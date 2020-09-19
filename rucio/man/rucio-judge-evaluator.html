@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daemon rucio-judge-evaluator &#8212; Rucio 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Daemon rucio-judge-injector" href="rucio-judge-injector.html" />
+    <link rel="prev" title="Daemon rucio-judge-cleaner" href="rucio-judge-cleaner.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="daemon-rucio-judge-evaluator">
+<h1>Daemon rucio-judge-evaluator<a class="headerlink" href="#daemon-rucio-judge-evaluator" title="Permalink to this headline">¶</a></h1>
+<p><p>The Judge-Evaluator daemon is responsible for execution and reevaluation of replication rules. First it checks if there are DIDs that have changed content e.g. attached or detached DIDs.In case of a new attachment, the replication rule for the dataset has to be applied to the attached DID, too. If the attached DID has already a replica on a RSE that satisfies the RSE expression of the rule, then the lock counter of that replica gets increased. If it does not have any replica satisfying the rule, then a new replica has to be created. In case of a new detachment, the replica has to be removed or the lock counter of the replica has to be decreased, depending on which RSE the replica exist. If the DID is a dataset, its properties like size and length also get updated and also an entry is saved to mark a change for possible collection replicas which have to be updated by another daemon.</p>
+</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">rucio</span><span class="o">-</span><span class="n">judge</span><span class="o">-</span><span class="n">evaluator</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">once</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">threads</span> <span class="n">THREADS</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments">
+<h2>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h2>
+<dl class="option-list">
+<dt><kbd>--run-once</kbd></dt>
+<dd><p>One iteration only</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--threads</kbd></dt>
+<dd><p>Concurrency control: total number of threads for this process</p>
+<p>Default: 1</p>
+</dd>
+</dl>
+</div>
+<p><p>Same RSEs:
+Create a dataset with a replication rule and upload a file to the same RSE. Then attach it to the dataset:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio add-dataset mock:dataset
+$ rucio add-rule mock:dataset 1 MOCK
+$ rucio upload --scope mock --rse MOCK --name file filename.txt
+$ rucio attach mock:dataset mock:file
+</pre></div>
+</div>
+<p>Check the rules and locks for the dataset and the replica:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-rules mock:dataset
+ID                                ACCOUNT    SCOPE:NAME    STATE[OK/REPL/STUCK]    RSE_EXPRESSION      COPIES  EXPIRES (UTC)    CREATED (UTC)
+--------------------------------  ---------  ------------  ----------------------  ----------------  --------  ---------------  -------------------
+e95941c165d54e38b6e46990de06d3d4  root       mock:dataset  OK[0/0/0]               MOCK                     1                   2018-12-03 12:35:43
+
+$ rucio list-rule mock:file
+ID                                ACCOUNT    SCOPE:NAME    STATE[OK/REPL/STUCK]    RSE_EXPRESSION      COPIES  EXPIRES (UTC)    CREATED (UTC)
+--------------------------------  ---------  ------------  ----------------------  ----------------  --------  ---------------  -------------------
+cfec9a944cdd4543b7267a34a2584631  root       mock:file     OK[1/0/0]               MOCK                     1                   2018-12-11 08:29:49
+
+$ python
+from rucio.db.sqla import session, models
+from rucio.core.rse import get_rse_id
+rse_id = get_rse_id(&#39;MOCK&#39;)
+session.get_session().query(models.RSEFileAssociation).filter_by(name=&#39;file&#39;, scope=&#39;mock&#39;, rse_id=rse_id).first().lock_cnt // 1
+</pre></div>
+</div>
+<p>There is one rule for the dataset which we created before and one lock and one rule for the replica which got created with the upload of the file.</p>
+<p>Run the daemon:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-judge-evaluator --run-once
+</pre></div>
+</div>
+<p>Check the locks for the replica again:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python
+from rucio.db.sqla import session, models
+from rucio.core.rse import get_rse_id
+rse_id = get_rse_id(&#39;MOCK&#39;)
+session.get_session().query(models.RSEFileAssociation).filter_by(name=&#39;file&#39;, scope=&#39;mock&#39;, rse_id=rse_id).first().lock_cnt // 2
+</pre></div>
+</div>
+<p>The replica of the DID mock:file has now 2 locks on RSE MOCK, because it is protected by the replication rule of the dataset and the first replication rule</p>
+<p>Different RSEs:
+Create a dataset with a replication rule and upload a file to another RSE. Then attach it to the dataset:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio add-dataset mock:dataset
+$ rucio add-rule mock:dataset 1 MOCK
+$ rucio upload --scope mock --rse MOCK2 --name file filename.txt
+$ rucio attach mock:dataset mock:file
+</pre></div>
+</div>
+<p>Check the rules and locks for the dataset and the replica:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-rules mock:dataset
+ID                                ACCOUNT    SCOPE:NAME    STATE[OK/REPL/STUCK]    RSE_EXPRESSION      COPIES  EXPIRES (UTC)    CREATED (UTC)
+--------------------------------  ---------  ------------  ----------------------  ----------------  --------  ---------------  -------------------
+e95941c165d54e38b6e46990de06d3d4  root       mock:dataset  OK[0/0/0]               MOCK                     1                   2018-12-03 12:35:43
+
+$ rucio list-rule mock:file
+ID                                ACCOUNT    SCOPE:NAME    STATE[OK/REPL/STUCK]    RSE_EXPRESSION      COPIES  EXPIRES (UTC)    CREATED (UTC)
+--------------------------------  ---------  ------------  ----------------------  ----------------  --------  ---------------  -------------------
+cfec9a944cdd4543b7267a34a2584631  root       mock:file     OK[1/0/0]               MOCK2                    1                   2018-12-11 08:29:49
+
+$ python
+from rucio.db.sqla import session, models
+from rucio.core.rse import get_rse_id
+rse_id = get_rse_id(&#39;MOCK2&#39;)
+session.get_session().query(models.RSEFileAssociation).filter_by(name=&#39;file&#39;, scope=&#39;mock&#39;, rse_id=rse_id).first().lock_cnt // 1
+</pre></div>
+</div>
+<p>There is one rule for the dataset which we created before and one lock and one rule for the replica which got created with the upload of the file.</p>
+<p>Run the daemon:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-judge-evaluator --run-once
+</pre></div>
+</div>
+<p>Check the replicas for the DID mock:file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python
+from rucio.db.sqla import session, models
+session.get_session().query(models.RSEFileAssociation).filter_by(name=&#39;file&#39;, scope=&#39;mock&#39;).first()
+// [{&#39;name&#39;: &#39;file&#39;,&#39;lock_cnt&#39;: 1, &#39;state&#39;: COPYING, &#39;scope&#39;: &#39;mock&#39;, &#39;rse_id&#39;: &#39;f81f366593754c01b0c340fa5ea0ab90&#39;},
+//  {&#39;scope&#39;: &#39;mock&#39;, &#39;rse_id&#39;: &#39;1330d5daee37474c88ba888101d7b859&#39;, &#39;name&#39;: &#39;file&#39;, &#39;state&#39;: AVAIABLE, &#39;lock_cnt&#39;: 1}]
+</pre></div>
+</div>
+<p>The DID mock:file has now two replicas with one lock each.
+As the file replica is attached to the dataset and the rule for the dataset specifies another RSE MOCK instead of the upload RSE, it has to be replicated to this RSE.
+Therefor a second replica in state COPYING got created on RSE MOCK.</p>
+</p>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Rucio</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database.html">Database operations</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio.html">Rucio CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-admin.html">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../policy_packages.html">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="daemons.html">Daemons CLIs</a><ul>
+      <li>Previous: <a href="rucio-judge-cleaner.html" title="previous chapter">Daemon rucio-judge-cleaner</a></li>
+      <li>Next: <a href="rucio-judge-injector.html" title="next chapter">Daemon rucio-judge-injector</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/man/rucio-judge-evaluator.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

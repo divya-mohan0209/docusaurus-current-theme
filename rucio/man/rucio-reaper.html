@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daemon rucio-reaper &#8212; Rucio 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Daemon rucio-transmogrifier" href="rucio-transmogrifier.html" />
+    <link rel="prev" title="Daemon rucio-necromancer" href="rucio-necromancer.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="daemon-rucio-reaper">
+<h1>Daemon rucio-reaper<a class="headerlink" href="#daemon-rucio-reaper" title="Permalink to this headline">¶</a></h1>
+<p><p>The Reaper daemon is responsible for replica deletion. It deletes them by checking if there are replicas that are not locked and have a tombstone to indicate that they can be deleted.</p>
+</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">rucio</span><span class="o">-</span><span class="n">reaper</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">once</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">total</span><span class="o">-</span><span class="n">workers</span> <span class="n">TOTAL_WORKERS</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">threads</span><span class="o">-</span><span class="n">per</span><span class="o">-</span><span class="n">worker</span> <span class="n">THREADS_PER_WORKER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">chunk</span><span class="o">-</span><span class="n">size</span> <span class="n">CHUNK_SIZE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">scheme</span> <span class="n">SCHEME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">greedy</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">exclude</span><span class="o">-</span><span class="n">rses</span> <span class="n">EXCLUDE_RSES</span><span class="p">]</span>
+                    <span class="p">[</span><span class="o">--</span><span class="n">include</span><span class="o">-</span><span class="n">rses</span> <span class="n">INCLUDE_RSES</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">rses</span> <span class="n">RSES</span> <span class="p">[</span><span class="n">RSES</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">vos</span> <span class="n">VOS</span> <span class="p">[</span><span class="n">VOS</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">delay</span><span class="o">-</span><span class="n">seconds</span> <span class="n">DELAY_SECONDS</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments">
+<h2>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h2>
+<dl class="option-list">
+<dt><kbd>--run-once</kbd></dt>
+<dd><p>One iteration only</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--total-workers</kbd></dt>
+<dd><p>Total number of workers per process</p>
+<p>Default: 1</p>
+</dd>
+<dt><kbd>--threads-per-worker</kbd></dt>
+<dd><p>Total number of threads created by each worker</p>
+</dd>
+<dt><kbd>--chunk-size</kbd></dt>
+<dd><p>Chunk size</p>
+<p>Default: 10</p>
+</dd>
+<dt><kbd>--scheme</kbd></dt>
+<dd><p>Force the reaper to use a particular protocol, e.g., mock.</p>
+</dd>
+<dt><kbd>--greedy</kbd></dt>
+<dd><p>Greedy mode</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--exclude-rses</kbd></dt>
+<dd><p>RSEs expression to exclude RSEs</p>
+</dd>
+<dt><kbd>--include-rses</kbd></dt>
+<dd><p>RSEs expression to include RSEs</p>
+</dd>
+<dt><kbd>--rses</kbd></dt>
+<dd><p>List of RSEs</p>
+</dd>
+<dt><kbd>--vos</kbd></dt>
+<dd><p>Optional list of VOs to consider. Only used in multi-VO mode.</p>
+</dd>
+<dt><kbd>--delay-seconds</kbd></dt>
+<dd><p>Delay to retry failed deletion</p>
+<p>Default: 3600</p>
+</dd>
+</dl>
+</div>
+<p><p>Upload a file and prepare the rules and replicas for deletion by using the judge-cleaner daemon:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio upload --rse MOCK --scope mock --name file filename.txt
+$ rucio add-rule mock:file 1 MOCK2 --lifetime 1
+$ rucio-judge-cleaner --run-once
+</pre></div>
+</div>
+<p>Check if the replica was created:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-file-replica mock:file
++---------+--------+------------+-----------+---------------------------------------------------------+
+| SCOPE   | NAME   | FILESIZE   | ADLER32   | RSE: REPLICA                                            |
+|---------+--------+------------+-----------+---------------------------------------------------------|
+| mock    | file   | 1.542 kB   | 1268ee71  | MOCK: file://localhost:0/tmp/rucio_rse/mock/15/58/file  |
++---------+--------+------------+-----------+---------------------------------------------------------+
+</pre></div>
+</div>
+<p>Run the daemon:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-reaper --run-once
+</pre></div>
+</div>
+<p>Check if the replica exists:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-file-replica mock:file
++---------+--------+------------+-----------+---------------------------------------------------------+
+| SCOPE   | NAME   | FILESIZE   | ADLER32   | RSE: REPLICA                                            |
+|---------+--------+------------+-----------+---------------------------------------------------------|
++---------+--------+------------+-----------+---------------------------------------------------------+
+</pre></div>
+</div>
+<p>When run in multi-VO mode, by default the Reaper will run on RSEs from all VOs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-reaper --run-once
+2020-07-28 15:15:14,110 5461    INFO    main: starting processes
+2020-07-28 15:15:14,151 5461    INFO    Reaper: This instance will work on VOs: def, abc, xyz, 123
+</pre></div>
+</div>
+<p>By using the <code class="docutils literal notranslate"><span class="pre">--vos</span></code> argument only the VO or VOs specified will be affected by the Reaper:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-reaper --run-once --vos abc xyz
+2020-07-28 15:16:36,022 5474    INFO    main: starting processes
+2020-07-28 15:16:36,066 5474    INFO    Reaper: This instance will work on VOs: abc, xyz
+</pre></div>
+</div>
+<p>Note that attempting the use the <code class="docutils literal notranslate"><span class="pre">--vos</span></code> argument when in single-VO mode will have no affect:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-reaper --run-once --vos abc xyz
+2020-07-28 15:21:33,348 5488    INFO    main: starting processes
+2020-07-28 15:21:33,349 5488    WARNING Ignoring argument vos, this is only applicable in a multi-VO setup.
+</pre></div>
+</div>
+</p>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Rucio</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database.html">Database operations</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio.html">Rucio CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-admin.html">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../policy_packages.html">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="daemons.html">Daemons CLIs</a><ul>
+      <li>Previous: <a href="rucio-necromancer.html" title="previous chapter">Daemon rucio-necromancer</a></li>
+      <li>Next: <a href="rucio-transmogrifier.html" title="next chapter">Daemon rucio-transmogrifier</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/man/rucio-reaper.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

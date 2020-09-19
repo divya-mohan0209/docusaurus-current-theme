@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Policy packages &#8212; Rucio 1.2 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="demo_environment.html" />
+    <link rel="prev" title="Monitoring" href="monitoring.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="policy-packages">
+<h1>Policy packages<a class="headerlink" href="#policy-packages" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Policy packages are separate Python packages that can be used to add
+experiment-specific customisations to Rucio. They typically customise Rucio’s
+handling of permissions and schema as well as optionally adding their own
+algorithms for lfn to pfn conversion and surl construction.</p>
+<p>Policy packages may be installed from a Python package repository such as
+<a class="reference external" href="https://pypi.python.org/">PyPi</a> or they may simply be installed in a local
+directory. In the latter case this directory will need to be added to the Rucio
+server’s <cite>PYTHONPATH</cite> environment variable.</p>
+<p>The name of the policy package in use is specified by the <cite>package</cite> value in the
+<cite>[policy]</cite> section of the Rucio configuration file. If no package is specified, a
+built in <cite>generic</cite> policy will be used. If a package is specified but cannot be
+loaded, Rucio will exit with an error.</p>
+</div>
+<div class="section" id="creating-a-policy-package">
+<h2>Creating a policy package<a class="headerlink" href="#creating-a-policy-package" title="Permalink to this headline">¶</a></h2>
+<p>The structure of a policy package is very simple. It contains the following:</p>
+<ul class="simple">
+<li><p>a <cite>permission.py</cite> module implementing permission customisations.</p></li>
+<li><p>a <cite>schema.py</cite> module implementing schema customisations.</p></li>
+<li><p>an optional <cite>__init__.py</cite> file that registers lfn to pfn and surl construction algorithms when the package is loaded. It should also contain a <cite>SUPPORTED_VERSION</cite> field.</p></li>
+</ul>
+<p>The easiest way to create the <cite>permission.py</cite> and <cite>schema.py</cite> modules is to modify
+the generic versions from the Rucio codebase. These can be found in
+<cite>lib/rucio/core/permission/generic.py</cite> and <cite>lib/rucio/common/schema/generic.py</cite>
+respectively.</p>
+<p>In the <cite>has_permission</cite> function you may wish to default to the generic permission
+checks if your experiment does not need specific functionality for a particular
+action, or so that new actions added to Rucio will work without your policy package
+having to be updated. This fallback can be implemented with code similar to the
+following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">rucio.core.permission.generic</span>
+<span class="k">if</span> <span class="n">action</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">perm</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">rucio</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">permission</span><span class="o">.</span><span class="n">generic</span><span class="o">.</span><span class="n">has_permission</span><span class="p">(</span><span class="n">issuer</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><cite>__init__.py</cite> should include a <cite>SUPPORTED_VERSION</cite> field indicating the version of
+Rucio that your package was developed against. This may be checked by Rucio in the
+event that the policy package interface changes in the future. Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SUPPORTED_VERSION</span> <span class="o">=</span> <span class="s2">&quot;1.20.7&quot;</span>
+</pre></div>
+</div>
+<p>Custom surl construction algorithms can be registered in <cite>__init__.py</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rucio.common.utils</span> <span class="kn">import</span> <span class="n">register_surl_algorithm</span>
+<span class="n">register_surl_algorithm</span><span class="p">(</span><span class="n">construct_surl_special</span><span class="p">,</span> <span class="s1">&#39;voname_special&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>So can custom lfn to pfn algorithms:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rucio.rse.protocols.protocol</span> <span class="kn">import</span> <span class="n">RSEDeterministicTranslation</span>
+<span class="n">RSEDeterministicTranslation</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">lfn2pfn_special</span><span class="p">,</span> <span class="s1">&#39;voname_special&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In both cases the name used to register the function must be prefixed with the
+name of the virtual organisation that owns the policy package, to avoid naming
+conflicts on multi-VO Rucio installations.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Rucio</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database.html">Database operations</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/rucio.html">Rucio CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/rucio-admin.html">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="monitoring.html">Monitoring</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="monitoring.html" title="previous chapter">Monitoring</a></li>
+      <li>Next: <a href="demo_environment.html" title="next chapter">&lt;no title&gt;</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/policy_packages.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

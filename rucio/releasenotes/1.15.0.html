@@ -1,0 +1,208 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1.15.0 “Daredonkey” &#8212; Rucio 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.14.9" href="1.14.9.html" />
+    <link rel="prev" title="1.15.1 (webui only)" href="1.15.1.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="daredonkey">
+<h1>1.15.0 “Daredonkey”<a class="headerlink" href="#daredonkey" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="general">
+<h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="update-instructions">
+<h3>Update Instructions<a class="headerlink" href="#update-instructions" title="Permalink to this headline">¶</a></h3>
+<p>This feature release requires a database schema update. Please consult the documentation about updating your database schema.</p>
+</div>
+<div class="section" id="features">
+<h3>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Clients: extend download/upload for cloud checksums <a class="reference external" href="https://github.com/rucio/rucio/issues/140">#140</a></p></li>
+<li><p>Core &amp; Internals: Pluggable LFN2PFN algorithms <a class="reference external" href="https://github.com/rucio/rucio/issues/570">#570</a></p></li>
+</ul>
+</div>
+<div class="section" id="enhancements">
+<h3>Enhancements<a class="headerlink" href="#enhancements" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Clients: Misleading warning in srm scheme  <a class="reference external" href="https://github.com/rucio/rucio/issues/575">#575</a></p></li>
+<li><p>Core &amp; Internals: better handling NoSectionError in db/sqla/session <a class="reference external" href="https://github.com/rucio/rucio/issues/641">#641</a></p></li>
+<li><p>Core &amp; Internals: documentation: database versioning <a class="reference external" href="https://github.com/rucio/rucio/issues/749">#749</a></p></li>
+<li><p>Documentation: Update concepts &amp; terminology section of the documentation <a class="reference external" href="https://github.com/rucio/rucio/issues/566">#566</a></p></li>
+<li><p>Documentation: Add auto-generated CLIs documentation for the daemons <a class="reference external" href="https://github.com/rucio/rucio/issues/718">#718</a></p></li>
+<li><p>Documentation: documentation for Installing dev environment  <a class="reference external" href="https://github.com/rucio/rucio/issues/725">#725</a></p></li>
+<li><p>Documentation: Broken readthedocs compilation with No such file or directory  <a class="reference external" href="https://github.com/rucio/rucio/issues/731">#731</a></p></li>
+<li><p>Documentation: Format architecture section and add figure to the documentation <a class="reference external" href="https://github.com/rucio/rucio/issues/763">#763</a></p></li>
+<li><p>Documentation: Fix broken rucio-admin CLI doc generation <a class="reference external" href="https://github.com/rucio/rucio/issues/769">#769</a></p></li>
+<li><p>RSE Manager: Shuffle equal-weight protocols <a class="reference external" href="https://github.com/rucio/rucio/issues/697">#697</a></p></li>
+<li><p>Release management: Possibility to make a pip install directly from git url <a class="reference external" href="https://github.com/rucio/rucio/issues/532">#532</a></p></li>
+<li><p>Release management: core dependencies update <a class="reference external" href="https://github.com/rucio/rucio/issues/757">#757</a></p></li>
+<li><p>Testing: provide docker compose file for demo containers <a class="reference external" href="https://github.com/rucio/rucio/issues/549">#549</a></p></li>
+<li><p>Testing: pylint in travis wrongly test all files containing ‘py’ in the name <a class="reference external" href="https://github.com/rucio/rucio/issues/688">#688</a></p></li>
+<li><p>Transfers: transfers: force S3 alternative authentication method <a class="reference external" href="https://github.com/rucio/rucio/issues/646">#646</a></p></li>
+<li><p>Transfers: Improvements in finisher <a class="reference external" href="https://github.com/rucio/rucio/issues/678">#678</a></p></li>
+<li><p>Transfers: Omit any mention of space tokens to FTS if not set <a class="reference external" href="https://github.com/rucio/rucio/issues/684">#684</a></p></li>
+</ul>
+</div>
+<div class="section" id="bugs">
+<h3>Bugs<a class="headerlink" href="#bugs" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Core &amp; Internals: custom rucio exceptions passing args and kwargs wrong to super <a class="reference external" href="https://github.com/rucio/rucio/issues/679">#679</a></p></li>
+<li><p>Core &amp; Internals: DuplicateRule error creates index out of bound stacktrace <a class="reference external" href="https://github.com/rucio/rucio/issues/906">#906</a></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="clients">
+<h2>Clients<a class="headerlink" href="#clients" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id22">
+<h3>Features<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Clients: Import extra modules only if they are available <a class="reference external" href="https://github.com/rucio/rucio/issues/336">#336</a></p></li>
+<li><p>Clients: Create download and upload capability in python clients <a class="reference external" href="https://github.com/rucio/rucio/issues/523">#523</a></p></li>
+</ul>
+</div>
+<div class="section" id="id25">
+<h3>Bugs<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Clients: Declare all replicas of a file lost <a class="reference external" href="https://github.com/rucio/rucio/issues/42">#42</a></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="webui">
+<h2>WebUI<a class="headerlink" href="#webui" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id27">
+<h3>Enhancements<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Authentication: webui cannot handle DNs with missing leading / <a class="reference external" href="https://github.com/rucio/rucio/issues/742">#742</a></p></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Rucio</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database.html">Database operations</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/rucio.html">Rucio CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/rucio-admin.html">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../policy_packages.html">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../releasenotes.html">Release notes</a><ul>
+      <li>Previous: <a href="1.15.1.html" title="previous chapter">1.15.1 (webui only)</a></li>
+      <li>Next: <a href="1.14.9.html" title="next chapter">1.14.9</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/releasenotes/1.15.0.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

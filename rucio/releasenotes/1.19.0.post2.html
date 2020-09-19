@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1.19.0.post2 “Fantastic Donkeys” &#8212; Rucio 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.18.9" href="1.18.9.html" />
+    <link rel="prev" title="1.19.1" href="1.19.1.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="post2-fantastic-donkeys">
+<h1>1.19.0.post2 “Fantastic Donkeys”<a class="headerlink" href="#post2-fantastic-donkeys" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="upgrade-instructions">
+<h2>Upgrade Instructions<a class="headerlink" href="#upgrade-instructions" title="Permalink to this headline">¶</a></h2>
+<p>This feature release requires a database schema upgrade. Please consult the <a class="reference external" href="https://rucio.readthedocs.io/en/latest/database.html">documentation</a> about upgrading your database schema.</p>
+<p>The following changes are necessary and are covered by the <code class="docutils literal notranslate"><span class="pre">alembic</span> <span class="pre">upgrade</span> <span class="pre">head</span></code> command:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bad_replicas_table</span></code> changes (Alembic revision <code class="docutils literal notranslate"><span class="pre">b96a1c7e1cc4</span></code>)</p>
+<ul class="simple">
+<li><p>New <code class="docutils literal notranslate"><span class="pre">expires_at</span></code> column.</p></li>
+<li><p>Primary key change.</p></li>
+<li><p>New <code class="docutils literal notranslate"><span class="pre">BAD_REPLICAS_EXPIRES_AT_IDX</span></code> Index.</p></li>
+<li><p>Constraint <code class="docutils literal notranslate"><span class="pre">BAD_REPLICAS_STATE_CHK</span></code> change.</p></li>
+</ul>
+</li>
+<li><p>New <code class="docutils literal notranslate"><span class="pre">bad_pfns</span></code> table (Alembic revision <code class="docutils literal notranslate"><span class="pre">b96a1c7e1cc4</span></code>)</p></li>
+<li><p>Change of <code class="docutils literal notranslate"><span class="pre">rse_attr_map</span></code> and <code class="docutils literal notranslate"><span class="pre">account_attr_map</span></code> boolean values (Alembic revision <code class="docutils literal notranslate"><span class="pre">9eb936a81eb1</span></code>)</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">True</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">False</span></code> to <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+</ul>
+</li>
+<li><p>Changes in history tables (Alembic revision <code class="docutils literal notranslate"><span class="pre">bf3baa1c1474</span></code>)</p>
+<ul class="simple">
+<li><p>Drop of Primary Key <code class="docutils literal notranslate"><span class="pre">CONTENTS_HIST_PK</span></code> for table <code class="docutils literal notranslate"><span class="pre">contents_history</span></code>.</p></li>
+<li><p>Drop of Primary Key <code class="docutils literal notranslate"><span class="pre">ARCH_CONTENTS_HISOTRY_PK</span></code> for table <code class="docutils literal notranslate"><span class="pre">archive_contents_history</span></code>.</p></li>
+<li><p>Creation of Index <code class="docutils literal notranslate"><span class="pre">ARCH_CONT_HIST_IDX</span></code> for table <code class="docutils literal notranslate"><span class="pre">archive_contents_history</span></code>.</p></li>
+<li><p>Drop of Primary Key <code class="docutils literal notranslate"><span class="pre">RULES_HIST_RECENT_PK</span></code> for table <code class="docutils literal notranslate"><span class="pre">rules_hist_recent</span></code>.</p></li>
+<li><p>Drop of column <code class="docutils literal notranslate"><span class="pre">history_id</span></code> for table <code class="docutils literal notranslate"><span class="pre">rules_hist_recent</span></code>.</p></li>
+<li><p>Drop of Primary Key <code class="docutils literal notranslate"><span class="pre">RULES_HIST_LONGTERM_PK</span></code> for table <code class="docutils literal notranslate"><span class="pre">rules_history</span></code>.</p></li>
+<li><p>Drop of column <code class="docutils literal notranslate"><span class="pre">history_id</span></code> for table <code class="docutils literal notranslate"><span class="pre">rules_history</span></code>.</p></li>
+<li><p>Drop of Primary Key <code class="docutils literal notranslate"><span class="pre">MESSAGES_HIST_ID_PK</span></code> for table <code class="docutils literal notranslate"><span class="pre">messages_history</span></code>.</p></li>
+</ul>
+</li>
+<li><p>Adding of new <code class="docutils literal notranslate"><span class="pre">payload_nolimit</span></code> column to messages tables (Alembic revision <code class="docutils literal notranslate"><span class="pre">90f47792bb76</span></code>)</p>
+<ul class="simple">
+<li><p>Add column <code class="docutils literal notranslate"><span class="pre">payload_nolimit</span></code> to table <code class="docutils literal notranslate"><span class="pre">messages</span></code>.</p></li>
+<li><p>Add column <code class="docutils literal notranslate"><span class="pre">payload_nolimit</span></code> to table <code class="docutils literal notranslate"><span class="pre">messages_history</span></code>.</p></li>
+</ul>
+</li>
+<li><p>Change of constraint <code class="docutils literal notranslate"><span class="pre">RULES_NOTIFICATION_CHK</span></code> for <code class="docutils literal notranslate"><span class="pre">rules</span></code> (Alembic revision <code class="docutils literal notranslate"><span class="pre">01eaf73ab656</span></code>)</p></li>
+<li><p>Change of Primary Key <code class="docutils literal notranslate"><span class="pre">REPLICAS_PK</span></code> for table <code class="docutils literal notranslate"><span class="pre">replicas</span></code> (Alembic revision <code class="docutils literal notranslate"><span class="pre">3345511706b8</span></code>)</p></li>
+</ol>
+<p>The following change are necessary and are <strong>NOT</strong> covered by the <code class="docutils literal notranslate"><span class="pre">alembic</span> <span class="pre">upgrade</span> <span class="pre">head</span></code> command:</p>
+<ol class="arabic simple">
+<li><p>The boolean values upgrade on the <code class="docutils literal notranslate"><span class="pre">rse_attr_map</span></code> and <code class="docutils literal notranslate"><span class="pre">account_attr_map</span></code> tables from <code class="docutils literal notranslate"><span class="pre">0</span></code> to <code class="docutils literal notranslate"><span class="pre">false</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code> need to be executed manually, since the script cannot distinguish between the integer or boolean interpretation of the attribute. It is very important that you only upgrade <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code> which actualy correspond to boolean values, otherwise functionality might be degraded (Alembic revision <code class="docutils literal notranslate"><span class="pre">9eb936a81eb1</span></code>)</p></li>
+</ol>
+</div>
+<div class="section" id="general">
+<h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="features">
+<h3>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Core &amp; Internals: Mark replicas as temporarily unavailable <a class="reference external" href="https://github.com/rucio/rucio/issues/1550">#1550</a></p></li>
+<li><p>Core &amp; Internals: PK in history tables mostly wrong <a class="reference external" href="https://github.com/rucio/rucio/issues/1818">#1818</a></p></li>
+<li><p>Core &amp; Internals: Limit the maximum space usage on an RSE <a class="reference external" href="https://github.com/rucio/rucio/issues/1965">#1965</a></p></li>
+<li><p>Core &amp; Internals: Messages payload are limited to 4000 characters and throw exception <a class="reference external" href="https://github.com/rucio/rucio/issues/48">#48</a></p></li>
+<li><p>Core &amp; Internals: json based import for RSEs, protocols, distances <a class="reference external" href="https://github.com/rucio/rucio/issues/716">#716</a></p></li>
+<li><p>Rules: New Rule Notification Mode <a class="reference external" href="https://github.com/rucio/rucio/issues/1922">#1922</a></p></li>
+<li><p>Transfers: Remove conveyor-transfer-submitter <a class="reference external" href="https://github.com/rucio/rucio/issues/1632">#1632</a></p></li>
+</ul>
+</div>
+<div class="section" id="enhancements">
+<h3>Enhancements<a class="headerlink" href="#enhancements" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Clients: Allow upload of replicas to non-det RSEs by users <a class="reference external" href="https://github.com/rucio/rucio/issues/1172">#1172</a></p></li>
+<li><p>Core &amp; Internals: Core migration to python3 <a class="reference external" href="https://github.com/rucio/rucio/issues/1912">#1912</a></p></li>
+<li><p>Core &amp; Internals: Daemon migration to python3 <a class="reference external" href="https://github.com/rucio/rucio/issues/1924">#1924</a></p></li>
+<li><p>Core &amp; Internals: fix last python3 incompatibilities <a class="reference external" href="https://github.com/rucio/rucio/issues/1961">#1961</a></p></li>
+<li><p>Core &amp; Internals: Add missing wsgi alias for import/export <a class="reference external" href="https://github.com/rucio/rucio/issues/1990">#1990</a></p></li>
+<li><p>Messaging: improve connection handling to broker <a class="reference external" href="https://github.com/rucio/rucio/issues/1479">#1479</a></p></li>
+<li><p>Rebalancing: bb8 - replacing sql query with sql alchemy <a class="reference external" href="https://github.com/rucio/rucio/issues/1861">#1861</a></p></li>
+<li><p>Rebalancing: BB8 should avoid reducing the replication factor of a dataset <a class="reference external" href="https://github.com/rucio/rucio/issues/484">#484</a></p></li>
+<li><p>Release management: Address security issue in paramiko due to CVE-2018-1000805 <a class="reference external" href="https://github.com/rucio/rucio/issues/1646">#1646</a></p></li>
+<li><p>Release management: Upgrade of dependencies for 1.19.0 <a class="reference external" href="https://github.com/rucio/rucio/issues/2028">#2028</a></p></li>
+<li><p>Release management: Rucio py3 compatibility <a class="reference external" href="https://github.com/rucio/rucio/issues/67">#67</a></p></li>
+<li><p>Testing: switch oracle image for travis tests <a class="reference external" href="https://github.com/rucio/rucio/issues/2010">#2010</a></p></li>
+<li><p>Traces: kronos: activemq connect is missing wait=True <a class="reference external" href="https://github.com/rucio/rucio/issues/321">#321</a></p></li>
+</ul>
+</div>
+<div class="section" id="bugs">
+<h3>Bugs<a class="headerlink" href="#bugs" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Core &amp; Internals: Primary Key for replicas table is in wrong order in models.py <a class="reference external" href="https://github.com/rucio/rucio/issues/1749">#1749</a></p></li>
+<li><p>Core &amp; Internals: list-rse-usage with –show-accounts does not work <a class="reference external" href="https://github.com/rucio/rucio/issues/2040">#2040</a></p></li>
+<li><p>Deletion: The reaper may ignore some rses if there is more than one rse handled per thread <a class="reference external" href="https://github.com/rucio/rucio/issues/1729">#1729</a></p></li>
+<li><p>Deletion: Reaper crashes if no RSEs are defined <a class="reference external" href="https://github.com/rucio/rucio/issues/1917">#1917</a></p></li>
+<li><p>Documentation: Documentation build fails <a class="reference external" href="https://github.com/rucio/rucio/issues/1774">#1774</a></p></li>
+<li><p>Documentation: Broken links in documentation sidebar <a class="reference external" href="https://github.com/rucio/rucio/issues/2065">#2065</a></p></li>
+<li><p>Probes &amp; Alarms: The FTS probe sometimes doesn’t whitelist a SE after the end of downtime <a class="reference external" href="https://github.com/rucio/rucio/issues/2015">#2015</a></p></li>
+<li><p>Probes &amp; Alarms: Synchronisation with VOMS fails under Nagios due to non-ASCII characters <a class="reference external" href="https://github.com/rucio/rucio/issues/2051">#2051</a></p></li>
+<li><p>Rebalancing: BB8 crash with RSEBlacklisted exception <a class="reference external" href="https://github.com/rucio/rucio/issues/313">#313</a></p></li>
+<li><p>Release management: Define stricter depdency ranges for pip-requires-client <a class="reference external" href="https://github.com/rucio/rucio/issues/1692">#1692</a></p></li>
+<li><p>Transfers: REST call for requests is broken by ‘/’ in DIDs <a class="reference external" href="https://github.com/rucio/rucio/issues/1791">#1791</a></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="clients">
+<h2>Clients<a class="headerlink" href="#clients" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id32">
+<h3>Features<a class="headerlink" href="#id32" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Clients: Expose request details (e.g. FTS job ID) to the client <a class="reference external" href="https://github.com/rucio/rucio/issues/1786">#1786</a></p></li>
+</ul>
+</div>
+<div class="section" id="id34">
+<h3>Enhancements<a class="headerlink" href="#id34" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Clients: rucio download should be able to use locally cached metalink <a class="reference external" href="https://github.com/rucio/rucio/issues/1415">#1415</a></p></li>
+<li><p>Clients: Handling of istape=False in the client <a class="reference external" href="https://github.com/rucio/rucio/issues/1455">#1455</a></p></li>
+<li><p>Clients: fix python3 incompatibilities not found by pylint <a class="reference external" href="https://github.com/rucio/rucio/issues/2020">#2020</a></p></li>
+</ul>
+</div>
+<div class="section" id="id38">
+<h3>Bugs<a class="headerlink" href="#id38" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Clients: authentication type selection safeguard <a class="reference external" href="https://github.com/rucio/rucio/issues/2006">#2006</a></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="webui">
+<h2>WebUI<a class="headerlink" href="#webui" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id40">
+<h3>Enhancements<a class="headerlink" href="#id40" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>WebUI: View for suspicious files <a class="reference external" href="https://github.com/rucio/rucio/issues/2054">#2054</a></p></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Rucio</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database.html">Database operations</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/rucio.html">Rucio CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/rucio-admin.html">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../policy_packages.html">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../releasenotes.html">Release notes</a><ul>
+      <li>Previous: <a href="1.19.1.html" title="previous chapter">1.19.1</a></li>
+      <li>Next: <a href="1.18.9.html" title="next chapter">1.18.9</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/releasenotes/1.19.0.post2.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

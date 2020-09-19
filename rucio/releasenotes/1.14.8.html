@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1.14.8 &#8212; Rucio 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.14.7" href="1.14.7.html" />
+    <link rel="prev" title="1.14.9" href="1.14.9.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="id1">
+<h1>1.14.8<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="general">
+<h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="enhancements">
+<h3>Enhancements<a class="headerlink" href="#enhancements" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Probes &amp; Alarms: Move the methods calls in check_rse_attributes from the API to the core <a class="reference external" href="https://github.com/rucio/rucio/issues/519">#519</a></p></li>
+<li><p>RSE Manager: Remove &lt;operation&gt;_protocol entries in rse_settings <a class="reference external" href="https://github.com/rucio/rucio/issues/508">#508</a></p></li>
+<li><p>RSE Manager: rsemanager add domain to all method signatures <a class="reference external" href="https://github.com/rucio/rucio/issues/62">#62</a></p></li>
+<li><p>Rules: Possibility to give reason when denying a rule <a class="reference external" href="https://github.com/rucio/rucio/issues/487">#487</a></p></li>
+<li><p>Transfers: Conveyor should only use schemes compatible to the destination scheme <a class="reference external" href="https://github.com/rucio/rucio/issues/73">#73</a></p></li>
+</ul>
+</div>
+<div class="section" id="bugs">
+<h3>Bugs<a class="headerlink" href="#bugs" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Core &amp; Internals: set_metadata should update guid both in did and content table <a class="reference external" href="https://github.com/rucio/rucio/issues/413">#413</a></p></li>
+<li><p>Core &amp; Internals: Creating incomplete message for datasets does not work <a class="reference external" href="https://github.com/rucio/rucio/issues/464">#464</a></p></li>
+<li><p>Core &amp; Internals: Postgres error in conveyor-finisher <a class="reference external" href="https://github.com/rucio/rucio/issues/480">#480</a></p></li>
+<li><p>Probes &amp; Alarms: Probe setting the naming convention is broken <a class="reference external" href="https://github.com/rucio/rucio/issues/522">#522</a></p></li>
+<li><p>Recovery: Crash when declaring bad file replicas already declared bad on a non-deterministic RSE <a class="reference external" href="https://github.com/rucio/rucio/issues/457">#457</a></p></li>
+<li><p>Traces: heartbeats do not work correctly for kronos dataset thread <a class="reference external" href="https://github.com/rucio/rucio/issues/510">#510</a></p></li>
+<li><p>Transfers: Conveyor receiver does not consume messages <a class="reference external" href="https://github.com/rucio/rucio/issues/513">#513</a></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="clients">
+<h2>Clients<a class="headerlink" href="#clients" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id14">
+<h3>Enhancements<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Clients: update-rule –lifetime command does not work <a class="reference external" href="https://github.com/rucio/rucio/issues/496">#496</a></p></li>
+</ul>
+</div>
+<div class="section" id="id16">
+<h3>Bugs<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Clients: Force GSI authentication for root fix did not work <a class="reference external" href="https://github.com/rucio/rucio/issues/467">#467</a></p></li>
+<li><p>Clients: Automatic protocol failover broken in rucio download <a class="reference external" href="https://github.com/rucio/rucio/issues/502">#502</a></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="webui">
+<h2>WebUI<a class="headerlink" href="#webui" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="features">
+<h3>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>WebUI: WebUI: Preview logfiles in browser #344 <a class="reference external" href="https://github.com/rucio/rucio/issues/344">#344</a></p></li>
+<li><p>WebUI: Rucio UI Account admin view <a class="reference external" href="https://github.com/rucio/rucio/issues/81">#81</a></p></li>
+</ul>
+</div>
+<div class="section" id="id21">
+<h3>Enhancements<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>WebUI: Admin interface in Rucio UI <a class="reference external" href="https://github.com/rucio/rucio/issues/78">#78</a></p></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Rucio</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database.html">Database operations</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/rucio.html">Rucio CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/rucio-admin.html">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../policy_packages.html">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../releasenotes.html">Release notes</a><ul>
+      <li>Previous: <a href="1.14.9.html" title="previous chapter">1.14.9</a></li>
+      <li>Next: <a href="1.14.7.html" title="next chapter">1.14.7</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/releasenotes/1.14.8.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

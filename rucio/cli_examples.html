@@ -1,0 +1,396 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rucio CLI: Examples &#8212; Rucio 1.2 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Rucio CLI" href="man/rucio.html" />
+    <link rel="prev" title="Installing Rucio Clients" href="installing_clients.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="rucio-cli-examples">
+<h1>Rucio CLI: Examples<a class="headerlink" href="#rucio-cli-examples" title="Permalink to this headline">¶</a></h1>
+<p>Rucio provides several commands for the end-user. See <a class="reference external" href="man/rucio.html">man pages</a>.</p>
+<div class="section" id="getting-user-information">
+<h2>Getting user information<a class="headerlink" href="#getting-user-information" title="Permalink to this headline">¶</a></h2>
+<p>The first thing you might try is to check who you are:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio whoami
+status     : ACTIVE
+account    : jdoe
+account_type : SERVICE
+created_at : 2014-01-17T07:52:18
+updated_at : 2014-01-17T07:52:18
+suspended_at : None
+deleted_at : None
+email      : jdoe@blahblah.com
+</pre></div>
+</div>
+<p>You can switch between different accounts by setting the RUCIO_ACCOUNT variable:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ export RUCIO_ACCOUNT=root
+$ rucio whoami
+status     : ACTIVE
+account    : jdoe
+account_type : SERVICE
+created_at : 2014-01-17T07:51:59
+updated_at : 2014-01-17T07:51:59
+suspended_at : None
+deleted_at : None
+email      : root@blahblah.com
+</pre></div>
+</div>
+<p>If you try to authenticate with an account that is not mapped with your credentials:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ export RUCIO_ACCOUNT=janedoe
+$ rucio whoami
+cannot get auth_token
+ 2018-01-30 16:50:08,554 ERROR   Cannot authenticate.
+ Details: x509 authentication failed
+ 2018-01-30 16:50:08,554 ERROR   Please verify that your proxy is still valid and renew it if needed.
+</pre></div>
+</div>
+<p>If you’re running a multi-VO instance of Rucio, then the VO to authenticate against is set in the configuration file. However you can specify a different VO as a CLI argument if your credentials map to an account there too:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio whoami
+status     : ACTIVE
+account    : jdoe
+account_type : SERVICE
+created_at : 2014-01-17T07:52:18
+updated_at : 2014-01-17T07:52:18
+suspended_at : None
+deleted_at : None
+email      : jdoe@normalvo.com
+$ rucio --vo abc --account root whoami
+status     : ACTIVE
+account    : root
+account_type : SERVICE
+created_at : 2014-01-17T07:51:59
+updated_at : 2014-01-17T07:51:59
+suspended_at : None
+deleted_at : None
+email      : root@abc.com
+</pre></div>
+</div>
+</div>
+<div class="section" id="open-id-connect-authentication-examples">
+<h2>Open ID Connect authentication examples<a class="headerlink" href="#open-id-connect-authentication-examples" title="Permalink to this headline">¶</a></h2>
+<p>There are 3 CLI login methods. Two were introduced in order to avoid typing the password in the Rucio CLI. The default Identity Provider (IdP)/issuer is configured on the side of Rucio server. In case multiple IdPs are supported, user can specify which one he desires to use by <code class="docutils literal notranslate"><span class="pre">--oidc-issuer=&lt;IdP</span> <span class="pre">nickname&gt;</span></code> option (where IdP nickname is the key under which issuers are configured on Rucio server side in the <cite>idpsecrets.json</cite> file). In the following examples we assume that user does not want to use the rucio account name specified in the rucio.cfg file on the client side (if so <code class="docutils literal notranslate"><span class="pre">-a</span></code> parameter can be omitted). If <cite>auth_type`</cite> is specified to be “oidc” in the rucio.cfg file, <code class="docutils literal notranslate"><span class="pre">-S</span></code> can be omitted as well. Furthermore, we use the same default issuer as configured on Rucio server side.</p>
+<ol class="arabic simple">
+<li><p>Login via user’s browser + fetch code:</p></li>
+</ol>
+<blockquote>
+<div><p>rucio -a=&lt;rucio_account_name&gt; -S=OIDC -v whoami</p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Login via user’s browser + polling Rucio auth server:</p></li>
+</ol>
+<blockquote>
+<div><p>rucio -a=&lt;rucio_account_name&gt; -S=OIDC –oidc-polling -v whoami</p>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>Automatic login:</p></li>
+</ol>
+<blockquote>
+<div><p>rucio -a=&lt;rucio_account_name&gt; -S=OIDC –oidc-user=&lt;idp_username&gt; –oidc-password=&lt;idp_password&gt; –oidc-auto -v whoami</p>
+</div></blockquote>
+<p>We strongly discourage this approach, typing your password in CLI does not comply with OAuth2/OIDC standard !</p>
+<p>Options for automatic token refresh: Assuming the rucio-oauth-manager daemon is running on the Rucio server side, one can also grant Rucio a refresh token and specify the time for which Rucio should act on behalf of the user (in hours) using the <code class="docutils literal notranslate"><span class="pre">--refresh-lifetime</span></code> option:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="o">-</span><span class="n">a</span><span class="o">=&lt;</span><span class="n">rucio_account_name</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">S</span><span class="o">=</span><span class="n">OIDC</span> <span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;openid profile offline_access&quot;</span> <span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">refresh</span><span class="o">-</span><span class="n">lifetime</span><span class="o">=</span><span class="mi">24</span> <span class="o">-</span><span class="n">v</span> <span class="n">whoami</span>
+</pre></div>
+</div>
+<p>If Rucio Server is granted a user both valid access and refresh tokens, it is also possible to configure Rucio Client to ask Rucio Server for token refresh. Assuming user used one of the 3 CLI authentication methods above + requested offline_access in the scope, rucio.cfg file can be configured with the following parameters in the [client] section:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">client</span><span class="p">]</span>
+<span class="n">auth_oidc_refresh_active</span> <span class="n">true</span>
+<span class="n">auth_oidc_refresh_before_exp</span> <span class="mi">20</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">auth_oidc_refresh_active</span></code> is false by default. If set to true, the Rucio Client will be following up token expiration timestamp. As soon as the current time gets to <code class="docutils literal notranslate"><span class="pre">auth_oidc_refresh_before_exp</span></code> minutes (20 min default) before token expiration, Rucio Client will ask Rucio Server for token refresh with every command. If the token has been refreshed in the recent 5 min already once, the same one will be returned (protection on the Rucio Server side). If the presented token has been refreshed automatically on the Rucio Server side by a oauth_manager daemon run, it will return this existing new token. If the presented token is invalid/expired/does not have refresh token in the DB, no refresh will be attempted.</p>
+<p>Example of rucio.cfg file configuration with automatic token refresh:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">client</span><span class="p">]</span>
+<span class="n">rucio_host</span> <span class="o">=</span> <span class="n">https</span><span class="p">:</span><span class="o">//&lt;</span><span class="n">rucio_host</span><span class="o">&gt;</span><span class="p">:</span><span class="mi">443</span>
+<span class="n">auth_host</span> <span class="o">=</span> <span class="n">https</span><span class="p">:</span><span class="o">//&lt;</span><span class="n">rucio_auth_host</span><span class="o">&gt;</span><span class="p">:</span><span class="mi">443</span>
+<span class="n">auth_type</span> <span class="o">=</span> <span class="n">oidc</span>
+<span class="n">account</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">rucio_account_name</span><span class="o">&gt;</span>
+<span class="n">oidc_audience</span> <span class="o">=</span> <span class="n">rucio</span>
+<span class="n">oidc_scope</span> <span class="o">=</span> <span class="n">openid</span> <span class="n">profile</span> <span class="n">offline_access</span>
+<span class="n">oidc_issuer</span> <span class="o">=</span> <span class="n">wlcg</span>
+<span class="n">auth_oidc_refresh_active</span> <span class="n">true</span>
+<span class="n">auth_oidc_refresh_before_exp</span> <span class="mi">20</span>
+</pre></div>
+</div>
+<p>Then, you should be able to do simply:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="o">-</span><span class="n">v</span> <span class="n">whoami</span>
+</pre></div>
+</div>
+<p>and follow the instruction for first log-in with your browser. New token will be requested before the current expires if a user types a rucio command within <code class="docutils literal notranslate"><span class="pre">auth_oidc_refresh_before_exp</span></code> minutes before the expiry. Note: If user does not use Rucio Client within <code class="docutils literal notranslate"><span class="pre">auth_oidc_refresh_before_exp</span></code> minutes before token expires, it will be necessary to re-authenticate asking for a new offline_access token.</p>
+<p>If a user wishes to authenticate with Rucio using a JSON web token not issued via the Rucio login mechanisms (CLI, WebUI), one has to make sure that:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span> <span class="n">the</span> <span class="n">token</span> <span class="n">scope</span> <span class="n">claim</span> <span class="ow">is</span> <span class="n">no</span> <span class="n">less</span> <span class="n">than</span> <span class="n">the</span> <span class="n">minimum</span> <span class="n">scope</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span> <span class="s1">&#39;openid profile&#39;</span><span class="p">)</span> <span class="n">required</span> <span class="n">by</span> <span class="n">the</span> <span class="n">Rucio</span> <span class="n">Auth</span> <span class="n">server</span> <span class="p">(</span><span class="n">configured</span> <span class="n">there</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">rucio</span><span class="o">.</span><span class="n">cfg</span> <span class="n">file</span><span class="p">)</span><span class="o">.</span>
+<span class="o">*</span> <span class="n">same</span> <span class="k">as</span> <span class="n">above</span> <span class="ow">is</span> <span class="n">true</span> <span class="k">for</span> <span class="n">the</span> <span class="n">use</span> <span class="n">of</span> <span class="n">audience</span> <span class="n">claim</span>
+<span class="o">*</span> <span class="n">token</span> <span class="n">issuer</span> <span class="ow">is</span> <span class="n">known</span> <span class="n">to</span> <span class="n">Rucio</span> <span class="n">Authentication</span> <span class="n">server</span>
+<span class="o">*</span> <span class="n">the</span> <span class="n">identity</span> <span class="n">of</span> <span class="n">the</span> <span class="n">token</span> <span class="p">(</span><span class="s2">&quot;SUB=&lt;user sub claim&gt;, ISS=&lt;issuer url&gt;&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="n">assigned</span> <span class="n">to</span> <span class="n">an</span> <span class="n">existing</span> <span class="n">Rucio</span> <span class="n">account</span> <span class="p">(</span><span class="n">pre</span><span class="o">-</span><span class="n">provisioned</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If so, one can directly present the token to the Rucio REST endpoint in the ‘X-Rucio-Auth-Token’ header, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python
+$ import requests
+$ s=requests.session()
+$ your_token=&lt;your JWT access token string&gt;
+$ headers={&#39;X-Rucio-Auth-Token&#39;: your_token}
+$ address=&#39;https://&lt;Rucio Auth Server Name&gt;/accounts/guenther&#39;
+$ result=s.get(address, headers=headers, verify=False)
+$ result.text
+&gt;&gt;&gt; u&#39;{&quot;status&quot;: &quot;ACTIVE&quot;, &quot;account&quot;: &quot;guenther&quot;, &quot;account_type&quot;: &quot;USER&quot;, &quot;created_at&quot;: &quot;2019-11-13T13:01:58&quot;, &quot;suspended_at&quot;: null, &quot;updated_at&quot;: &quot;2019-11-13T13:01:58&quot;, &quot;deleted_at&quot;: null, &quot;email&quot;: &quot;jaroslav.guenther@gmail.com&quot;}&#39;
+</pre></div>
+</div>
+<p>There is also an option to specify a <code class="docutils literal notranslate"><span class="pre">auth_token_file_path</span></code> in the <code class="docutils literal notranslate"><span class="pre">[client]</span></code> section of the rucio.cfg file. Rucio Client will then store and search for user’s token saved in such file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">client</span><span class="p">]</span>
+<span class="n">auth_token_file_path</span> <span class="o">=</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">token</span><span class="o">/</span><span class="n">file</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="querrying-basic-information-about-rses">
+<h2>Querrying basic information about RSEs<a class="headerlink" href="#querrying-basic-information-about-rses" title="Permalink to this headline">¶</a></h2>
+<p>You can query the list of available RSEs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-rses
+SITE1_DISK
+SITE1_TAPE
+SITE2_DISK
+SITE2_SCRATCH
+SITE3_TAPE
+</pre></div>
+</div>
+<p>If the RSEs are tagged with attributes you can build RSE expressions and query the sites matching these expressions:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-rses --expression &quot;tier=1&amp;disk=1&quot;
+SITE1_DISK
+SITE2_DISK
+</pre></div>
+</div>
+</div>
+<div class="section" id="querying-information-about-dids">
+<h2>Querying information about DIDs<a class="headerlink" href="#querying-information-about-dids" title="Permalink to this headline">¶</a></h2>
+<p>To list all the possible scopes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-scopes
+mc
+data
+user.jdoe
+user.janedoe
+</pre></div>
+</div>
+<p>You can query the DIDs matching a certain pattern. It always requires to specify the scope in which you want to search:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-dids user.jdoe:*
++-------------------------------------------+--------------+
+| SCOPE:NAME                                | [DID TYPE]   |
+|-------------------------------------------+--------------|
+| user.jdoe:user.jdoe.test.container.1234.1 | CONTAINER    |
+| user.jdoe:user.jdoe.test.container.1234.2 | CONTAINER    |
+| user.jdoe:user.jdoe.test.dataset.1        | DATASET      |
+| user.jdoe:user.jdoe.test.dataset.2        | DATASET      |
+| user.jdoe:test.file.1                     | FILE         |
+| user.jdoe:test.file.2                     | FILE         |
+| user.jdoe:test.file.3                     | FILE         |
+|-------------------------------------------+--------------|
+</pre></div>
+</div>
+<p>You can filter by key/value, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-dids --filter type=CONTAINER
++-------------------------------------------+--------------+
+| SCOPE:NAME                                | [DID TYPE]   |
+|-------------------------------------------+--------------|
+| user.jdoe:user.jdoe.test.container.1234.1 | CONTAINER    |
+| user.jdoe:user.jdoe.test.container.1234.2 | CONTAINER    |
+|-------------------------------------------+--------------|
+</pre></div>
+</div>
+<p>If you want to resolve a collection (CONTAINER or DATASET) into the list of its constituents:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-content user.jdoe:user.jdoe.test.container.1234.1
++------------------------------------+--------------+
+| SCOPE:NAME                         | [DID TYPE]   |
+|------------------------------------+--------------|
+| user.jdoe:user.jdoe.test.dataset.1 | DATASET      |
+| user.jdoe:user.jdoe.test.dataset.2 | DATASET      |
++------------------------------------+--------------+
+</pre></div>
+</div>
+<p>You can resolve also the collections (CONTAINER or DATASET) into the list of files:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-files user.jdoe:user.jdoe.test.container.1234.1
++-----------------------+--------------------------------------+-------------+------------+----------+
+| SCOPE:NAME            | GUID                                 | ADLER32     | FILESIZE   | EVENTS   |
+|-----------------------+--------------------------------------+-------------+------------+----------|
+| user.jdoe:test.file.1 | 9DF32550-D0D1-4482-9A26-0FBC46D6902A | ad:56fb0723 | 39.247 kB  |          |
+| user.jdoe:test.file.2 | 67E8CF14-F953-45F3-B3F5-E6143F89915F | ad:e3e573b5 | 636.075 kB |          |
+| user.jdoe:test.file.3 | 32CD7F8E-944B-4EA4-83E3-BABE48DB5751 | ad:22849380 | 641.427 kB |          |
++-----------------------+--------------------------------------+-------------+------------+----------+
+Total files : 3
+Total size : 1.316 MB:
+</pre></div>
+</div>
+</div>
+<div class="section" id="rules-operations">
+<h2>Rules operations<a class="headerlink" href="#rules-operations" title="Permalink to this headline">¶</a></h2>
+<p>You can create a new rule like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio add-rules --lifetime 1209600 user.jdoe:user.jdoe.test.container.1234.1 1 &quot;tier=1&amp;disk=1&quot;
+a12e5664555a4f12b3cc6991db5accf9
+</pre></div>
+</div>
+<p>The command returns the rule_id of the rule.</p>
+<p>You can list the rules for a particular DID:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-rules user.jdoe:user.jdoe.test.container.1234.1
+ID                                ACCOUNT    SCOPE:NAME                                 STATE[OK/REPL/STUCK]    RSE_EXPRESSION        COPIES  EXPIRES (UTC)
+--------------------------------  ---------  -----------------------------------------  ----------------------  ------------------  --------  -------------------
+a12e5664555a4f12b3cc6991db5accf9  jdoe       user.jdoe:user.jdoe.test.container.1234.1  OK[3/0/0]               tier=1&amp;disk=1       1         2018-02-09 03:57:46
+b0fcde2acbdb489b874c3c4537595adc  janedoe    user.jdoe:user.jdoe.test.container.1234.1  REPLICATING[4/1/1]      tier=1&amp;tape=1       2
+4a6bd85c13384bd6836fbc06e8b316d7  mc         user.jdoe:user.jdoe.test.container.1234.1  OK[3/0/0]               tier=1&amp;tape=1       2
+</pre></div>
+</div>
+<p>The state indicates how many locks (physical replicas of the files) are OK, Replicating or Stuck</p>
+</div>
+<div class="section" id="accessing-files">
+<h2>Accessing files<a class="headerlink" href="#accessing-files" title="Permalink to this headline">¶</a></h2>
+<p>The command to download DIDs locally is called rucio download. It supports various sets of option. You can invoke it like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># rucio download user.jdoe:user.jdoe.test.container.1234.1</span>
+<span class="mi">2018</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">02</span> <span class="mi">15</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mi">08</span><span class="p">,</span><span class="mi">450</span> <span class="n">INFO</span>    <span class="n">Thread</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span> <span class="p">:</span> <span class="n">Starting</span> <span class="n">the</span> <span class="n">download</span> <span class="n">of</span> <span class="n">user</span><span class="o">.</span><span class="n">jdoe</span><span class="p">:</span><span class="n">test</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="mi">2</span>
+<span class="mi">2018</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">02</span> <span class="mi">15</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mi">08</span><span class="p">,</span><span class="mi">451</span> <span class="n">INFO</span>    <span class="n">Thread</span> <span class="mi">2</span><span class="o">/</span><span class="mi">3</span> <span class="p">:</span> <span class="n">Starting</span> <span class="n">the</span> <span class="n">download</span> <span class="n">of</span> <span class="n">user</span><span class="o">.</span><span class="n">jdoe</span><span class="p">:</span><span class="n">test</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="mi">3</span>
+<span class="mi">2018</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">02</span> <span class="mi">15</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mi">08</span><span class="p">,</span><span class="mi">451</span> <span class="n">INFO</span>    <span class="n">Thread</span> <span class="mi">3</span><span class="o">/</span><span class="mi">3</span> <span class="p">:</span> <span class="n">Starting</span> <span class="n">the</span> <span class="n">download</span> <span class="n">of</span> <span class="n">user</span><span class="o">.</span><span class="n">jdoe</span><span class="p">:</span><span class="n">test</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="mi">1</span>
+<span class="mi">2018</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">02</span> <span class="mi">15</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mi">08</span><span class="p">,</span><span class="mi">503</span> <span class="n">INFO</span>    <span class="n">Thread</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span> <span class="p">:</span> <span class="n">File</span> <span class="n">user</span><span class="o">.</span><span class="n">jdoe</span><span class="p">:</span><span class="n">test</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="mi">2</span> <span class="n">trying</span> <span class="kn">from</span> <span class="nn">SITE1_DISK</span>
+<span class="mi">2018</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">02</span> <span class="mi">15</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mi">08</span><span class="p">,</span><span class="mi">549</span> <span class="n">INFO</span>    <span class="n">Thread</span> <span class="mi">2</span><span class="o">/</span><span class="mi">3</span> <span class="p">:</span> <span class="n">File</span> <span class="n">user</span><span class="o">.</span><span class="n">jdoe</span><span class="p">:</span><span class="n">test</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="mi">3</span> <span class="n">trying</span> <span class="kn">from</span> <span class="nn">SITE2_DISK</span>
+<span class="mi">2018</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">02</span> <span class="mi">15</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mi">08</span><span class="p">,</span><span class="mi">551</span> <span class="n">INFO</span>    <span class="n">Thread</span> <span class="mi">3</span><span class="o">/</span><span class="mi">3</span> <span class="p">:</span> <span class="n">File</span> <span class="n">user</span><span class="o">.</span><span class="n">jdoe</span><span class="p">:</span><span class="n">test</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="mi">1</span> <span class="n">trying</span> <span class="kn">from</span> <span class="nn">SITE1_DISK</span>
+<span class="mi">2018</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">02</span> <span class="mi">15</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="mi">399</span> <span class="n">INFO</span>    <span class="n">Thread</span> <span class="mi">3</span><span class="o">/</span><span class="mi">3</span> <span class="p">:</span> <span class="n">File</span> <span class="n">user</span><span class="o">.</span><span class="n">jdoe</span><span class="p">:</span><span class="n">test</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="mi">1</span> <span class="n">successfully</span> <span class="n">downloaded</span> <span class="kn">from</span> <span class="nn">SITE1_DISK</span>
+<span class="mi">2018</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">02</span> <span class="mi">15</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="mi">415</span> <span class="n">INFO</span>    <span class="n">Thread</span> <span class="mi">2</span><span class="o">/</span><span class="mi">3</span> <span class="p">:</span> <span class="n">File</span> <span class="n">user</span><span class="o">.</span><span class="n">jdoe</span><span class="p">:</span><span class="n">test</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="mi">3</span> <span class="n">successfully</span> <span class="n">downloaded</span> <span class="kn">from</span> <span class="nn">SITE2_DISK</span>
+<span class="mi">2018</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">02</span> <span class="mi">15</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="mi">420</span> <span class="n">INFO</span>    <span class="n">Thread</span> <span class="mi">3</span><span class="o">/</span><span class="mi">3</span> <span class="p">:</span> <span class="n">File</span> <span class="n">user</span><span class="o">.</span><span class="n">jdoe</span><span class="p">:</span><span class="n">test</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="mi">1</span> <span class="n">successfully</span> <span class="n">downloaded</span><span class="o">.</span> <span class="mf">39.247</span> <span class="n">kB</span> <span class="ow">in</span> <span class="mf">1.85</span> <span class="n">seconds</span> <span class="o">=</span> <span class="mf">0.02</span> <span class="n">MBps</span>
+<span class="mi">2018</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">02</span> <span class="mi">15</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="mi">537</span> <span class="n">INFO</span>    <span class="n">Thread</span> <span class="mi">2</span><span class="o">/</span><span class="mi">3</span> <span class="p">:</span> <span class="n">File</span> <span class="n">user</span><span class="o">.</span><span class="n">jdoe</span><span class="p">:</span><span class="n">test</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="mi">3</span> <span class="n">successfully</span> <span class="n">downloaded</span><span class="o">.</span> <span class="mf">641.427</span> <span class="n">kB</span> <span class="ow">in</span> <span class="mf">1.87</span> <span class="n">seconds</span> <span class="o">=</span> <span class="mf">0.34</span> <span class="n">MBps</span>
+<span class="mi">2018</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">02</span> <span class="mi">15</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="mi">614</span> <span class="n">INFO</span>    <span class="n">Thread</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span> <span class="p">:</span> <span class="n">File</span> <span class="n">user</span><span class="o">.</span><span class="n">jdoe</span><span class="p">:</span><span class="n">test</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="mi">2</span> <span class="n">successfully</span> <span class="n">downloaded</span> <span class="kn">from</span> <span class="nn">SITE1_DISK</span>
+<span class="mi">2018</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">02</span> <span class="mi">15</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="mi">633</span> <span class="n">INFO</span>    <span class="n">Thread</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span> <span class="p">:</span> <span class="n">File</span> <span class="n">user</span><span class="o">.</span><span class="n">jdoe</span><span class="p">:</span><span class="n">test</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="mi">2</span> <span class="n">successfully</span> <span class="n">downloaded</span><span class="o">.</span> <span class="mf">636.075</span> <span class="n">kB</span> <span class="ow">in</span> <span class="mf">2.11</span> <span class="n">seconds</span> <span class="o">=</span> <span class="mf">0.3</span> <span class="n">MBps</span>
+<span class="o">----------------------------------</span>
+<span class="n">Download</span> <span class="n">summary</span>
+<span class="o">----------------------------------------</span>
+<span class="n">DID</span> <span class="n">user</span><span class="o">.</span><span class="n">jdoe</span><span class="p">:</span><span class="n">user</span><span class="o">.</span><span class="n">jdoe</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">container</span><span class="o">.</span><span class="mf">1234.1</span>
+<span class="n">Total</span> <span class="n">files</span> <span class="p">:</span>                                 <span class="mi">3</span>
+<span class="n">Downloaded</span> <span class="n">files</span> <span class="p">:</span>                            <span class="mi">3</span>
+<span class="n">Files</span> <span class="n">already</span> <span class="n">found</span> <span class="n">locally</span> <span class="p">:</span>                 <span class="mi">0</span>
+<span class="n">Files</span> <span class="n">that</span> <span class="n">cannot</span> <span class="n">be</span> <span class="n">downloaded</span> <span class="p">:</span>             <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Rucio</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database.html">Database operations</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/rucio.html">Rucio CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/rucio-admin.html">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="monitoring.html">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="policy_packages.html">Policy packages</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="installing_clients.html" title="previous chapter">Installing Rucio Clients</a></li>
+      <li>Next: <a href="man/rucio.html" title="next chapter">Rucio CLI</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/cli_examples.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

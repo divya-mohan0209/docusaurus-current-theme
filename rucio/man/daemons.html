@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daemons CLIs &#8212; Rucio 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Daemon rucio-abacus-account" href="rucio-abacus-account.html" />
+    <link rel="prev" title="Installing Rucio daemons" href="../installing_daemons.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="daemons-clis">
+<h1>Daemons CLIs<a class="headerlink" href="#daemons-clis" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rucio-abacus-account.html">Daemon rucio-abacus-account</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-abacus-rse.html">Daemon rucio-abacus-rse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-atropos.html">Daemon rucio-atropos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-automatix.html">Daemon rucio-automatix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-bb8.html">Daemon rucio-bb8</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-c3po.html">Daemon rucio-c3po</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-cache-consumer.html">Daemon rucio-cache-consumer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-conveyor-finisher.html">Daemon rucio-conveyor-finisher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-conveyor-poller.html">Daemon rucio-conveyor-poller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-conveyor-receiver.html">Daemon rucio-conveyor-receiver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-conveyor-stager.html">Daemon rucio-conveyor-stager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-conveyor-submitter.html">Daemon rucio-conveyor-submitter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-conveyor-throttler.html">Daemon rucio-conveyor-throttler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-dark-reaper.html">Daemon rucio-dark-reaper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-hermes.html">Daemon rucio-hermes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-judge-cleaner.html">Daemon rucio-judge-cleaner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-judge-evaluator.html">Daemon rucio-judge-evaluator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-judge-injector.html">Daemon rucio-judge-injector</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-judge-repairer.html">Daemon rucio-judge-repairer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-kronos.html">Daemon rucio-kronos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-light-reaper.html">Daemon rucio-light-reaper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-minos.html">Daemon rucio-minos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-minos-temporary-expiration.html">Daemon rucio-minos-temporary-expiration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-necromancer.html">Daemon rucio-necromancer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-reaper.html">Daemon rucio-reaper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-transmogrifier.html">Daemon rucio-transmogrifier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-undertaker.html">Daemon rucio-undertaker</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Rucio</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database.html">Database operations</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio.html">Rucio CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-admin.html">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../policy_packages.html">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../installing_daemons.html" title="previous chapter">Installing Rucio daemons</a></li>
+      <li>Next: <a href="rucio-abacus-account.html" title="next chapter">Daemon rucio-abacus-account</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/man/daemons.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

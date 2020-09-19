@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1.22.0 “Green Donkey” &#8212; Rucio 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.21.9 (clients only)" href="1.21.9.html" />
+    <link rel="prev" title="1.22.0rc1" href="1.22.0rc1.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="green-donkey">
+<h1>1.22.0 “Green Donkey”<a class="headerlink" href="#green-donkey" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="upgrade-instructions">
+<h2>Upgrade Instructions<a class="headerlink" href="#upgrade-instructions" title="Permalink to this headline">¶</a></h2>
+<p>This feature release requires a database schema upgrade. Please consult the <a class="reference external" href="https://rucio.readthedocs.io/en/latest/database.html">documentation</a> about upgrading your database schema.</p>
+<p>The following changes are necessary and are covered by the <code class="docutils literal notranslate"><span class="pre">alembic</span> <span class="pre">upgrade</span> <span class="pre">head</span></code> command:</p>
+<ol class="arabic simple">
+<li><p>OAuth2.0 and JWT feature support (Alembic revision <code class="docutils literal notranslate"><span class="pre">d1189a09c6e0</span></code>)</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">IDENTITIES_TYPE_CHK</span></code> constraint in <code class="docutils literal notranslate"><span class="pre">identities</span></code> table</p></li>
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">ACCOUNT_MAP_ID_TYPE_CHK</span></code> constraint in <code class="docutils literal notranslate"><span class="pre">account_map</span></code> table</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">oidc_scope</span></code> column to <code class="docutils literal notranslate"><span class="pre">tokens</span></code> table</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">audience</span></code> column to <code class="docutils literal notranslate"><span class="pre">tokens</span></code> table</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">refresh_token</span></code> column to <code class="docutils literal notranslate"><span class="pre">tokens</span></code> table</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">refresh</span></code> column to <code class="docutils literal notranslate"><span class="pre">tokens</span></code> table</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">TOKENS_REFRESH_CHK</span></code> constraint to <code class="docutils literal notranslate"><span class="pre">tokens</span></code> table</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">refresh_start</span></code> column to <code class="docutils literal notranslate"><span class="pre">tokens</span></code> table</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">refresh_expired_at</span></code> column to <code class="docutils literal notranslate"><span class="pre">tokens</span></code> table</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">refresh_lifetime</span></code> column to <code class="docutils literal notranslate"><span class="pre">tokens</span></code> table</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">oauth_requests</span></code> table</p></li>
+<li><p>Change size of <code class="docutils literal notranslate"><span class="pre">token</span></code> column in <code class="docutils literal notranslate"><span class="pre">tokens</span></code> table</p></li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Changes for Multi-VO functionality (Alembic revision <code class="docutils literal notranslate"><span class="pre">a118956323f8</span></code>)</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">vos</span></code> table</p></li>
+<li><p>Insert default row to <code class="docutils literal notranslate"><span class="pre">vos</span></code> table</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">vo</span></code> column to <code class="docutils literal notranslate"><span class="pre">rses</span></code> table</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">RSES_VOS_FK</span></code> foreign key constraint to <code class="docutils literal notranslate"><span class="pre">rses</span></code> table</p></li>
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">RSES_RSE_UQ</span></code> unique contraint in <code class="docutils literal notranslate"><span class="pre">rses</span></code> table</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="general">
+<h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="features">
+<h3>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Authentication &amp; Authorisation: Rucio user authentication via OIDC protocol (XDC IAM), getting user info and JWT tokens <a class="reference external" href="https://github.com/rucio/rucio/issues/2612">#2612</a></p></li>
+<li><p>Core &amp; Internals: Need VO table and VO column in RSE table <a class="reference external" href="https://github.com/rucio/rucio/issues/2727">#2727</a></p></li>
+<li><p>Deletion: Reaper 2.0 <a class="reference external" href="https://github.com/rucio/rucio/issues/2412">#2412</a></p></li>
+<li><p>Monitoring &amp; Logging: Add support for prometheus in core.monitor <a class="reference external" href="https://github.com/rucio/rucio/issues/3124">#3124</a></p></li>
+<li><p>Release management: Add oidc auth templates to setup.py <a class="reference external" href="https://github.com/rucio/rucio/issues/3348">#3348</a></p></li>
+<li><p>Release management: Dependency upgrade for 1.22 <a class="reference external" href="https://github.com/rucio/rucio/issues/3360">#3360</a></p></li>
+<li><p>Release management: Better way to deal with configuration / permissions / policy <a class="reference external" href="https://github.com/rucio/rucio/issues/533">#533</a></p></li>
+</ul>
+</div>
+<div class="section" id="enhancements">
+<h3>Enhancements<a class="headerlink" href="#enhancements" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Deletion: Protection of sources too strict in the reaper <a class="reference external" href="https://github.com/rucio/rucio/issues/1637">#1637</a></p></li>
+</ul>
+</div>
+<div class="section" id="bugs">
+<h3>Bugs<a class="headerlink" href="#bugs" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Authentication &amp; Authorisation: Fixes to OIDC AuthN/Z after first deployment on a testbed <a class="reference external" href="https://github.com/rucio/rucio/issues/3337">#3337</a></p></li>
+<li><p>Deletion: only_delete_obsolete is not working properly <a class="reference external" href="https://github.com/rucio/rucio/issues/3399">#3399</a></p></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Rucio</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database.html">Database operations</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/rucio.html">Rucio CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/rucio-admin.html">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../policy_packages.html">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../releasenotes.html">Release notes</a><ul>
+      <li>Previous: <a href="1.22.0rc1.html" title="previous chapter">1.22.0rc1</a></li>
+      <li>Next: <a href="1.21.9.html" title="next chapter">1.21.9 (clients only)</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/releasenotes/1.22.0.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

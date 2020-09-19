@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daemon rucio-transmogrifier &#8212; Rucio 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Daemon rucio-undertaker" href="rucio-undertaker.html" />
+    <link rel="prev" title="Daemon rucio-reaper" href="rucio-reaper.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="daemon-rucio-transmogrifier">
+<h1>Daemon rucio-transmogrifier<a class="headerlink" href="#daemon-rucio-transmogrifier" title="Permalink to this headline">¶</a></h1>
+<p><p>The Transmogrifier daemon is responsible for the creation of replication rules for DIDs matching a subscription.</p>
+</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">rucio</span><span class="o">-</span><span class="n">transmogrifier</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">once</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">threads</span> <span class="n">THREADS</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">bulk</span> <span class="n">BULK</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">sleep</span><span class="o">-</span><span class="n">time</span> <span class="n">SLEEP_TIME</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments">
+<h2>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h2>
+<dl class="option-list">
+<dt><kbd>--run-once</kbd></dt>
+<dd><p>Runs one loop iteration</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--threads</kbd></dt>
+<dd><p>Concurrency control: number of threads</p>
+<p>Default: 1</p>
+</dd>
+<dt><kbd>--bulk</kbd></dt>
+<dd><p>Bulk control: number of requests per cycle</p>
+<p>Default: 1000</p>
+</dd>
+<dt><kbd>--sleep-time</kbd></dt>
+<dd><p>Seconds to sleep between two cycles</p>
+<p>Default: 60</p>
+</dd>
+</dl>
+</div>
+<p><p>Create a DID:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python
+from rucio.core.did import add_did
+from rucio.db.sqla.constants import DIDType
+add_did(scope=&#39;mock&#39;, name=&#39;test&#39;, type=DIDType.DATASET, account=&#39;root&#39;, meta={&#39;project&#39;: &#39;test_project&#39;})
+</pre></div>
+</div>
+<p>Create a subscription that matches the DID:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin subscription add test &#39;{&quot;scope&quot;: [&quot;mock&quot;], &quot;project&quot;: [&quot;test_project&quot;]}&#39; &#39;[{&quot;copies&quot;: 1, &quot;rse_expression&quot;: &quot;MOCK&quot;, &quot;activity&quot;: &quot;User Subscriptions&quot;}]&#39; &#39;df&#39;
+</pre></div>
+</div>
+<p>Check if there are rules for the DID:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-rules mock:test
+ID                                ACCOUNT    SCOPE:NAME    STATE[OK/REPL/STUCK]    RSE_EXPRESSION      COPIES  EXPIRES (UTC)    CREATED (UTC)
+--------------------------------  ---------  ------------  ----------------------  ----------------  --------  ---------------  -------------------
+</pre></div>
+</div>
+<p>Run the daemon:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-transmogrifier --run-once
+</pre></div>
+</div>
+<p>Check again if there are rules for the DID:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-rules mock:test
+ID                                ACCOUNT    SCOPE:NAME    STATE[OK/REPL/STUCK]    RSE_EXPRESSION      COPIES  EXPIRES (UTC)    CREATED (UTC)
+--------------------------------  ---------  ------------  ----------------------  ----------------  --------  ---------------  -------------------
+e658f6f47f444326aad624dabef7b785  root       mock:test     OK[0/0/0]               MOCK                     1                   2018-12-03 14:01:19
+</pre></div>
+</div>
+</p>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Rucio</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database.html">Database operations</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio.html">Rucio CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-admin.html">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../policy_packages.html">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="daemons.html">Daemons CLIs</a><ul>
+      <li>Previous: <a href="rucio-reaper.html" title="previous chapter">Daemon rucio-reaper</a></li>
+      <li>Next: <a href="rucio-undertaker.html" title="next chapter">Daemon rucio-undertaker</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/man/rucio-transmogrifier.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

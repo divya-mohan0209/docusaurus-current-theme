@@ -1,0 +1,418 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Installing Rucio server &#8212; Rucio 1.2 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installing Rucio daemons" href="installing_daemons.html" />
+    <link rel="prev" title="Advanced Usage" href="advanced_usage.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="installing-rucio-server">
+<h1>Installing Rucio server<a class="headerlink" href="#installing-rucio-server" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>The Rucio server runs on Python 2.7, 3.6 and 3.7 on any Unix-like platform.</p>
+</div>
+<div class="section" id="install-via-pip">
+<h2>Install via pip<a class="headerlink" href="#install-via-pip" title="Permalink to this headline">¶</a></h2>
+<p>Heads up: We recommend to use the docker-based install (see next section) as it will configure many things for you automatically. Only use the pip-based install if you have a good reason and know how to configure your webservices manually:</p>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">rucio</span></code></p>
+<p>This will pull the latest release from <a class="reference external" href="https://pypi.python.org/pypi/rucio/">PyPi</a>. The Rucio server also needs several Python dependencies. These are all listed in the file <code class="docutils literal notranslate"><span class="pre">tools/pip-requires</span></code> and will be pulled in as necessary.</p>
+</div>
+<div class="section" id="install-via-docker">
+<h2>Install via Docker<a class="headerlink" href="#install-via-docker" title="Permalink to this headline">¶</a></h2>
+<p>A simple server without SSL can be started like this:</p>
+<p><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">--name=rucio-server</span> <span class="pre">-p</span> <span class="pre">80:80</span> <span class="pre">-d</span> <span class="pre">rucio/rucio-server</span></code></p>
+<p>This will start up a simple server using sqlite based on an automatically generated configuration. You can check if the server is running with <cite>curl http://localhost/ping</cite></p>
+<p>This should return the Rucio version used in the container. Any other curl requests will not work as the database backend is not initialized as this image is meant to be used with an already bootstrapped database backend. I.e., that the container has to be configured to point to the correct database. There are two ways to manage the Rucio configuration: using environment variables or by mounting a full rucio.cfg.</p>
+<p>If you want to set the connection string for the database it can be done using the <cite>RUCIO_CFG_DATABASE_DEFAULT</cite> environment variable, e.g., to start a container connecting to a MySQL DB running at <cite>mysql.db</cite> you could use something like this:</p>
+<p><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">--name=rucio-server</span> <span class="pre">-e</span> <span class="pre">RUCIO_CFG_DATABASE_DEFAULT=&quot;mysql+pymysql://rucio:rucio&#64;mysql.db/rucio&quot;</span> <span class="pre">-p</span> <span class="pre">80:80</span> <span class="pre">-d</span> <span class="pre">rucio/rucio-server</span></code></p>
+<p>The are much more configuration parameters available that will be listed at the end of this readme.</p>
+<p>Another way to configure Rucio is to directly mount a complete rucio.cfg into the container. This will then be used instead of the auto-generated one, e.g., if you have a rucio.cfg ready on your host system under <cite>/tmp/rucio.cfg</cite> you could start a container like this:</p>
+<p><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">--name=rucio-server</span> <span class="pre">-v</span> <span class="pre">/tmp/rucio.cfg:/opt/rucio/etc/rucio.cfg</span> <span class="pre">-p</span> <span class="pre">80:80</span> <span class="pre">-d</span> <span class="pre">rucio/rucio-server</span></code></p>
+<p>The rucio.cfg is used to configure the database backend.</p>
+<p>If you want to enable SSL you would need to set the <cite>RUCIO_ENABLE_SSL</cite> variable and also need to include the host certificate, key and the the CA certificate as volumes. E.g.,:</p>
+<p><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">--name=rucio-server</span> <span class="pre">-v</span> <span class="pre">/tmp/ca.pem:/etc/grid-security/ca.pem</span> <span class="pre">-v</span> <span class="pre">/tmp/hostcert.pem:/etc/grid-security/hostcert.pem</span> <span class="pre">-v</span> <span class="pre">/tmp/hostkey.pem:/etc/grid-security/hostkey.pem</span> <span class="pre">-v</span> <span class="pre">/tmp/rucio.cfg:/opt/rucio/etc/rucio.cfg</span> <span class="pre">-p</span> <span class="pre">443:443</span> <span class="pre">-e</span> <span class="pre">RUCIO_ENABLE_SSL=True</span> <span class="pre">-d</span> <span class="pre">rucio/rucio-server</span></code></p>
+<p>By default the output of the Apache web server is written directly to stdout and stderr. If you would rather direct them into separate files it can be done using the <cite>RUCIO_ENABLE_LOGS</cite> variable. The storage folder of the logs can be used as a volume:</p>
+<p><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">--name=rucio-server</span> <span class="pre">-v</span> <span class="pre">/tmp/rucio.cfg:/opt/rucio/etc/rucio.cfg</span> <span class="pre">-v</span> <span class="pre">/tmp/logs:/var/log/httpd</span> <span class="pre">-p</span> <span class="pre">80:80</span> <span class="pre">-e</span> <span class="pre">RUCIO_ENABLE_LOGFILE=True</span> <span class="pre">-d</span> <span class="pre">rucio/rucio-server</span></code></p>
+</div>
+<div class="section" id="environment-variables">
+<h2>Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h2>
+<p>As shown in the examples above the rucio-server image can be configured using environment variables that are passed with <cite>docker run</cite>. Below is a list of all available variables and their behaviour:</p>
+<div class="section" id="rucio-enable-ssl">
+<h3><cite>RUCIO_ENABLE_SSL</cite><a class="headerlink" href="#rucio-enable-ssl" title="Permalink to this headline">¶</a></h3>
+<p>By default, the rucio server runs without SSL on port 80. If you want to enable SSL set this variable to <cite>True</cite>. If you enable SSL you will also have to provide the host certificate and key and the certificate authority file. The server will look for <cite>hostcert.pem</cite>, <cite>hostkey.pem</cite> and <cite>ca.pem</cite> under <cite>/etc/grid-security</cite> so you will have to mount them as volumes. Furthermore you will also have to expose port 443.</p>
+</div>
+<div class="section" id="rucio-ca-path">
+<h3><cite>RUCIO_CA_PATH</cite><a class="headerlink" href="#rucio-ca-path" title="Permalink to this headline">¶</a></h3>
+<p>If you are using SSL and want use <cite>SSLCACertificatePath</cite> and <cite>SSLCARevocationPath</cite> you can do so by specifying the path in this variable.</p>
+</div>
+<div class="section" id="rucio-define-aliases">
+<h3><cite>RUCIO_DEFINE_ALIASES</cite><a class="headerlink" href="#rucio-define-aliases" title="Permalink to this headline">¶</a></h3>
+<p>By default, the web server is configured with all common rest endpoints except the authentication endpoint. If you want to specify your own set of aliases you can set this variable to <cite>True</cite>. The web server then expects an alias file under <cite>/opt/rucio/etc/aliases.conf</cite></p>
+</div>
+<div class="section" id="rucio-enable-logfile">
+<h3><cite>RUCIO_ENABLE_LOGFILE</cite><a class="headerlink" href="#rucio-enable-logfile" title="Permalink to this headline">¶</a></h3>
+<p>By default, the log output of the web server is written to stdout and stderr. If you set this variable to <cite>True</cite> the output will be written to <cite>access_log</cite> and <cite>error_log</cite> under <cite>/var/log/httpd</cite>.</p>
+</div>
+<div class="section" id="rucio-log-level">
+<h3><cite>RUCIO_LOG_LEVEL</cite><a class="headerlink" href="#rucio-log-level" title="Permalink to this headline">¶</a></h3>
+<p>The default log level is <cite>info</cite>. You can change it using this variable.</p>
+</div>
+<div class="section" id="rucio-log-format">
+<h3><cite>RUCIO_LOG_FORMAT</cite><a class="headerlink" href="#rucio-log-format" title="Permalink to this headline">¶</a></h3>
+<p>The default rucio log format is <cite>%ht%tt%{X-Rucio-Forwarded-For}it%Tt%Dt”%{X-Rucio-Auth-Token}i”t%{X-Rucio-RequestId}it%{X-Rucio-Client-Ref}it”%r”t%&gt;st%b</cite>
+You can set your own format using this variable.</p>
+</div>
+<div class="section" id="rucio-hostname">
+<h3><cite>RUCIO_HOSTNAME</cite><a class="headerlink" href="#rucio-hostname" title="Permalink to this headline">¶</a></h3>
+<p>This variable sets the server name in the apache config.</p>
+</div>
+<div class="section" id="rucio-server-admin">
+<h3><cite>RUCIO_SERVER_ADMIN</cite><a class="headerlink" href="#rucio-server-admin" title="Permalink to this headline">¶</a></h3>
+<p>This variable sets the server admin in the apache config.</p>
+</div>
+</div>
+<div class="section" id="rucio-cfg-configuration-parameters">
+<h2><cite>RUCIO_CFG</cite> configuration parameters:<a class="headerlink" href="#rucio-cfg-configuration-parameters" title="Permalink to this headline">¶</a></h2>
+<p>Environment variables can be used to set values for the auto-generated rucio.cfg. The names are derived from the actual names in the configuration file prefixed by <cite>RUCIO_CFG</cite>, e.g., the <cite>default</cite> value in the <cite>database</cite> section becomes <cite>RUCIO_CFG_DATABASE_DEFAULT</cite>.
+All available environment variables are:</p>
+<ul class="simple">
+<li><p>RUCIO_CFG_COMMON_LOGDIR</p></li>
+<li><p>RUCIO_CFG_COMMON_LOGLEVEL</p></li>
+<li><p>RUCIO_CFG_COMMON_MAILTEMPLATEDIR</p></li>
+<li><p>RUCIO_CFG_DATABASE_DEFAULT</p></li>
+<li><p>RUCIO_CFG_DATABASE_SCHEMA</p></li>
+<li><p>RUCIO_CFG_DATABASE_POOL_RESET_ON_RETURN</p></li>
+<li><p>RUCIO_CFG_DATABASE_ECHO</p></li>
+<li><p>RUCIO_CFG_DATABASE_POLL_RECYCLE</p></li>
+<li><p>RUCIO_CFG_DATABASE_POOL_SIZE</p></li>
+<li><p>RUCIO_CFG_DATABASE_POOL_TIMEOUT</p></li>
+<li><p>RUCIO_CFG_DATABASE_MAX_OVERFLOW</p></li>
+<li><p>RUCIO_CFG_DATABASE_POWUSERACCOUNT</p></li>
+<li><p>RUCIO_CFG_DATABASE_USERPASSWORD</p></li>
+<li><p>RUCIO_CFG_MONITOR_CARBON_SERVER</p></li>
+<li><p>RUCIO_CFG_MONITOR_CARBON_PORT</p></li>
+<li><p>RUCIO_CFG_MONITOR_USER_SCOPE</p></li>
+<li><p>RUCIO_CFG_TRACE_TRACEDIR</p></li>
+<li><p>RUCIO_CFG_TRACE_BROKERS</p></li>
+<li><p>RUCIO_CFG_TRACE_PORT</p></li>
+<li><p>RUCIO_CFG_TRACE_USERNAME</p></li>
+<li><p>RUCIO_CFG_TRACE_PASSWORD</p></li>
+<li><p>RUCIO_CFG_TRACE_TOPIC</p></li>
+<li><p>RUCIO_CFG_PERMISSION_POLICY</p></li>
+<li><p>RUCIO_CFG_PERMISSION_SCHEMA</p></li>
+<li><p>RUCIO_CFG_PERMISSION_LFN2PFN_ALGORITHM_DEFAULT</p></li>
+<li><p>RUCIO_CFG_PERMISSION_SUPPORT</p></li>
+<li><p>RUCIO_CFG_PERMISSION_SUPPORT_RUCIO</p></li>
+<li><p>RUCIO_CFG_WEBUI_USERCERT</p></li>
+</ul>
+</div>
+<div class="section" id="server-configuration-for-open-id-connect-authn-z">
+<h2>Server Configuration for Open ID Connect AuthN/Z<a class="headerlink" href="#server-configuration-for-open-id-connect-authn-z" title="Permalink to this headline">¶</a></h2>
+<p>In order to be able to use JSON web tokens (JWTs) and related OAuth2.0 authentication and authorization with Rucio, one first needs to have an account with the Identity Provider (IdP) which will act as Rucio Admin account representing the Rucio Application. Currently supported IdPs use Identity Access Management (IAM) system. Once, you have got your Rucio Admin IAM account (and its <cite>sub</cite> claim identifier), you will need to <a class="reference external" href="https://indigo-iam.github.io/docs/v/current/user-guide/client-registration.html">register two IAM Rucio clients</a> linked to this account. Once it is done, please save the relevant client_id, client_secret and registration access token (RAT some place safe, you will be needing them. In both clients, one needs to setup the redirect_uris to include both <cite>https://&lt;your_server_name&gt;/auth/oidc_token</cite> and <cite>https://&lt;your_server_name&gt;/auth/oidc_code</cite> paths. We will use one client as Rucio Auth IAM client (i.e. client for the authentication and authorization on the Rucio server). This client needs to have <cite>token exchange</cite>, <cite>token refresh</cite> and <cite>authorization code grant</cite> enabled. For the former two you might need to contact the IAM admin as such settings are usually not accessible to IAM users. In addition, you will need to request your IAM admin to allow your client returning refresh tokens with lifetime being visible in their unverified header. In addition Rucio assumes refresh tokens to expire immediatelly after their first use, which has to be also confirmed by your IAM admin. Second client, let’s call it Rucio Admin IAM client, will be used by a Rucio probe script <cite>check_voms</cite> in order to synchronize existing Rucio accounts with Rucio identities. Rucio will also use this client’s credentials in order to request token for itself. The IAM administrator must include the <cite>scim:read</cite> scope and allow <cite>client credentials</cite> grant type for the Rucio Admin IAM client in order to grant you rights to pre-provision IAM users for Rucio. Examples of the configuration of these two clients follow below:</p>
+<p>Example of the Rucio Auth IAM client configuration:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;client_id&quot;</span><span class="p">:</span> <span class="s2">&quot;AbcCDe123...&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;registration_access_token&quot;</span><span class="p">:</span> <span class="s2">&quot;AbcCDe123...&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;redirect_uris&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;https://rucio-auth.cern.ch/auth/oidc_token&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;https://rucio-auth.cern.ch/auth/oidc_code&quot;</span><span class="p">,</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;client_name&quot;</span><span class="p">:</span> <span class="s2">&quot;rucio-admin-client&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;client_uri&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;logo_uri&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;contacts&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;jaroslav.guenther@gmail.com&quot;</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;tos_uri&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;token_endpoint_auth_method&quot;</span><span class="p">:</span> <span class="s2">&quot;client_secret_basic&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;scope&quot;</span><span class="p">:</span> <span class="s2">&quot;address fts phone openid profile offline_access rucio email wlcg wlcg.groups fts:submit-transfer&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;grant_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;refresh_token&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;urn:ietf:params:oauth:grant-type:token-exchange&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;authorization_code&quot;</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;response_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;code&quot;</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;policy_uri&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;jwks_uri&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;jwks&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;jwksType&quot;</span><span class="p">:</span> <span class="s2">&quot;URI&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;application_type&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;sector_identifier_uri&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;subject_type&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;request_object_signing_alg&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;userinfo_signed_response_alg&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;userinfo_encrypted_response_alg&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;userinfo_encrypted_response_enc&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;id_token_signed_response_alg&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;id_token_encrypted_response_alg&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;id_token_encrypted_response_enc&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;default_max_age&quot;</span><span class="p">:</span> <span class="mi">60000</span><span class="p">,</span>
+  <span class="s2">&quot;require_auth_time&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+  <span class="s2">&quot;default_acr_values&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;initiate_login_uri&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;post_logout_redirect_uris&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;claims_redirect_uris&quot;</span><span class="p">:</span> <span class="p">[],</span>
+  <span class="s2">&quot;request_uris&quot;</span><span class="p">:</span> <span class="p">[],</span>
+  <span class="s2">&quot;software_statement&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;software_id&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;software_version&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;code_challenge_method&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;registration_client_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;https://wlcg.cloud.cnaf.infn.it/register/fdc297fc-0907-4a68-9022-3ccc7dd2501a&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;client_secret_expires_at&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s2">&quot;client_id_issued_at&quot;</span><span class="p">:</span> <span class="mi">1574700620</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Example of the Rucio Admin IAM client configuration:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;client_id&quot;</span><span class="p">:</span> <span class="s2">&quot;AbcDe123...&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;registration_access_token&quot;</span><span class="p">:</span> <span class="s2">&quot;AbcDe123...&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;client_secret&quot;</span><span class="p">:</span> <span class="s2">&quot;AbcDe123...&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;redirect_uris&quot;</span><span class="p">:</span> <span class="p">[],</span>
+  <span class="s2">&quot;client_name&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;client_uri&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;logo_uri&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;contacts&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;jaroslav.guenther@gmail.com&quot;</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;tos_uri&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;token_endpoint_auth_method&quot;</span><span class="p">:</span> <span class="s2">&quot;client_secret_basic&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;scope&quot;</span><span class="p">:</span> <span class="s2">&quot;address scim:read phone email wlcg profile fts:submit-transfer rucio fts fts:submit-transfer&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;grant_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;client_credentials&quot;</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;response_types&quot;</span><span class="p">:</span> <span class="p">[],</span>
+  <span class="s2">&quot;policy_uri&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;jwks_uri&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;jwks&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;jwksType&quot;</span><span class="p">:</span> <span class="s2">&quot;URI&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;application_type&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;sector_identifier_uri&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;subject_type&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;request_object_signing_alg&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;userinfo_signed_response_alg&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;userinfo_encrypted_response_alg&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;userinfo_encrypted_response_enc&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;id_token_signed_response_alg&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;id_token_encrypted_response_alg&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;id_token_encrypted_response_enc&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;default_max_age&quot;</span><span class="p">:</span> <span class="mi">60000</span><span class="p">,</span>
+  <span class="s2">&quot;require_auth_time&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+  <span class="s2">&quot;default_acr_values&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;initiate_login_uri&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;post_logout_redirect_uris&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;claims_redirect_uris&quot;</span><span class="p">:</span> <span class="p">[],</span>
+  <span class="s2">&quot;request_uris&quot;</span><span class="p">:</span> <span class="p">[],</span>
+  <span class="s2">&quot;software_statement&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;software_id&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;software_version&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;code_challenge_method&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+  <span class="s2">&quot;registration_client_uri&quot;</span><span class="p">:</span> <span class="s2">&quot;https://wlcg.cloud.cnaf.infn.it/register/5b5e5d37-926b-4b42-8a98-a0b4b28baf18&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;client_secret_expires_at&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s2">&quot;client_id_issued_at&quot;</span><span class="p">:</span> <span class="mi">1574700703</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>To make the Rucio server aware of the two clients above, one has to exchange the empty dictionary in <cite>etc/idpsecrets.json</cite> file with one containing the relevant information. Example of such dictionary (for multiple IdPs) follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+ <span class="s2">&quot;&lt;IdP nickname&gt;&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;redirect_uris&quot;</span><span class="p">:</span> <span class="p">[</span>
+   <span class="s2">&quot;https://&lt;server_name&gt;/auth/oidc_token&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;https://&lt;server_name&gt;/auth/oidc_code&quot;</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;registration_access_token&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;RAT_string&gt;&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;client_secret&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;client_secret&gt;&quot;</span><span class="p">,</span>
+ <span class="s2">&quot;SCIM&quot;</span><span class="p">:</span> <span class="p">{</span>
+   <span class="s2">&quot;client_secret&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;client_secret&gt;&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;grant_type&quot;</span><span class="p">:</span> <span class="s2">&quot;client_credentials&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;registration_access_token&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;RAT_string&gt;&quot;</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;issuer&quot;</span><span class="p">:</span> <span class="s2">&quot;https://&lt;issuer_server_name&gt;/&quot;</span>
+ <span class="p">},</span>
+ <span class="s2">&quot;wlcg&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;redirect_uris&quot;</span><span class="p">:</span> <span class="p">[</span>
+   <span class="s2">&quot;https://rucio-auth.cern.ch/auth/oidc_token&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;https://rucio-auth.cern.ch/auth/oidc_code&quot;</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;registration_access_token&quot;</span><span class="p">:</span> <span class="s2">&quot;eyJraWQiOi ...&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;client_id&quot;</span><span class="p">:</span> <span class="s2">&quot;fdc297fc-09 ...&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;client_secret&quot;</span><span class="p">:</span> <span class="s2">&quot;APFVcga_X ...&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;SCIM&quot;</span><span class="p">:</span> <span class="p">{</span>
+   <span class="s2">&quot;client_secret&quot;</span><span class="p">:</span> <span class="s2">&quot;IQqAcMOa ...&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;grant_type&quot;</span><span class="p">:</span> <span class="s2">&quot;client_credentials&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;registration_access_token&quot;</span><span class="p">:</span> <span class="s2">&quot;eyJraW ...&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;client_id&quot;</span><span class="p">:</span> <span class="s2">&quot;5b5e5d3 ...&quot;</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;issuer&quot;</span><span class="p">:</span> <span class="s2">&quot;https://wlcg.cloud.cnaf.infn.it/&quot;</span>
+ <span class="p">},</span>
+ <span class="s2">&quot;xdc&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="o">...</span> <span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>After this is done, please make sure your <cite>rucio.cfg</cite> file contains the following section:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">oidc</span><span class="p">]</span>
+<span class="n">idpsecrets</span> <span class="o">=</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">your</span><span class="o">/</span><span class="n">idpsecrets</span><span class="o">.</span><span class="n">json</span>
+<span class="n">admin_issuer</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">IdP_nickname</span><span class="o">&gt;</span>
+<span class="n">expected_audience</span> <span class="o">=</span> <span class="s1">&#39;&lt;rucio&gt;&#39;</span>
+<span class="n">expected_scope</span> <span class="o">=</span> <span class="s1">&#39;openid profile&#39;</span>
+</pre></div>
+</div>
+<p>Parameters ‘idpsecrets’ and ‘admin_issuer’ have to be present. &lt;IdP_nickname&gt; stands for your preferred IdP (e.g. “wlcg”). The IdP specified under admin_issuer will be contacted to get information about Rucio Users (SCIM) and to request tokens for the Rucio ‘root’ account. The expected_scope and expected_audence parameters are optional and if not filled, the Rucio server will set them to ‘openid profile’ and ‘rucio’ respectively. The expected scopes and audiences have to be configured correspondinly on the side of your registered clienst at your IdP (usually you can control accepted scopes and audiences for your clients via an IdP web interface).</p>
+<p>To finalise the process, one should assign the OIDC identities to the relevant Rucio admin_account_name (e.g. ‘root’, ‘ddmadmin’). This identity ID is composed of the IAM account sub claim and issuer url such as demonstrated below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">identity</span> <span class="n">add</span> <span class="o">--</span><span class="n">account</span> <span class="n">admin_account_name</span> <span class="o">--</span><span class="nb">type</span> <span class="n">OIDC</span> <span class="o">--</span><span class="nb">id</span> <span class="s2">&quot;SUB=b3127dc7-2be3-417b-9647-6bf61238ad01, ISS=https://wlcg.cloud.cnaf.infn.it/&quot;</span> <span class="o">--</span><span class="n">email</span> <span class="s2">&quot;wlcg-doma-rucio@cern.ch&quot;</span>
+</pre></div>
+</div>
+<p>A second identity has to be added to the same admin_account_name representing the client_credentials flow of the Rucio application, i.e. of the Rucio Admin IAM client from above. This identity consists of the client_id of the Rucio Admin IAM client and the issuer (the token obtained via the client credentials flow using the Rucio Admin IAM client will contain in the SUB claim the client_id instead of the IAM account SUB claim):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">identity</span> <span class="n">add</span> <span class="o">--</span><span class="n">account</span> <span class="n">admin_account_name</span> <span class="o">--</span><span class="nb">type</span> <span class="n">OIDC</span> <span class="o">--</span><span class="nb">id</span> <span class="s2">&quot;SUB=5b5e5d37-926b-4b42-8a98-a0b4b28baf18, ISS=https://wlcg.cloud.cnaf.infn.it/&quot;</span> <span class="o">--</span><span class="n">email</span> <span class="s2">&quot;wlcg-doma-rucio@cern.ch&quot;</span>
+</pre></div>
+</div>
+<p>Note: In case you can not/will not run the Rucio check_scim probe script in order to sync Rucio accounts with their IAM identities, you should assign the appropriate OIDC identity manually (as in the example above) to each Rucio account which is meant to use the OIDC authN/Z.</p>
+<p>In case you wish to use OIDC by default in order to login to the Rucio WebUI, one has to configure also another block in the <cite>rucio.cfg</cite> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">webui</span><span class="p">]</span>
+<span class="n">auth_type</span> <span class="o">=</span> <span class="n">oidc</span>
+<span class="n">auth_issuer</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">IdP</span> <span class="n">nickname</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">idpsecrets</span><span class="o">.</span><span class="n">json</span> <span class="n">file</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>This is not obligatory section, if not filled a user will get directed to a page with login choices.</p>
+<p>In order to ensure the correct lifetime management of the tokens and auth sessions, one also has to run the rucio-oauth-daemon run on the server!</p>
+<p>Rucio servers may run also conveyor daemon, which is responsible for submission of the transfers created in connection with existing Rucio rule. In case both, the source and destination RSEs have attribute {‘oidc_support’: True} assigned, the Rucio account which created such a rule will be used to request a JWT token for OAuth2 authentication with FTS. The issuer of user’s token will be used to get a valid OIDC token with the requested audience and scope for FTS transfer. This new token will have either the same identity of the user (received after user’s token exchange with IdP) or it will have the identity of the Rucio Admin IAM client (client_id will be in the ‘sub’ claim) (received after client credentials token flow of the admin). If in any of the two formerly mentioned cases, valid token is present in Rucio DB beforehand, it will be used in the header of the transfer request to FTS and no new token demand will be made to IdP. The OIDC authentication mechanism shall be configured by the following parameters in the rucio.cfg file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">conveyor</span><span class="p">]</span>
+<span class="n">allow_user_oidc_tokens</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">request_oidc_scope</span> <span class="o">=</span> <span class="s1">&#39;fts:submit-transfer&#39;</span>
+<span class="n">request_oidc_audience</span> <span class="o">=</span> <span class="s1">&#39;fts&#39;</span>
+</pre></div>
+</div>
+<p>If ‘allow_user_oidc_tokens’ is set to True the system will attempt to exchange a valid OIDC token (if any) of the account that owns the rule/transfer for a token that has the ‘request_oidc_scope’ and ‘request_oidc_audience’. If set to False, the system will use the IdP issuer of the account that owns the transfer, will get a Rucio admin client token with the ‘request_oidc_scope’ and ‘request_oidc_audience’ and authenticate against FTS with the Rucio admin client credentials on behalf of the user. The allowed scopes and audiences have to be again also configured correspondingly for your clients at the IdP side (usually through IdP web interface).</p>
+<p>Note aside: For some IdPs it may happen that the scope and audience claims are not a part of the token payload. For this reason Rucio has a fall-back mechanism to get this information using the IdPs introspection endpoint. To allow Rucio to introspect tokens that were not issued by its clients, please talk to the IdP admin who should enable this functionality for your clients.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Rucio</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database.html">Database operations</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/rucio.html">Rucio CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/rucio-admin.html">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="monitoring.html">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="policy_packages.html">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="advanced_usage.html" title="previous chapter">Advanced Usage</a></li>
+      <li>Next: <a href="installing_daemons.html" title="next chapter">Installing Rucio daemons</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/installing_server.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

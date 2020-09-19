@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monitoring &#8212; Rucio 1.2 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Policy packages" href="policy_packages.html" />
+    <link rel="prev" title="Daemon rucio-undertaker" href="man/rucio-undertaker.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="monitoring">
+<h1>Monitoring<a class="headerlink" href="#monitoring" title="Permalink to this headline">¶</a></h1>
+<dl class="simple">
+<dt>There are three different monitoring components:</dt><dd><ul class="simple">
+<li><p>Rucio internal monitoring using Graphite/Grafana</p></li>
+<li><p>Transfer monitoring using the messages sent by Hermes</p></li>
+<li><p>File/Dataset Access monitoring using the traces</p></li>
+</ul>
+</dd>
+</dl>
+<div class="section" id="internal-monitoring">
+<h2>Internal Monitoring<a class="headerlink" href="#internal-monitoring" title="Permalink to this headline">¶</a></h2>
+<p>This is to monitor the internals of Rucio servers and daemons, e.g., submission rate of
+the conveyor, state of conveyor queues, reaper deletion rate, server response times,
+server active session, etc. We use Graphite <a class="footnote-reference brackets" href="#f1" id="id1">1</a> for this. It’s easy to setup and
+then you have to point your Rucio instance to the Graphite server using the
+“carbon_server” options in the “monitor” section in etc/rucio.cfg.</p>
+<p>The different Rucio components will then send metrics using those “record” functions you
+will find all over the code. Graphite has a built-in web interface to show graphs but
+more comfortable to use is the Grafana <a class="footnote-reference brackets" href="#f2" id="id2">2</a> tool.</p>
+</div>
+<div class="section" id="transfer-monitoring">
+<h2>Transfer monitoring<a class="headerlink" href="#transfer-monitoring" title="Permalink to this headline">¶</a></h2>
+<p>If a transfer is submitted, queued, waiting, done or failed  messages are sent to
+ActiveMQ via Hermes and are also archived in the messages_history table. Same is true for deletions.
+In the case of ATLAS we have a dedicated monitoring infrastructure that reads
+the messages from <a class="reference external" href="https://activemq.apache.org">ActiveMQ</a>, aggregates them and then writes the aggregated data
+into ElasticSearch/InfluxDB from where it then can be visualised using Kibana/Grafana.</p>
+</div>
+<div class="section" id="access-monitoring">
+<h2>Access monitoring<a class="headerlink" href="#access-monitoring" title="Permalink to this headline">¶</a></h2>
+<p>The traces are sent by the pilots or the rucio clients whenever a file is downloaded/uploaded.</p>
+<p class="rubric">Footnotes</p>
+<dl class="footnote brackets">
+<dt class="label" id="f1"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p><a class="reference external" href="https://graphiteapp.org/">https://graphiteapp.org/</a></p>
+</dd>
+<dt class="label" id="f2"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dd><p><a class="reference external" href="https://grafana.com/">https://grafana.com/</a></p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Rucio</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database.html">Database operations</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/rucio.html">Rucio CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/rucio-admin.html">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="policy_packages.html">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="man/rucio-undertaker.html" title="previous chapter">Daemon rucio-undertaker</a></li>
+      <li>Next: <a href="policy_packages.html" title="next chapter">Policy packages</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/monitoring.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

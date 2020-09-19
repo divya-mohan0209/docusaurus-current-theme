@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Typical replica workflow &#8212; Rucio 1.2 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Architecture" href="architecture.html" />
+    <link rel="prev" title="Subscriptions" href="overview_Subscriptions.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="typical-replica-workflow">
+<h1>Typical replica workflow<a class="headerlink" href="#typical-replica-workflow" title="Permalink to this headline">¶</a></h1>
+<p>This section gives an overview of what happens within Rucio, for a typical replica workflow. Two workflows are described:
+When a replica is uploaded to Rucio via a client and when a replica is created by a
+site to site transfer due to the creation of a <a class="reference external" href="overview_Replica_management.html">replication rule</a>.</p>
+<div class="section" id="replica-paths-on-storage">
+<h2>Replica paths on storage<a class="headerlink" href="#replica-paths-on-storage" title="Permalink to this headline">¶</a></h2>
+<p>Rucio has two basic paradigms in deciding the path for a replica on a specific storage system. <strong>Deterministic</strong> and <strong>Non-deterministic</strong> paths. If we assume
+a file whose data identifier is <code class="docutils literal notranslate"><span class="pre">user.jdoe:test.file.1</span></code>, thus the scope is <code class="docutils literal notranslate"><span class="pre">user.jdoe</span></code> and the name is <code class="docutils literal notranslate"><span class="pre">test.file.1</span></code>. In Rucio a deterministically created path is a path
+which can be generated solely knowing the scope and name of a data identifier (Ignoring the static prefix of the storage endpoint). For a non-deterministic path
+additional information describing the file is necessary, such as meta-data, the dataset the file belongs to, etc.</p>
+<p>Rucio supports pluggable algorithms for both deterministic and non-deterministic algorithms. This section explains a few of them.</p>
+<div class="section" id="deterministic-algorithm-based-on-hashes">
+<h3>Deterministic algorithm based on hashes<a class="headerlink" href="#deterministic-algorithm-based-on-hashes" title="Permalink to this headline">¶</a></h3>
+<p>The hash deterministic algorithm is an algorithm commonly used in Rucio. The advantage of this algorithm is that, due to the characteristics of cryptographic hash functions,
+the files are evenly distributed to directories. This can be an important characteristic for storage systems whose access performance degrades based on the number
+of files in a directory.</p>
+<p>For a data identifier, e.g. <code class="docutils literal notranslate"><span class="pre">user.jdoe:test.file.1</span></code> a md5-hashsum is calculated <code class="docutils literal notranslate"><span class="pre">077c8119053bebb168d125034bff64ac</span></code>. The generated path is then based on the first four
+characters of the hashsum. e.g. <code class="docutils literal notranslate"><span class="pre">/07/7c/user.jdoe/test.file.1</span></code>.</p>
+</div>
+<div class="section" id="deterministic-algorithm-based-on-naming-convention">
+<h3>Deterministic algorithm based on naming convention<a class="headerlink" href="#deterministic-algorithm-based-on-naming-convention" title="Permalink to this headline">¶</a></h3>
+<p>If a specific naming convention is enforced on the filenames, a possible deterministic algorithm can be based on it.</p>
+<p>For the data identifier <code class="docutils literal notranslate"><span class="pre">user.jdoe:test.file.1</span></code> the first part of the filename (<code class="docutils literal notranslate"><span class="pre">test</span></code>) is extracted and used to generate the path: <code class="docutils literal notranslate"><span class="pre">/test/user.jdoe/file.1</span></code></p>
+</div>
+<div class="section" id="non-deterministic-algorithm-based-on-parent-dataset">
+<h3>Non-Deterministic algorithm based on parent dataset<a class="headerlink" href="#non-deterministic-algorithm-based-on-parent-dataset" title="Permalink to this headline">¶</a></h3>
+<p>If the file is part of a dataset, e.g. <code class="docutils literal notranslate"><span class="pre">data:dataset1234</span></code> the dataset can be used in the path of the filename. This is useful for e.g. tape storage systems, to keep the files belonging to the same dataset on the same tape.</p>
+<p>For the data identifier <code class="docutils literal notranslate"><span class="pre">user.jdoe:test.file.1</span></code> which is part of the datset <code class="docutils literal notranslate"><span class="pre">data:dataset1234</span></code> the generated path is: <code class="docutils literal notranslate"><span class="pre">/data/dataset1234/user.jdoe/test.file.1</span></code></p>
+</div>
+</div>
+<div class="section" id="replica-is-uploaded-with-the-command-line-client">
+<h2>Replica is uploaded with the command line client<a class="headerlink" href="#replica-is-uploaded-with-the-command-line-client" title="Permalink to this headline">¶</a></h2>
+<p>This is a typical workflow when a user uploads multiple files, which are part of a dataset, via the command line client.</p>
+<ol class="arabic simple">
+<li><p>The dataset <code class="docutils literal notranslate"><span class="pre">test.dataset</span></code> is being registered at the server.
+All files, or datasets are associated to a <a class="reference external" href="overview_File_Dataset_Container.html">scope</a>, if not specifically mentioned the client will assume the default scope of the user,
+such as <code class="docutils literal notranslate"><span class="pre">user.jdoe</span></code>. Thus the full data identifier for the dataset is <code class="docutils literal notranslate"><span class="pre">user.jdoe:test.dataset</span></code>.</p></li>
+<li><p>The client queries the RSE information from the server. This not only gives a list of prioritized write protocols to use but also the information
+if the RSE is a deterministic or non-deterministic one.</p></li>
+<li><p>The file replica is registered as <code class="docutils literal notranslate"><span class="pre">COPYING</span></code> on the RSE.</p></li>
+<li><p>Based on the identified naming algorithm of the RSE and the list of prioritized write protocols, the file URL is calculated.
+e.g. using the hash algorithm from above: <code class="docutils literal notranslate"><span class="pre">https://storageserver.organization.org/VO/data/07/7c/user.jdoe/test.file.1</span></code></p></li>
+<li><p>The file upload is done with the first prioritized protocol. If the upload fails, step 4 is repeated with the second prioritized protocol, etc.</p></li>
+<li><p>Once the upload is successfully finished, the replica state is changed to <code class="docutils literal notranslate"><span class="pre">AVAILABLE</span></code>.</p></li>
+<li><p>Step 3-6 are repeated (done in parallel) with all other files part of the uploaded dataset.</p></li>
+</ol>
+</div>
+<div class="section" id="replica-is-created-by-a-replication-rule">
+<h2>Replica is created by a replication rule<a class="headerlink" href="#replica-is-created-by-a-replication-rule" title="Permalink to this headline">¶</a></h2>
+<p>This is a typical workflow if a file already exists in Rucio but the user wants to replicate it to a different RSE.</p>
+<ol class="arabic simple">
+<li><p>The user creates a replication rule for the dataset <code class="docutils literal notranslate"><span class="pre">user.jdoe:test.dataset</span></code> at the server.</p></li>
+<li><p>The Rucio server creates internal requests for each single file in the dataset and puts them in a queue to be read by the data transfer service.</p></li>
+<li><p>The data transfer submitter picks these requests up and queries the destination RSE information for each file.</p></li>
+<li><p>Based on the identified naming algorithm of the destination RSE it creates the destination URLs and creates the file replicas in <code class="docutils literal notranslate"><span class="pre">COPYING</span></code> state.</p></li>
+<li><p>The transfer service then submits the transfer job to the connected transfer tool (e.g. FTS)</p></li>
+<li><p>Once the transfers are finished the transfer tool notifies Rucio about the transfer success and the transfer services marks the replicas as <code class="docutils literal notranslate"><span class="pre">AVAILABLE</span></code>.</p></li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Rucio</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database.html">Database operations</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/rucio.html">Rucio CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/rucio-admin.html">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="monitoring.html">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="policy_packages.html">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="overview_Subscriptions.html" title="previous chapter">Subscriptions</a></li>
+      <li>Next: <a href="architecture.html" title="next chapter">Architecture</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/replica_workflow.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

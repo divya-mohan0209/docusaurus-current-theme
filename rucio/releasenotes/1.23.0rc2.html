@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1.23.0rc2 &#8212; Rucio 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.23.0rc1" href="1.23.0rc1.html" />
+    <link rel="prev" title="1.23.1" href="1.23.1.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="rc2">
+<h1>1.23.0rc2<a class="headerlink" href="#rc2" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="release-candidate">
+<h2>Release Candidate<a class="headerlink" href="#release-candidate" title="Permalink to this headline">¶</a></h2>
+<p>This is a release candidate! Only to be used in testing environments!</p>
+</div>
+<div class="section" id="upgrade-instructions">
+<h2>Upgrade Instructions<a class="headerlink" href="#upgrade-instructions" title="Permalink to this headline">¶</a></h2>
+<p>This feature release requires a database schema upgrade. Please consult the <a class="reference external" href="https://rucio.readthedocs.io/en/latest/database.html">documentation</a> about upgrading your database schema.</p>
+<p>The following changes are necessary and are covered by the <code class="docutils literal notranslate"><span class="pre">alembic</span> <span class="pre">upgrade</span> <span class="pre">head</span></code> command:</p>
+<ol class="arabic simple">
+<li><p>Adding column <code class="docutils literal notranslate"><span class="pre">services</span></code> to <code class="docutils literal notranslate"><span class="pre">messages</span></code> and <code class="docutils literal notranslate"><span class="pre">messages_history</span></code> table (Alembic revision <code class="docutils literal notranslate"><span class="pre">a193a275255c</span></code>)</p></li>
+<li><p>Preparation for QoS feature (Alembic revision <code class="docutils literal notranslate"><span class="pre">c0937668555f</span></code> and <code class="docutils literal notranslate"><span class="pre">50280c53117c</span></code>)</p>
+<ul class="simple">
+<li><p>Adding <code class="docutils literal notranslate"><span class="pre">rse_qos_map</span></code> table</p></li>
+<li><p>Adding <code class="docutils literal notranslate"><span class="pre">qos_class</span></code> column to <code class="docutils literal notranslate"><span class="pre">rses</span></code> table</p></li>
+</ul>
+</li>
+</ol>
+</div>
+<div class="section" id="important-changes">
+<h2>Important changes<a class="headerlink" href="#important-changes" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Due to the metadata unification feature (<a class="reference external" href="https://github.com/rucio/rucio/issues/3096">#3096</a>) added in this release, the APIs for <code class="docutils literal notranslate"><span class="pre">add_did_meta</span></code>, <code class="docutils literal notranslate"><span class="pre">get_did_meta</span></code>, and <code class="docutils literal notranslate"><span class="pre">delete_did_meta</span></code> were removed. This data is now available through the plugin mechanism of the common <code class="docutils literal notranslate"><span class="pre">get_metadata</span></code> API.</p></li>
+</ol>
+</div>
+<div class="section" id="general">
+<h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="features">
+<h3>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Core &amp; Internals: MultiVO functionality for Rucio <a class="reference external" href="https://github.com/rucio/rucio/issues/2635">#2635</a></p></li>
+<li><p>Core &amp; Internals: Unification of metadata interfaces <a class="reference external" href="https://github.com/rucio/rucio/issues/3096">#3096</a></p></li>
+<li><p>Core &amp; Internals: QoS: Core and interfaces <a class="reference external" href="https://github.com/rucio/rucio/issues/3543">#3543</a></p></li>
+<li><p>Messaging: Extending Hermes to submit to influxDB or Elastic <a class="reference external" href="https://github.com/rucio/rucio/issues/3680">#3680</a></p></li>
+</ul>
+</div>
+<div class="section" id="enhancements">
+<h3>Enhancements<a class="headerlink" href="#enhancements" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Authentication &amp; Authorisation: OAuth2/OIDC: token exchange of JWTs not acquired via Rucio CLI (cases with offline_access scope) <a class="reference external" href="https://github.com/rucio/rucio/issues/3778">#3778</a></p></li>
+<li><p>Core &amp; Internals: Support bulk requests in the list_dataset_replicas CLI API <a class="reference external" href="https://github.com/rucio/rucio/issues/2459">#2459</a></p></li>
+<li><p>Core &amp; Internals: Introduce BelleII activities <a class="reference external" href="https://github.com/rucio/rucio/issues/3771">#3771</a></p></li>
+<li><p>RSE Manager: GlobusRSEProtocol Modifications: remove RSEDeterministicTranslation and call super of protocol base class <a class="reference external" href="https://github.com/rucio/rucio/issues/3584">#3584</a></p></li>
+<li><p>Testing: Reaper tests make no assertions or deletions <a class="reference external" href="https://github.com/rucio/rucio/issues/3726">#3726</a></p></li>
+<li><p>Transfers: Adding list and exists methods to GlobusRSEProtocol <a class="reference external" href="https://github.com/rucio/rucio/issues/3346">#3346</a></p></li>
+<li><p>Transfers: Introduce caching of a MultiHop path to optimize algorithm runtime <a class="reference external" href="https://github.com/rucio/rucio/issues/3830">#3830</a></p></li>
+</ul>
+</div>
+<div class="section" id="bugs">
+<h3>Bugs<a class="headerlink" href="#bugs" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Authentication &amp; Authorisation: OAuth2/OIDC: fix to py2/3 compatibility of common.utils  <a class="reference external" href="https://github.com/rucio/rucio/issues/3743">#3743</a></p></li>
+<li><p>Authentication &amp; Authorisation: Token validation for credential signing request <a class="reference external" href="https://github.com/rucio/rucio/issues/3823">#3823</a></p></li>
+<li><p>Core &amp; Internals: Internal error during adding duplicate attribute to account <a class="reference external" href="https://github.com/rucio/rucio/issues/3777">#3777</a></p></li>
+<li><p>Core &amp; Internals: Fix extract_scope method for BelleII <a class="reference external" href="https://github.com/rucio/rucio/issues/3797">#3797</a></p></li>
+<li><p>Transfers: Conveyor submitter creates partitions wrongly <a class="reference external" href="https://github.com/rucio/rucio/issues/3752">#3752</a></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="clients">
+<h2>Clients<a class="headerlink" href="#clients" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id18">
+<h3>Features<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Clients: Moving upload method from rsemgr to client <a class="reference external" href="https://github.com/rucio/rucio/issues/3084">#3084</a></p></li>
+</ul>
+</div>
+<div class="section" id="id20">
+<h3>Enhancements<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Clients: Allow passing the dynamic parameter to get_did() <a class="reference external" href="https://github.com/rucio/rucio/issues/3760">#3760</a></p></li>
+</ul>
+</div>
+<div class="section" id="id22">
+<h3>Bugs<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Clients: Python 3 error with uploadclient json.dump <a class="reference external" href="https://github.com/rucio/rucio/issues/3747">#3747</a></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="webui">
+<h2>WebUI<a class="headerlink" href="#webui" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id24">
+<h3>Enhancements<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>WebUI: Harden security on the Web UI <a class="reference external" href="https://github.com/rucio/rucio/issues/3757">#3757</a></p></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Rucio</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database.html">Database operations</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/rucio.html">Rucio CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/rucio-admin.html">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../policy_packages.html">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../releasenotes.html">Release notes</a><ul>
+      <li>Previous: <a href="1.23.1.html" title="previous chapter">1.23.1</a></li>
+      <li>Next: <a href="1.23.0rc1.html" title="next chapter">1.23.0rc1</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/releasenotes/1.23.0rc2.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

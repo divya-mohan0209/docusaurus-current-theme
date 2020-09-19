@@ -1,0 +1,1632 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rucio CLI &#8212; Rucio 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Rucio Administrative CLI" href="rucio-admin.html" />
+    <link rel="prev" title="Rucio CLI: Examples" href="../cli_examples.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="rucio-cli">
+<h1>Rucio CLI<a class="headerlink" href="#rucio-cli" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">rucio</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">version</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">config</span> <span class="n">CONFIG</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">verbose</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">H</span> <span class="n">ADDRESS</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">auth</span><span class="o">-</span><span class="n">host</span> <span class="n">ADDRESS</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">a</span> <span class="n">ACCOUNT</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">S</span> <span class="n">AUTH_STRATEGY</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">T</span> <span class="n">TIMEOUT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">robot</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">user</span><span class="o">-</span><span class="n">agent</span> <span class="n">USER_AGENT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vo</span> <span class="n">VO</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">u</span> <span class="n">USERNAME</span><span class="p">]</span>
+             <span class="p">[</span><span class="o">-</span><span class="n">pwd</span> <span class="n">PASSWORD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">user</span> <span class="n">OIDC_USERNAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">password</span> <span class="n">OIDC_PASSWORD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">scope</span> <span class="n">OIDC_SCOPE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">audience</span> <span class="n">OIDC_AUDIENCE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">auto</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">polling</span><span class="p">]</span>
+             <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">refresh</span><span class="o">-</span><span class="n">lifetime</span> <span class="n">OIDC_REFRESH_LIFETIME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">issuer</span> <span class="n">OIDC_ISSUER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">certificate</span> <span class="n">CERTIFICATE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ca</span><span class="o">-</span><span class="n">certificate</span> <span class="n">CA_CERTIFICATE</span><span class="p">]</span>
+             <span class="p">{</span><span class="n">ping</span><span class="p">,</span><span class="n">whoami</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="n">replicas</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">dataset</span><span class="o">-</span><span class="n">replicas</span><span class="p">,</span><span class="n">add</span><span class="o">-</span><span class="n">dataset</span><span class="p">,</span><span class="n">add</span><span class="o">-</span><span class="n">container</span><span class="p">,</span><span class="n">attach</span><span class="p">,</span><span class="n">detach</span><span class="p">,</span><span class="n">ls</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">dids</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">dids</span><span class="o">-</span><span class="n">extended</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">parent</span><span class="o">-</span><span class="n">dids</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">parent</span><span class="o">-</span><span class="n">datasets</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">scopes</span><span class="p">,</span><span class="n">close</span><span class="p">,</span><span class="n">reopen</span><span class="p">,</span><span class="n">stat</span><span class="p">,</span><span class="n">erase</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">files</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">content</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">content</span><span class="o">-</span><span class="n">history</span><span class="p">,</span><span class="n">upload</span><span class="p">,</span><span class="n">get</span><span class="p">,</span><span class="n">download</span><span class="p">,</span><span class="n">get</span><span class="o">-</span><span class="n">metadata</span><span class="p">,</span><span class="nb">set</span><span class="o">-</span><span class="n">metadata</span><span class="p">,</span><span class="n">delete</span><span class="o">-</span><span class="n">metadata</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">rse</span><span class="o">-</span><span class="n">usage</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">account</span><span class="o">-</span><span class="n">usage</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">account</span><span class="o">-</span><span class="n">limits</span><span class="p">,</span><span class="n">add</span><span class="o">-</span><span class="n">rule</span><span class="p">,</span><span class="n">delete</span><span class="o">-</span><span class="n">rule</span><span class="p">,</span><span class="n">rule</span><span class="o">-</span><span class="n">info</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">rules</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">rules</span><span class="o">-</span><span class="n">history</span><span class="p">,</span><span class="n">update</span><span class="o">-</span><span class="n">rule</span><span class="p">,</span><span class="n">move</span><span class="o">-</span><span class="n">rule</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">rses</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">rse</span><span class="o">-</span><span class="n">attributes</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">datasets</span><span class="o">-</span><span class="n">rse</span><span class="p">,</span><span class="n">test</span><span class="o">-</span><span class="n">server</span><span class="p">,</span><span class="n">touch</span><span class="p">}</span>
+             <span class="o">...</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments">
+<h2>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h2>
+<dl class="option-list">
+<dt><kbd>--version</kbd></dt>
+<dd><p>show program’s version number and exit</p>
+</dd>
+<dt><kbd>--config</kbd></dt>
+<dd><p>The Rucio configuration file to use.</p>
+</dd>
+<dt><kbd>--verbose, -v</kbd></dt>
+<dd><p>Print more verbose output.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>-H, --host</kbd></dt>
+<dd><p>The Rucio API host.</p>
+</dd>
+<dt><kbd>--auth-host</kbd></dt>
+<dd><p>The Rucio Authentication host.</p>
+</dd>
+<dt><kbd>-a, --account</kbd></dt>
+<dd><p>Rucio account to use.</p>
+</dd>
+<dt><kbd>-S, --auth-strategy</kbd></dt>
+<dd><p>Authentication strategy (userpass, x509…)</p>
+</dd>
+<dt><kbd>-T, --timeout</kbd></dt>
+<dd><p>Set all timeout values to seconds.</p>
+</dd>
+<dt><kbd>--robot, -R</kbd></dt>
+<dd><p>All output in bytes and without the units. This output format is preferred by parsers and scripts.</p>
+<p>Default: True</p>
+</dd>
+<dt><kbd>--user-agent, -U</kbd></dt>
+<dd><p>Rucio User Agent</p>
+<p>Default: “rucio-clients”</p>
+</dd>
+<dt><kbd>--vo</kbd></dt>
+<dd><p>VO to authenticate at. Only used in multi-VO mode.</p>
+</dd>
+<dt><kbd>-u, --user</kbd></dt>
+<dd><p>username</p>
+</dd>
+<dt><kbd>-pwd, --password</kbd></dt>
+<dd><p>password</p>
+</dd>
+<dt><kbd>--oidc-user</kbd></dt>
+<dd><p>OIDC username</p>
+</dd>
+<dt><kbd>--oidc-password</kbd></dt>
+<dd><p>OIDC password</p>
+</dd>
+<dt><kbd>--oidc-scope</kbd></dt>
+<dd><p>Defines which (OIDC) information user will share with Rucio. Rucio requires at least -sc=”openid profile”. To request refresh token for Rucio, scope must include “openid offline_access” and there must be no active access token saved on the side of the currently used Rucio Client.</p>
+<p>Default: “openid profile”</p>
+</dd>
+<dt><kbd>--oidc-audience</kbd></dt>
+<dd><p>Defines which audience are tokens requested for.</p>
+</dd>
+<dt><kbd>--oidc-auto</kbd></dt>
+<dd><p>If not specified, username and password credentials are not required and users will be given a URL to use in their browser. If specified, the users explicitly trust Rucio with their IdP credentials.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--oidc-polling</kbd></dt>
+<dd><p>If not specified, user will be asked to enter a code returned by the browser to the command line. If –polling is set, Rucio Client should get the token without any further interaction of the user. This option is active only if –auto is <em>not</em> specified.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--oidc-refresh-lifetime</kbd></dt>
+<dd><p>Max lifetime in hours for this an access token will be refreshed by asynchronous Rucio daemon. If not specified, refresh will be stopped after 4 days. This option is effective only if –oidc-scope includes offline_access scope for a refresh token to be granted to Rucio.</p>
+</dd>
+<dt><kbd>--oidc-issuer</kbd></dt>
+<dd><p>Defines which Identity Provider is goign to be used. The issuer string must correspond to the keys configured in the /etc/idpsecrets.json auth server configuration file.</p>
+</dd>
+<dt><kbd>--certificate</kbd></dt>
+<dd><p>Client certificate file.</p>
+</dd>
+<dt><kbd>--ca-certificate</kbd></dt>
+<dd><p>CA certificate to verify peer against (SSL).</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Sub-commands:">
+<h2>Sub-commands:<a class="headerlink" href="#Sub-commands:" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="ping">
+<h3>ping<a class="headerlink" href="#ping" title="Permalink to this headline">¶</a></h3>
+<p>Ping Rucio server.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">ping</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="usage-example">
+<h4>Usage example<a class="headerlink" href="#usage-example" title="Permalink to this headline">¶</a></h4>
+<p>To ping the server:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio ping
+1.14.8
+</pre></div>
+</div>
+<p>The returned value is the version of Rucio installed on the server.</p>
+</div>
+</div>
+<div class="section" id="whoami">
+<h3>whoami<a class="headerlink" href="#whoami" title="Permalink to this headline">¶</a></h3>
+<p>Get information about account whose token is used.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">whoami</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="usage-example_repeat1">
+<h4>Usage example<a class="headerlink" href="#usage-example_repeat1" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio whoami
+jdoe
+</pre></div>
+</div>
+<p>The returned value is the account currently used.</p>
+</div>
+</div>
+<div class="section" id="list-file-replicas">
+<h3>list-file-replicas<a class="headerlink" href="#list-file-replicas" title="Permalink to this headline">¶</a></h3>
+<p>This method allows to list all the replicas of a given Data IDentifier (DID). The only mandatory parameter is the DID which can be a container/dataset/files. By default all the files replicas in state available are returned.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="nb">list</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="n">replicas</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">protocols</span> <span class="n">PROTOCOLS</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">all</span><span class="o">-</span><span class="n">states</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">pfns</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">domain</span> <span class="n">DOMAIN</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">link</span> <span class="n">LINK</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">rse</span> <span class="n">SELECTED_RSE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">missing</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">metalink</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">resolve</span><span class="o">-</span><span class="n">archives</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">sort</span> <span class="n">SORT</span><span class="p">]</span>
+                         <span class="p">[</span><span class="o">--</span><span class="n">expression</span> <span class="n">RSE_EXPRESSION</span><span class="p">]</span>
+                         <span class="n">dids</span> <span class="p">[</span><span class="n">dids</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>dids</kbd></dt>
+<dd><p>List of space separated data identifiers.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat1">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat1" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--protocols</kbd></dt>
+<dd><p>List of comma separated protocols. (i.e. https, root, srm).</p>
+</dd>
+<dt><kbd>--all-states</kbd></dt>
+<dd><p>To select all replicas (including unavailable ones).</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--pfns</kbd></dt>
+<dd><p>Show only the PFNs.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--domain</kbd></dt>
+<dd><p>Force the networking domain. Available options: wan, lan, all.</p>
+</dd>
+<dt><kbd>--link</kbd></dt>
+<dd><p>Symlink PFNs with directory substitution.</p>
+</dd>
+<dt><kbd>--rse</kbd></dt>
+<dd><p>Show only results for this RSE.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--missing</kbd></dt>
+<dd><p>To list missing replicas at a RSE. Must be used with –rse option</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--metalink</kbd></dt>
+<dd><p>Output available replicas as metalink.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--no-resolve-archives</kbd></dt>
+<dd><p>Do not resolve archives which may contain the files.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--sort</kbd></dt>
+<dd><p>Replica sort algorithm. Available options: random (default), geoip</p>
+</dd>
+<dt><kbd>--expression</kbd></dt>
+<dd><p>The RSE filter expression. A comprehensive help about RSE expressions            can be found in [1mhttp://rucio.cern.ch/client_tutorial.html#adding-rules-for-replication[0m</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat2">
+<h4>Usage example<a class="headerlink" href="#usage-example_repeat2" title="Permalink to this headline">¶</a></h4>
+<p>To list the file replicas for a given dataset:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-file-replicas user.jdoe:user.jdoe.test.data.1234.1
++-----------+---------------------------------+------------+-----------+-----------------------------------------------------------------------------------+
+| SCOPE     | NAME                            | FILESIZE   | ADLER32   | RSE: REPLICA                                                                      |
+|-----------+---------------------------------+------------+-----------+-----------------------------------------------------------------------------------|
+| user.jdoe | user.jdoe.test.data.1234.file.1 | 94.835 MB  | 5d000974  | SITE1_DISK: srm://blahblih/path/to/file/user.jdoe/user.jdoe.test.data.1234.file.1 |
+| user.jdoe | user.jdoe.test.data.1234.file.1 | 94.835 MB  | 5d000974  | SITE2_DISK: file://another/path/to/file/user.jdoe/user.jdoe.test.data.1234.file.1 |
+| user.jdoe | user.jdoe.test.data.1234.file.2 | 82.173 MB  | 01e56f23  | SITE2_DISK: file://another/path/to/file/user.jdoe/user.jdoe.test.data.1234.file.2 |
++-----------+---------------------------------+------------+-----------+-----------------------------------------------------------------------------------+
+</pre></div>
+</div>
+<p>To list the missing replica of a dataset of a given RSE:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-file-replicas --rse SITE1_DISK user.jdoe:user.jdoe.test.data.1234.1
++-----------+----------------------------+
+| SCOPE     | NAME                       |
+|-----------+----------------------------|
+| user.jdoe | user.jdoe.test.data.1234.2 |
++-----------+----------------------------+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="list-dataset-replicas">
+<h3>list-dataset-replicas<a class="headerlink" href="#list-dataset-replicas" title="Permalink to this headline">¶</a></h3>
+<p>List the dataset replicas.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="nb">list</span><span class="o">-</span><span class="n">dataset</span><span class="o">-</span><span class="n">replicas</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">deep</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">csv</span><span class="p">]</span> <span class="n">dids</span> <span class="p">[</span><span class="n">dids</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat1">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat1" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>dids</kbd></dt>
+<dd><p>The name of the DID to search.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat2">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat2" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--deep</kbd></dt>
+<dd><p>Make a deep check.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--csv</kbd></dt>
+<dd><p>Comma Separated Value output.</p>
+<p>Default: False</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat3">
+<h4>Usage example<a class="headerlink" href="#usage-example_repeat3" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-dataset-replicas user.jdoe:user.jdoe.test.data.1234.1
+
+DATASET: user.jdoe:user.jdoe.test.data.1234.1
++------------+---------+---------+
+| RSE        |   FOUND |   TOTAL |
+|------------+---------+---------|
+| SITE1_DISK |       1 |       2 |
+| SITE2_DISK |       2 |       2 |
++------------+---------+---------+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="add-dataset">
+<h3>add-dataset<a class="headerlink" href="#add-dataset" title="Permalink to this headline">¶</a></h3>
+<p>Add a dataset to Rucio Catalog.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">add</span><span class="o">-</span><span class="n">dataset</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">monotonic</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">lifetime</span> <span class="n">LIFETIME</span><span class="p">]</span> <span class="n">did</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat2">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat2" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>did</kbd></dt>
+<dd><p>The name of the dataset to add.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat3">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat3" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--monotonic</kbd></dt>
+<dd><p>Monotonic status to True.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--lifetime</kbd></dt>
+<dd><p>Lifetime in seconds.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat4">
+<h4>Usage example<a class="headerlink" href="#usage-example_repeat4" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio add-dataset user.jdoe:user.jdoe.test.data.1234.1
+Added user.jdoe:user.jdoe.test.data.1234.1
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="add-container">
+<h3>add-container<a class="headerlink" href="#add-container" title="Permalink to this headline">¶</a></h3>
+<p>Add a container to Rucio Catalog.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">add</span><span class="o">-</span><span class="n">container</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">monotonic</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">lifetime</span> <span class="n">LIFETIME</span><span class="p">]</span> <span class="n">did</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat3">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat3" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>did</kbd></dt>
+<dd><p>The name of the container to add.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat4">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat4" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--monotonic</kbd></dt>
+<dd><p>Monotonic status to True.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--lifetime</kbd></dt>
+<dd><p>Lifetime in seconds.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat5">
+<h4>Usage example<a class="headerlink" href="#usage-example_repeat5" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio add-container user.jdoe:user.jdoe.test.cont.1234.1
+Added user.jdoe:user.jdoe.test.cont.1234.1
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="attach">
+<h3>attach<a class="headerlink" href="#attach" title="Permalink to this headline">¶</a></h3>
+<p>Attach a list of Data IDentifiers (file, dataset or container) to an other Data IDentifier (dataset or container).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">attach</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">f</span><span class="p">]</span> <span class="n">todid</span> <span class="n">dids</span> <span class="p">[</span><span class="n">dids</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat4">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat4" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>todid</kbd></dt>
+<dd><p>Destination Data IDentifier (either dataset or container).</p>
+</dd>
+<dt><kbd>dids</kbd></dt>
+<dd><p>List of space separated data identifiers (or a file containing one did per line, if -f is present).</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat5">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat5" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>-f, --from-file</kbd></dt>
+<dd><p>Attach the DIDs contained in a file. The file should contain one did per line.</p>
+<p>Default: False</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat6">
+<h4>Usage example<a class="headerlink" href="#usage-example_repeat6" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio attach user.jdoe:user.jdoe.test.cont.1234.1 user.jdoe:user.jdoe.test.data.1234.1
+DIDs successfully attached to user.jdoe:user.jdoe.test.cont.1234.1
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="detach">
+<h3>detach<a class="headerlink" href="#detach" title="Permalink to this headline">¶</a></h3>
+<p>Detach a list of Data Identifiers (file, dataset or container) from an other Data Identifier (dataset or container).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">detach</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">fromdid</span> <span class="n">dids</span> <span class="p">[</span><span class="n">dids</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat5">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat5" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>fromdid</kbd></dt>
+<dd><p>Target Data IDentifier (must be a dataset or container).</p>
+</dd>
+<dt><kbd>dids</kbd></dt>
+<dd><p>List of space separated data identifiers.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat7">
+<h4>Usage example<a class="headerlink" href="#usage-example_repeat7" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio detach user.jdoe:user.jdoe.test.cont.1234.1 user.jdoe:user.jdoe.test.data.1234.1
+DIDs successfully detached from user.jdoe:user.jdoe.test.cont.1234.1
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="ls">
+<h3>ls<a class="headerlink" href="#ls" title="Permalink to this headline">¶</a></h3>
+<p>List the Data IDentifiers matching certain pattern. Only the collections (i.e. dataset or container) are returned by default. With the filter option, you can specify a list of metadata that the Data IDentifier should match.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">ls</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">r</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">filter</span> <span class="n">FILTER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">short</span><span class="p">]</span> <span class="n">did</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat6">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat6" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>did</kbd></dt>
+<dd><p>Data IDentifier pattern.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat6">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat6" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>-r, --recursive</kbd></dt>
+<dd><p>List data identifiers recursively.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--filter</kbd></dt>
+<dd><p>Filter arguments in form <cite>key=value,another_key=next_value</cite>. Valid keys are name, type.</p>
+</dd>
+<dt><kbd>--short</kbd></dt>
+<dd><p>Just dump the list of DIDs.</p>
+<p>Default: False</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat8">
+<h4>Usage example<a class="headerlink" href="#usage-example_repeat8" title="Permalink to this headline">¶</a></h4>
+<p>You can query the DIDs matching a certain pattern. It always requires to specify the scope in which you want to search:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio ls user.jdoe:*
++-------------------------------------------+--------------+
+| SCOPE:NAME                                | [DID TYPE]   |
+|-------------------------------------------+--------------|
+| user.jdoe:user.jdoe.test.container.1234.1 | CONTAINER    |
+| user.jdoe:user.jdoe.test.container.1234.2 | CONTAINER    |
+| user.jdoe:user.jdoe.test.cont.1234.2      | CONTAINER    |
+| user.jdoe:user.jdoe.test.dataset.1        | DATASET      |
+| user.jdoe:user.jdoe.test.dataset.2        | DATASET      |
+| user.jdoe:user.jdoe.test.data.1234.1      | DATASET      |
+| user.jdoe:test.file.1                     | FILE         |
+| user.jdoe:test.file.2                     | FILE         |
+| user.jdoe:test.file.3                     | FILE         |
++-------------------------------------------+--------------+
+</pre></div>
+</div>
+<p>You can filter by key/value, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio ls --filter type=CONTAINER
++-------------------------------------------+--------------+
+| SCOPE:NAME                                | [DID TYPE]   |
+|-------------------------------------------+--------------|
+| user.jdoe:user.jdoe.test.container.1234.1 | CONTAINER    |
+| user.jdoe:user.jdoe.test.container.1234.2 | CONTAINER    |
+| user.jdoe:user.jdoe.test.cont.1234.2      | CONTAINER    |
++-------------------------------------------+--------------+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="list-dids">
+<h3>list-dids<a class="headerlink" href="#list-dids" title="Permalink to this headline">¶</a></h3>
+<p>List the Data IDentifiers matching certain pattern.
+Only the collections (i.e. dataset or container) are returned by default.
+With the filter option, you can specify a list of metadata that the Data IDentifier should match.
+Please use the filter option <cite>–filter type=all</cite> to find all types of Data IDentifiers.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="nb">list</span><span class="o">-</span><span class="n">dids</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">recursive</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">filter</span> <span class="n">FILTER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">short</span><span class="p">]</span> <span class="n">did</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat7">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat7" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>did</kbd></dt>
+<dd><p>Data IDentifier pattern</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat7">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat7" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--recursive</kbd></dt>
+<dd><p>List data identifiers recursively.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--filter</kbd></dt>
+<dd><p>Filter arguments in form <cite>key=value,another_key&gt;=next_value</cite>. Valid keys are type and length. Use <cite>type</cite> to specify a DID type to search for. Valid values are <cite>ALL</cite>, <cite>COLLECTION</cite>, <cite>CONTAINER</cite>, <cite>DATASET</cite>, <cite>FILE</cite>. Use <cite>length</cite> to filter for an amount of corresponding Data IDentifiers. Valid operators are <cite>=</cite>, <cite>&gt;</cite>, <cite>&gt;=</cite>, <cite>&lt;</cite>, <cite>&lt;=</cite>.</p>
+</dd>
+<dt><kbd>--short</kbd></dt>
+<dd><p>Just dump the list of DIDs.</p>
+<p>Default: False</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat9">
+<h4>Usage example<a class="headerlink" href="#usage-example_repeat9" title="Permalink to this headline">¶</a></h4>
+<p>You can query the DIDs matching a certain pattern. It always requires to specify the scope in which you want to search:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-dids --filter &#39;type=all&#39; user.jdoe:*
++-------------------------------------------+--------------+
+| SCOPE:NAME                                | [DID TYPE]   |
+|-------------------------------------------+--------------|
+| user.jdoe:user.jdoe.test.container.1234.1 | CONTAINER    |
+| user.jdoe:user.jdoe.test.container.1234.2 | CONTAINER    |
+| user.jdoe:user.jdoe.test.cont.1234.2      | CONTAINER    |
+| user.jdoe:user.jdoe.test.dataset.1        | DATASET      |
+| user.jdoe:user.jdoe.test.dataset.2        | DATASET      |
+| user.jdoe:user.jdoe.test.data.1234.1      | DATASET      |
+| user.jdoe:test.file.1                     | FILE         |
+| user.jdoe:test.file.2                     | FILE         |
+| user.jdoe:test.file.3                     | FILE         |
++-------------------------------------------+--------------+
+</pre></div>
+</div>
+<p>You can filter by key/value, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-dids --filter &#39;type=CONTAINER&#39;
++-------------------------------------------+--------------+
+| SCOPE:NAME                                | [DID TYPE]   |
+|-------------------------------------------+--------------|
+| user.jdoe:user.jdoe.test.container.1234.1 | CONTAINER    |
+| user.jdoe:user.jdoe.test.container.1234.2 | CONTAINER    |
+| user.jdoe:user.jdoe.test.cont.1234.2      | CONTAINER    |
++-------------------------------------------+--------------+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="list-dids-extended">
+<h3>list-dids-extended<a class="headerlink" href="#list-dids-extended" title="Permalink to this headline">¶</a></h3>
+<p>List the Data IDentifiers matching certain pattern.
+Only the collections (i.e. dataset or container) are returned by default.
+With the filter option, you can specify a list of metadata that the Data IDentifier should match.
+Please use the filter option <cite>–filter type=all</cite> to find all types of Data IDentifiers.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="nb">list</span><span class="o">-</span><span class="n">dids</span><span class="o">-</span><span class="n">extended</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">recursive</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">filter</span> <span class="n">FILTER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">short</span><span class="p">]</span> <span class="n">did</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat8">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat8" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>did</kbd></dt>
+<dd><p>Data IDentifier pattern</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat8">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat8" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--recursive</kbd></dt>
+<dd><p>List data identifiers recursively.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--filter</kbd></dt>
+<dd><p>Filter arguments in form <cite>key=value,another_key&gt;=next_value</cite>. Valid keys are type and length. Use <cite>type</cite> to specify a DID type to search for. Valid values are <cite>ALL</cite>, <cite>COLLECTION</cite>, <cite>CONTAINER</cite>, <cite>DATASET</cite>, <cite>FILE</cite>. Use <cite>length</cite> to filter for an amount of corresponding Data IDentifiers. Valid operators are <cite>=</cite>, <cite>&gt;</cite>, <cite>&gt;=</cite>, <cite>&lt;</cite>, <cite>&lt;=</cite>.</p>
+</dd>
+<dt><kbd>--short</kbd></dt>
+<dd><p>Just dump the list of DIDs.</p>
+<p>Default: False</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat10">
+<h4>Usage example<a class="headerlink" href="#usage-example_repeat10" title="Permalink to this headline">¶</a></h4>
+<p>You can query the DIDs matching a certain pattern. It always requires to specify the scope in which you want to search:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-dids --filter &#39;type=all&#39; user.jdoe:*
++-------------------------------------------+--------------+
+| SCOPE:NAME                                | [DID TYPE]   |
+|-------------------------------------------+--------------|
+| user.jdoe:user.jdoe.test.container.1234.1 | CONTAINER    |
+| user.jdoe:user.jdoe.test.container.1234.2 | CONTAINER    |
+| user.jdoe:user.jdoe.test.cont.1234.2      | CONTAINER    |
+| user.jdoe:user.jdoe.test.dataset.1        | DATASET      |
+| user.jdoe:user.jdoe.test.dataset.2        | DATASET      |
+| user.jdoe:user.jdoe.test.data.1234.1      | DATASET      |
+| user.jdoe:test.file.1                     | FILE         |
+| user.jdoe:test.file.2                     | FILE         |
+| user.jdoe:test.file.3                     | FILE         |
++-------------------------------------------+--------------+
+</pre></div>
+</div>
+<p>You can filter by key/value, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-dids --filter &#39;type=CONTAINER&#39;
++-------------------------------------------+--------------+
+| SCOPE:NAME                                | [DID TYPE]   |
+|-------------------------------------------+--------------|
+| user.jdoe:user.jdoe.test.container.1234.1 | CONTAINER    |
+| user.jdoe:user.jdoe.test.container.1234.2 | CONTAINER    |
+| user.jdoe:user.jdoe.test.cont.1234.2      | CONTAINER    |
++-------------------------------------------+--------------+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="list-parent-dids">
+<h3>list-parent-dids<a class="headerlink" href="#list-parent-dids" title="Permalink to this headline">¶</a></h3>
+<p>List all parents Data IDentifier that contains the target Data IDentifier.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="nb">list</span><span class="o">-</span><span class="n">parent</span><span class="o">-</span><span class="n">dids</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">pfn</span> <span class="n">PFNS</span> <span class="p">[</span><span class="n">PFNS</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">guid</span> <span class="n">GUIDS</span> <span class="p">[</span><span class="n">GUIDS</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="n">did</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat9">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat9" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>did</kbd></dt>
+<dd><p>Data identifier.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat9">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat9" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--pfn</kbd></dt>
+<dd><p>List parent dids for these pfns.</p>
+</dd>
+<dt><kbd>--guid</kbd></dt>
+<dd><p>List parent dids for these guids.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat11">
+<h4>Usage example<a class="headerlink" href="#usage-example_repeat11" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-parent-dids user.jdoe:user.jdoe.test.data.1234.1
++--------------------------------------+--------------+
+| SCOPE:NAME                           | [DID TYPE]   |
+|--------------------------------------+--------------|
+| user.jdoe:user.jdoe.test.cont.1234.2 | CONTAINER    |
++--------------------------------------+--------------+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="list-parent-datasets">
+<h3>list-parent-datasets<a class="headerlink" href="#list-parent-datasets" title="Permalink to this headline">¶</a></h3>
+<p>List all parents Data IDentifier that contains the target Data IDentifier.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="nb">list</span><span class="o">-</span><span class="n">parent</span><span class="o">-</span><span class="n">datasets</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">pfn</span> <span class="n">PFNS</span> <span class="p">[</span><span class="n">PFNS</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">guid</span> <span class="n">GUIDS</span> <span class="p">[</span><span class="n">GUIDS</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="n">did</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat10">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat10" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>did</kbd></dt>
+<dd><p>Data identifier.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat10">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat10" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--pfn</kbd></dt>
+<dd><p>List parent dids for these pfns.</p>
+</dd>
+<dt><kbd>--guid</kbd></dt>
+<dd><p>List parent dids for these guids.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat12">
+<h4>Usage example<a class="headerlink" href="#usage-example_repeat12" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-parent-datasets user.jdoe:user.jdoe.test.data.1234.1
++--------------------------------------+--------------+
+| SCOPE:NAME                           | [DID TYPE]   |
+|--------------------------------------+--------------|
+| user.jdoe:user.jdoe.test.cont.1234.2 | CONTAINER    |
++--------------------------------------+--------------+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="list-scopes">
+<h3>list-scopes<a class="headerlink" href="#list-scopes" title="Permalink to this headline">¶</a></h3>
+<p>List all available scopes.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="nb">list</span><span class="o">-</span><span class="n">scopes</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="usage-example_repeat13">
+<h4>Usage example<a class="headerlink" href="#usage-example_repeat13" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-scopes
+mc
+data
+user.jdoe
+user.janedoe
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="close">
+<h3>close<a class="headerlink" href="#close" title="Permalink to this headline">¶</a></h3>
+<p>Close a dataset or container.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">close</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">dids</span> <span class="p">[</span><span class="n">dids</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat11">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat11" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>dids</kbd></dt>
+<dd><p>List of space separated data identifiers.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="reopen">
+<h3>reopen<a class="headerlink" href="#reopen" title="Permalink to this headline">¶</a></h3>
+<p>Reopen a dataset or container (only for privileged users).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">reopen</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">dids</span> <span class="p">[</span><span class="n">dids</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat12">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat12" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>dids</kbd></dt>
+<dd><p>List of space separated data identifiers.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="stat">
+<h3>stat<a class="headerlink" href="#stat" title="Permalink to this headline">¶</a></h3>
+<p>List attributes and statuses about data identifiers.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">stat</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">dids</span> <span class="p">[</span><span class="n">dids</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat13">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat13" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>dids</kbd></dt>
+<dd><p>List of space separated data identifiers.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="erase">
+<h3>erase<a class="headerlink" href="#erase" title="Permalink to this headline">¶</a></h3>
+<p>This command sets the lifetime of the DID in order to expire in the next 24 hours.            After this time, the dataset is eligible for deletion. The deletion is not reversible after 24 hours grace time period expired.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">erase</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">undo</span><span class="p">]</span> <span class="n">dids</span> <span class="p">[</span><span class="n">dids</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat14">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat14" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>dids</kbd></dt>
+<dd><p>List of space separated data identifiers.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat11">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat11" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--undo</kbd></dt>
+<dd><p>Undo erase DIDs. Only works if has been less than 24 hours since erase operation.</p>
+<p>Default: False</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="list-files">
+<h3>list-files<a class="headerlink" href="#list-files" title="Permalink to this headline">¶</a></h3>
+<p>List all the files in a Data IDentifier. The DID can be a container, dataset or a file.                                                                  What is returned is a list of files in the DID with : &lt;scope&gt;:&lt;name&gt;   &lt;guid&gt;  &lt;checksum&gt;      &lt;filesize&gt;</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="nb">list</span><span class="o">-</span><span class="n">files</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">csv</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">pfc</span> <span class="n">LOCALPATH</span><span class="p">]</span> <span class="n">dids</span> <span class="p">[</span><span class="n">dids</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat15">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat15" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>dids</kbd></dt>
+<dd><p>List of space separated data identifiers.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat12">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat12" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--csv</kbd></dt>
+<dd><p>Comma Separated Value output. This output format is preferred for easy parsing and scripting.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--pfc</kbd></dt>
+<dd><p>Outputs the list of files in the dataset with the LOCALPATH prepended as a PoolFileCatalog</p>
+<p>Default: False</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="list-content">
+<h3>list-content<a class="headerlink" href="#list-content" title="Permalink to this headline">¶</a></h3>
+<p>List the content of a collection.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="nb">list</span><span class="o">-</span><span class="n">content</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">short</span><span class="p">]</span> <span class="n">dids</span> <span class="p">[</span><span class="n">dids</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat16">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat16" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>dids</kbd></dt>
+<dd><p>List of space separated data identifiers.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat13">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat13" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--short</kbd></dt>
+<dd><p>Just dump the list of DIDs.</p>
+<p>Default: False</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="list-content-history">
+<h3>list-content-history<a class="headerlink" href="#list-content-history" title="Permalink to this headline">¶</a></h3>
+<p>List the content history of a collection.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="nb">list</span><span class="o">-</span><span class="n">content</span><span class="o">-</span><span class="n">history</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">dids</span> <span class="p">[</span><span class="n">dids</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat17">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat17" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>dids</kbd></dt>
+<dd><p>List of space separated data identifiers.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="upload">
+<h3>upload<a class="headerlink" href="#upload" title="Permalink to this headline">¶</a></h3>
+<p>Upload method.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">upload</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">rse</span> <span class="n">RSE</span> <span class="p">[</span><span class="o">--</span><span class="n">lifetime</span> <span class="n">LIFETIME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">scope</span> <span class="n">SCOPE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">register</span><span class="o">-</span><span class="n">after</span><span class="o">-</span><span class="n">upload</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">summary</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">guid</span> <span class="n">GUID</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">protocol</span> <span class="n">PROTOCOL</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">pfn</span> <span class="n">PFN</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">name</span> <span class="n">NAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">transfer</span><span class="o">-</span><span class="n">timeout</span> <span class="n">TRANSFER_TIMEOUT</span><span class="p">]</span>
+             <span class="n">args</span> <span class="p">[</span><span class="n">args</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat18">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat18" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>args</kbd></dt>
+<dd><p>files and datasets.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat14">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat14" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--rse</kbd></dt>
+<dd><p>Rucio Storage Element (RSE) name.</p>
+</dd>
+<dt><kbd>--lifetime</kbd></dt>
+<dd><p>Lifetime of the rule in seconds.</p>
+</dd>
+<dt><kbd>--scope</kbd></dt>
+<dd><p>Scope name.</p>
+</dd>
+<dt><kbd>--register-after-upload</kbd></dt>
+<dd><p>Register the file only after successful upload.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--summary</kbd></dt>
+<dd><p>Create rucio_upload.json summary file</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--guid</kbd></dt>
+<dd><p>Manually specify the GUID for the file.</p>
+</dd>
+<dt><kbd>--protocol</kbd></dt>
+<dd><p>Force the protocol to use</p>
+</dd>
+<dt><kbd>--pfn</kbd></dt>
+<dd><p>Specify the exact PFN for the upload.</p>
+</dd>
+<dt><kbd>--name</kbd></dt>
+<dd><p>Specify the exact LFN for the upload.</p>
+</dd>
+<dt><kbd>--transfer-timeout</kbd></dt>
+<dd><p>Transfer timeout (in seconds).</p>
+<p>Default: 360</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="get">
+<h3>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
+<p>Download method (synonym for download)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">get</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">dir</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">allow</span><span class="o">-</span><span class="n">tape</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">rse</span> <span class="n">RSE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">protocol</span> <span class="n">PROTOCOL</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">nrandom</span> <span class="n">NRANDOM</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ndownloader</span> <span class="n">NDOWNLOADER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">subdir</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">pfn</span> <span class="n">PFN</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">archive</span><span class="o">-</span><span class="n">did</span> <span class="n">ARCHIVE_DID</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">resolve</span><span class="o">-</span><span class="n">archives</span><span class="p">]</span>
+          <span class="p">[</span><span class="o">--</span><span class="n">transfer</span><span class="o">-</span><span class="n">timeout</span> <span class="n">TRANSFER_TIMEOUT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">aria</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">filter</span> <span class="n">FILTER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">scope</span> <span class="n">SCOPE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">metalink</span> <span class="n">METALINK_FILE</span><span class="p">]</span>
+          <span class="p">[</span><span class="n">dids</span> <span class="p">[</span><span class="n">dids</span> <span class="o">...</span><span class="p">]]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat19">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat19" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>dids</kbd></dt>
+<dd><p>List of space separated data identifiers.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat15">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat15" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--dir</kbd></dt>
+<dd><p>The directory to store the downloaded file.</p>
+<p>Default: “.”</p>
+</dd>
+<dt><kbd>--allow-tape</kbd></dt>
+<dd><p>Also consider tape endpoints as source of the download.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--rse</kbd></dt>
+<dd><p>RSE Expression to specify allowed sources</p>
+</dd>
+<dt><kbd>--protocol</kbd></dt>
+<dd><p>Force the protocol to use.</p>
+</dd>
+<dt><kbd>--nrandom</kbd></dt>
+<dd><p>Download N random files from the DID.</p>
+</dd>
+<dt><kbd>--ndownloader</kbd></dt>
+<dd><p>Choose the number of parallel processes for download.</p>
+<p>Default: 3</p>
+</dd>
+<dt><kbd>--no-subdir</kbd></dt>
+<dd><p>Don’t create a subdirectory for the scope of the files. Existing files in the directory will be overwritten.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--pfn</kbd></dt>
+<dd><p>Specify the exact PFN for the download.</p>
+</dd>
+<dt><kbd>--archive-did</kbd></dt>
+<dd><p>Download from archive is transparent. This option is obsolete.</p>
+</dd>
+<dt><kbd>--no-resolve-archives</kbd></dt>
+<dd><p>If set archives will not be considered for download.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--transfer-timeout</kbd></dt>
+<dd><p>Transfer timeout (in seconds).</p>
+<p>Default: 360</p>
+</dd>
+<dt><kbd>--aria</kbd></dt>
+<dd><p>Use aria2c utility if possible. (EXPERIMENTAL)</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--filter</kbd></dt>
+<dd><p>Filter files by key-value pairs like guid=2e2232aafac8324db452070304f8d745.</p>
+</dd>
+<dt><kbd>--scope</kbd></dt>
+<dd><p>Scope if you are using the filter option and no full DID.</p>
+</dd>
+<dt><kbd>--metalink</kbd></dt>
+<dd><p>Path to a metalink file.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="download">
+<h3>download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h3>
+<p>Download method (synonym for get)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">download</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">dir</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">allow</span><span class="o">-</span><span class="n">tape</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">rse</span> <span class="n">RSE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">protocol</span> <span class="n">PROTOCOL</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">nrandom</span> <span class="n">NRANDOM</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ndownloader</span> <span class="n">NDOWNLOADER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">subdir</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">pfn</span> <span class="n">PFN</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">archive</span><span class="o">-</span><span class="n">did</span> <span class="n">ARCHIVE_DID</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">resolve</span><span class="o">-</span><span class="n">archives</span><span class="p">]</span>
+               <span class="p">[</span><span class="o">--</span><span class="n">transfer</span><span class="o">-</span><span class="n">timeout</span> <span class="n">TRANSFER_TIMEOUT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">aria</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">filter</span> <span class="n">FILTER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">scope</span> <span class="n">SCOPE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">metalink</span> <span class="n">METALINK_FILE</span><span class="p">]</span>
+               <span class="p">[</span><span class="n">dids</span> <span class="p">[</span><span class="n">dids</span> <span class="o">...</span><span class="p">]]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat20">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat20" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>dids</kbd></dt>
+<dd><p>List of space separated data identifiers.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat16">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat16" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--dir</kbd></dt>
+<dd><p>The directory to store the downloaded file.</p>
+<p>Default: “.”</p>
+</dd>
+<dt><kbd>--allow-tape</kbd></dt>
+<dd><p>Also consider tape endpoints as source of the download.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--rse</kbd></dt>
+<dd><p>RSE Expression to specify allowed sources</p>
+</dd>
+<dt><kbd>--protocol</kbd></dt>
+<dd><p>Force the protocol to use.</p>
+</dd>
+<dt><kbd>--nrandom</kbd></dt>
+<dd><p>Download N random files from the DID.</p>
+</dd>
+<dt><kbd>--ndownloader</kbd></dt>
+<dd><p>Choose the number of parallel processes for download.</p>
+<p>Default: 3</p>
+</dd>
+<dt><kbd>--no-subdir</kbd></dt>
+<dd><p>Don’t create a subdirectory for the scope of the files. Existing files in the directory will be overwritten.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--pfn</kbd></dt>
+<dd><p>Specify the exact PFN for the download.</p>
+</dd>
+<dt><kbd>--archive-did</kbd></dt>
+<dd><p>Download from archive is transparent. This option is obsolete.</p>
+</dd>
+<dt><kbd>--no-resolve-archives</kbd></dt>
+<dd><p>If set archives will not be considered for download.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--transfer-timeout</kbd></dt>
+<dd><p>Transfer timeout (in seconds).</p>
+<p>Default: 360</p>
+</dd>
+<dt><kbd>--aria</kbd></dt>
+<dd><p>Use aria2c utility if possible. (EXPERIMENTAL)</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--filter</kbd></dt>
+<dd><p>Filter files by key-value pairs like guid=2e2232aafac8324db452070304f8d745.</p>
+</dd>
+<dt><kbd>--scope</kbd></dt>
+<dd><p>Scope if you are using the filter option and no full DID.</p>
+</dd>
+<dt><kbd>--metalink</kbd></dt>
+<dd><p>Path to a metalink file.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="get-metadata">
+<h3>get-metadata<a class="headerlink" href="#get-metadata" title="Permalink to this headline">¶</a></h3>
+<p>Get metadata for DIDs.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">get</span><span class="o">-</span><span class="n">metadata</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">plugin</span> <span class="n">PLUGIN</span><span class="p">]</span> <span class="n">dids</span> <span class="p">[</span><span class="n">dids</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat21">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat21" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>dids</kbd></dt>
+<dd><p>List of space separated data identifiers.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat17">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat17" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--plugin</kbd></dt>
+<dd><p>Filter down to metdata from specific metadata plugin</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="set-metadata">
+<h3>set-metadata<a class="headerlink" href="#set-metadata" title="Permalink to this headline">¶</a></h3>
+<p>set-metadata method</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="nb">set</span><span class="o">-</span><span class="n">metadata</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">did</span> <span class="n">DID</span> <span class="o">--</span><span class="n">key</span> <span class="n">KEY</span> <span class="o">--</span><span class="n">value</span> <span class="n">VALUE</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments_repeat18">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat18" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--did</kbd></dt>
+<dd><p>Data identifier whose metadata will be set</p>
+</dd>
+<dt><kbd>--key</kbd></dt>
+<dd><p>Attribute key</p>
+</dd>
+<dt><kbd>--value</kbd></dt>
+<dd><p>Attribute value</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="delete-metadata">
+<h3>delete-metadata<a class="headerlink" href="#delete-metadata" title="Permalink to this headline">¶</a></h3>
+<p>delete metadata</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">delete</span><span class="o">-</span><span class="n">metadata</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">did</span> <span class="n">DID</span> <span class="o">--</span><span class="n">key</span> <span class="n">KEY</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments_repeat19">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat19" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--did</kbd></dt>
+<dd><p>Data identifier to delete</p>
+</dd>
+<dt><kbd>--key</kbd></dt>
+<dd><p>Attribute key</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="list-rse-usage">
+<h3>list-rse-usage<a class="headerlink" href="#list-rse-usage" title="Permalink to this headline">¶</a></h3>
+<p>Shows the total/free/used space for a given RSE. This values can differ for different RSE source.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="nb">list</span><span class="o">-</span><span class="n">rse</span><span class="o">-</span><span class="n">usage</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">history</span> <span class="n">HISTORY</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">show</span><span class="o">-</span><span class="n">accounts</span><span class="p">]</span> <span class="n">rse</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat22">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat22" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>rse</kbd></dt>
+<dd><p>Rucio Storage Element (RSE) name.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat20">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat20" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--history</kbd></dt>
+<dd><p>List RSE usage history. [Unimplemented]</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--show-accounts</kbd></dt>
+<dd><p>List accounts usages of RSE</p>
+<p>Default: False</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="list-account-usage">
+<h3>list-account-usage<a class="headerlink" href="#list-account-usage" title="Permalink to this headline">¶</a></h3>
+<p>Shows the space used, the quota limit and the quota left for an account for every RSE where the user have quota.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="nb">list</span><span class="o">-</span><span class="n">account</span><span class="o">-</span><span class="n">usage</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">rse</span> <span class="n">RSE</span><span class="p">]</span> <span class="n">usage_account</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat23">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat23" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>usage_account</kbd></dt>
+<dd><p>Account name.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat21">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat21" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--rse</kbd></dt>
+<dd><p>Show usage for only for this RSE.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="list-account-limits">
+<h3>list-account-limits<a class="headerlink" href="#list-account-limits" title="Permalink to this headline">¶</a></h3>
+<p>List quota limits for an account in every RSEs.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="nb">list</span><span class="o">-</span><span class="n">account</span><span class="o">-</span><span class="n">limits</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">rse</span> <span class="n">RSE</span><span class="p">]</span> <span class="n">limit_account</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat24">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat24" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>limit_account</kbd></dt>
+<dd><p>The account name.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat22">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat22" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--rse</kbd></dt>
+<dd><p>If this option is given, the results are restricted to only this RSE.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="add-rule">
+<h3>add-rule<a class="headerlink" href="#add-rule" title="Permalink to this headline">¶</a></h3>
+<p>Add replication rule.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">add</span><span class="o">-</span><span class="n">rule</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">weight</span> <span class="n">WEIGHT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">lifetime</span> <span class="n">LIFETIME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">grouping</span> <span class="p">{</span><span class="n">DATASET</span><span class="p">,</span><span class="n">ALL</span><span class="p">,</span><span class="n">NONE</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">locked</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">source</span><span class="o">-</span><span class="n">replica</span><span class="o">-</span><span class="n">expression</span> <span class="n">SOURCE_REPLICA_EXPRESSION</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">notify</span> <span class="n">NOTIFY</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">activity</span> <span class="n">ACTIVITY</span><span class="p">]</span>
+               <span class="p">[</span><span class="o">--</span><span class="n">comment</span> <span class="n">COMMENT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ask</span><span class="o">-</span><span class="n">approval</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">asynchronous</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">account</span> <span class="n">RULE_ACCOUNT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">skip</span><span class="o">-</span><span class="n">duplicates</span><span class="p">]</span>
+               <span class="n">dids</span> <span class="p">[</span><span class="n">dids</span> <span class="o">...</span><span class="p">]</span> <span class="n">copies</span> <span class="n">rse_expression</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat25">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat25" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>dids</kbd></dt>
+<dd><p>DID(s) to apply the rule to</p>
+</dd>
+<dt><kbd>copies</kbd></dt>
+<dd><p>Number of copies</p>
+</dd>
+<dt><kbd>rse_expression</kbd></dt>
+<dd><p>RSE Expression</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat23">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat23" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--weight</kbd></dt>
+<dd><p>RSE Weight</p>
+</dd>
+<dt><kbd>--lifetime</kbd></dt>
+<dd><p>Rule lifetime (in seconds)</p>
+</dd>
+<dt><kbd>--grouping</kbd></dt>
+<dd><p>Possible choices: DATASET, ALL, NONE</p>
+<p>Rule grouping</p>
+</dd>
+<dt><kbd>--locked</kbd></dt>
+<dd><p>Rule locking</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--source-replica-expression</kbd></dt>
+<dd><p>RSE Expression for RSEs to be considered for source replicas</p>
+</dd>
+<dt><kbd>--notify</kbd></dt>
+<dd><p>Notification strategy : Y (Yes), N (No), C (Close)</p>
+</dd>
+<dt><kbd>--activity</kbd></dt>
+<dd><p>Activity to be used (e.g. User, Data Consolidation)</p>
+</dd>
+<dt><kbd>--comment</kbd></dt>
+<dd><p>Comment about the replication rule</p>
+</dd>
+<dt><kbd>--ask-approval</kbd></dt>
+<dd><p>Ask for rule approval</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--asynchronous</kbd></dt>
+<dd><p>Create rule asynchronously</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--account</kbd></dt>
+<dd><p>The account owning the rule</p>
+</dd>
+<dt><kbd>--skip-duplicates</kbd></dt>
+<dd><p>Skip duplicate rules</p>
+<p>Default: False</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="delete-rule">
+<h3>delete-rule<a class="headerlink" href="#delete-rule" title="Permalink to this headline">¶</a></h3>
+<p>Delete replication rule.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">delete</span><span class="o">-</span><span class="n">rule</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">purge</span><span class="o">-</span><span class="n">replicas</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">all</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">rse_expression</span> <span class="n">RSE_EXPRESSION</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">account</span> <span class="n">RULE_ACCOUNT</span><span class="p">]</span> <span class="n">rule_id</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat26">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat26" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>rule_id</kbd></dt>
+<dd><p>Rule id or DID. If DID, the RSE expression is mandatory.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat24">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat24" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--purge-replicas</kbd></dt>
+<dd><p>Purge rule replicas</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--all</kbd></dt>
+<dd><p>Delete all the rules, even the ones that are not owned by the account</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--rse_expression</kbd></dt>
+<dd><p>The RSE expression. Must be specified if a DID is provided.</p>
+</dd>
+<dt><kbd>--account</kbd></dt>
+<dd><p>The account of the rule that must be deleted</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="rule-info">
+<h3>rule-info<a class="headerlink" href="#rule-info" title="Permalink to this headline">¶</a></h3>
+<p>Retrieve information about a rule.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">rule</span><span class="o">-</span><span class="n">info</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">examine</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">estimate</span><span class="o">-</span><span class="n">ttc</span><span class="p">]</span> <span class="n">rule_id</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat27">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat27" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>rule_id</kbd></dt>
+<dd><p>The rule ID</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat25">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat25" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--examine</kbd></dt>
+<dd><p>Detailed analysis of transfer errors</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--estimate-ttc</kbd></dt>
+<dd><p>Show Estimated Time To Complete for the rule. Calculation can be time consuming.</p>
+<p>Default: False</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="list-rules">
+<h3>list-rules<a class="headerlink" href="#list-rules" title="Permalink to this headline">¶</a></h3>
+<p>List replication rules.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="nb">list</span><span class="o">-</span><span class="n">rules</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">id</span> <span class="n">RULE_ID</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">traverse</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">csv</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">file</span> <span class="n">FILE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">account</span> <span class="n">RULE_ACCOUNT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">subscription</span> <span class="n">ACCOUNT</span> <span class="n">SUBSCRIPTION</span><span class="p">]</span> <span class="p">[</span><span class="n">did</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat28">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat28" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>did</kbd></dt>
+<dd><p>List by did</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat26">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat26" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--id</kbd></dt>
+<dd><p>List by rule id</p>
+</dd>
+<dt><kbd>--traverse</kbd></dt>
+<dd><p>Traverse the did tree and search for rules affecting this did</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--csv</kbd></dt>
+<dd><p>Comma Separated Value output</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--file</kbd></dt>
+<dd><p>List associated rules of an affected file</p>
+</dd>
+<dt><kbd>--account</kbd></dt>
+<dd><p>List by account</p>
+</dd>
+<dt><kbd>--subscription</kbd></dt>
+<dd><p>List by account and subscription name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat14">
+<h4>Usage example<a class="headerlink" href="#usage-example_repeat14" title="Permalink to this headline">¶</a></h4>
+<p>You can list the rules for a particular DID:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-rules user.jdoe:user.jdoe.test.container.1234.1
+ID                                ACCOUNT    SCOPE:NAME                                 STATE[OK/REPL/STUCK]    RSE_EXPRESSION        COPIES  EXPIRES (UTC)
+--------------------------------  ---------  -----------------------------------------  ----------------------  ------------------  --------  -------------------
+a12e5664555a4f12b3cc6991db5accf9  jdoe       user.jdoe:user.jdoe.test.container.1234.1  OK[3/0/0]               tier=1&amp;disk=1       1         2018-02-09 03:57:46
+b0fcde2acbdb489b874c3c4537595adc  janedoe    user.jdoe:user.jdoe.test.container.1234.1  REPLICATING[4/1/1]      tier=1&amp;tape=1       2
+4a6bd85c13384bd6836fbc06e8b316d7  mc         user.jdoe:user.jdoe.test.container.1234.1  OK[3/0/0]               tier=1&amp;tape=1       2
+</pre></div>
+</div>
+<p>You can filter by account:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-rules --account jdoe
+ID                                ACCOUNT    SCOPE:NAME                                 STATE[OK/REPL/STUCK]    RSE_EXPRESSION        COPIES  EXPIRES (UTC)
+--------------------------------  ---------  -----------------------------------------  ----------------------  ------------------  --------  -------------------
+a12e5664555a4f12b3cc6991db5accf9  jdoe       user.jdoe:user.jdoe.test.container.1234.1  OK[3/0/0]               tier=1&amp;disk=1       1         2018-02-09 03:57:46
+08537b2176843d92e05317938a89d148  jdoe       user.jdoe:user.jdoe.test.data.1234.1       OK[2/0/0]               SITE2_DISK          1
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="list-rules-history">
+<h3>list-rules-history<a class="headerlink" href="#list-rules-history" title="Permalink to this headline">¶</a></h3>
+<p>List replication rules history for a DID.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="nb">list</span><span class="o">-</span><span class="n">rules</span><span class="o">-</span><span class="n">history</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">did</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat29">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat29" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>did</kbd></dt>
+<dd><p>The Data IDentifier.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="update-rule">
+<h3>update-rule<a class="headerlink" href="#update-rule" title="Permalink to this headline">¶</a></h3>
+<p>Update replication rule.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">update</span><span class="o">-</span><span class="n">rule</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">lifetime</span> <span class="n">LIFETIME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">locked</span> <span class="n">LOCKED</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">account</span> <span class="n">RULE_ACCOUNT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">stuck</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">suspend</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">activity</span> <span class="n">RULE_ACTIVITY</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">source</span><span class="o">-</span><span class="n">replica</span><span class="o">-</span><span class="n">expression</span> <span class="n">SOURCE_REPLICA_EXPRESSION</span><span class="p">]</span>
+                  <span class="p">[</span><span class="o">--</span><span class="n">cancel</span><span class="o">-</span><span class="n">requests</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">priority</span> <span class="n">PRIORITY</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">child</span><span class="o">-</span><span class="n">rule</span><span class="o">-</span><span class="nb">id</span> <span class="n">CHILD_RULE_ID</span><span class="p">]</span>
+                  <span class="n">rule_id</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat30">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat30" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>rule_id</kbd></dt>
+<dd><p>Rule id</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat27">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat27" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--lifetime</kbd></dt>
+<dd><p>Lifetime in seconds.</p>
+</dd>
+<dt><kbd>--locked</kbd></dt>
+<dd><p>Locked (True/False).</p>
+</dd>
+<dt><kbd>--account</kbd></dt>
+<dd><p>Account to change.</p>
+</dd>
+<dt><kbd>--stuck</kbd></dt>
+<dd><p>Set state to STUCK.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--suspend</kbd></dt>
+<dd><p>Set state to SUSPENDED.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--activity</kbd></dt>
+<dd><p>Activity of the rule.</p>
+</dd>
+<dt><kbd>--source-replica-expression</kbd></dt>
+<dd><p>Source replica expression of the rule.</p>
+</dd>
+<dt><kbd>--cancel-requests</kbd></dt>
+<dd><p>Cancel requests when setting rules to stuck.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--priority</kbd></dt>
+<dd><p>Priority of the requests of the rule.</p>
+</dd>
+<dt><kbd>--child-rule-id</kbd></dt>
+<dd><p>Child rule id of the rule.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="move-rule">
+<h3>move-rule<a class="headerlink" href="#move-rule" title="Permalink to this headline">¶</a></h3>
+<p>Move a replication rule to another RSE.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">move</span><span class="o">-</span><span class="n">rule</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">rule_id</span> <span class="n">rse_expression</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat31">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat31" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>rule_id</kbd></dt>
+<dd><p>Rule id</p>
+</dd>
+<dt><kbd>rse_expression</kbd></dt>
+<dd><p>RSE expression of new rule</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="list-rses">
+<h3>list-rses<a class="headerlink" href="#list-rses" title="Permalink to this headline">¶</a></h3>
+<p>Show the list of all the registered Rucio Storage Elements (RSEs).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="nb">list</span><span class="o">-</span><span class="n">rses</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">expression</span> <span class="n">RSE_EXPRESSION</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments_repeat28">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat28" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--expression</kbd></dt>
+<dd><p>The RSE filter expression. A comprehensive help about RSE expressions can be found in [1mhttp://rucio.cern.ch/client_tutorial.html#adding-rules-for-replication[0m</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="list-rse-attributes">
+<h3>list-rse-attributes<a class="headerlink" href="#list-rse-attributes" title="Permalink to this headline">¶</a></h3>
+<p>This command is useful to create RSE filter expressions.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="nb">list</span><span class="o">-</span><span class="n">rse</span><span class="o">-</span><span class="n">attributes</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">rse</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat32">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat32" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>rse</kbd></dt>
+<dd><p>The RSE name</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="list-datasets-rse">
+<h3>list-datasets-rse<a class="headerlink" href="#list-datasets-rse" title="Permalink to this headline">¶</a></h3>
+<p>This method allows to list all the datasets on a given Rucio Storage Element.        [1mWarning: [0mThis command can take a long time depending on the number of datasets in the RSE.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="nb">list</span><span class="o">-</span><span class="n">datasets</span><span class="o">-</span><span class="n">rse</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">long</span><span class="p">]</span> <span class="n">rse</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat33">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat33" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>rse</kbd></dt>
+<dd><p>The RSE name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat29">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat29" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--long</kbd></dt>
+<dd><p>The long option</p>
+<p>Default: False</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="test-server">
+<h3>test-server<a class="headerlink" href="#test-server" title="Permalink to this headline">¶</a></h3>
+<p>Run a bunch of tests against the Rucio Servers.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">test</span><span class="o">-</span><span class="n">server</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="touch">
+<h3>touch<a class="headerlink" href="#touch" title="Permalink to this headline">¶</a></h3>
+<p>Touch one or more DIDs and set the last accessed date to the current date</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">touch</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">rse</span> <span class="n">RSE</span><span class="p">]</span> <span class="n">dids</span> <span class="p">[</span><span class="n">dids</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat34">
+<h4>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat34" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>dids</kbd></dt>
+<dd><p>List of space separated data identifiers.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat30">
+<h4>Named Arguments<a class="headerlink" href="#Named Arguments_repeat30" title="Permalink to this headline">¶</a></h4>
+<dl class="option-list">
+<dt><kbd>--rse</kbd></dt>
+<dd><p>The RSE of the DIDs that are touched.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Rucio</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database.html">Database operations</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Rucio CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-admin.html">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../policy_packages.html">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../cli_examples.html" title="previous chapter">Rucio CLI: Examples</a></li>
+      <li>Next: <a href="rucio-admin.html" title="next chapter">Rucio Administrative CLI</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/man/rucio.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

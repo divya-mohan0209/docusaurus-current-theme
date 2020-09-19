@@ -1,0 +1,1774 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rucio Administrative CLI &#8212; Rucio 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Rucio Clients" href="../clients.html" />
+    <link rel="prev" title="Rucio CLI" href="rucio.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="rucio-administrative-cli">
+<h1>Rucio Administrative CLI<a class="headerlink" href="#rucio-administrative-cli" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">version</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">verbose</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">H</span> <span class="n">ADDRESS</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">auth</span><span class="o">-</span><span class="n">host</span> <span class="n">ADDRESS</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">a</span> <span class="n">ACCOUNT</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">S</span> <span class="n">AUTH_STRATEGY</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">T</span> <span class="n">TIMEOUT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vo</span> <span class="n">VO</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">u</span> <span class="n">USERNAME</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">pwd</span> <span class="n">PASSWORD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">user</span> <span class="n">OIDC_USERNAME</span><span class="p">]</span>
+                   <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">password</span> <span class="n">OIDC_PASSWORD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">scope</span> <span class="n">OIDC_SCOPE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">audience</span> <span class="n">OIDC_AUDIENCE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">auto</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">polling</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">refresh</span><span class="o">-</span><span class="n">lifetime</span> <span class="n">OIDC_REFRESH_LIFETIME</span><span class="p">]</span>
+                   <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">issuer</span> <span class="n">OIDC_ISSUER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">certificate</span> <span class="n">CERTIFICATE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ca</span><span class="o">-</span><span class="n">certificate</span> <span class="n">CA_CERTIFICATE</span><span class="p">]</span>
+                   <span class="p">{</span><span class="n">data</span><span class="p">,</span><span class="n">account</span><span class="p">,</span><span class="n">identity</span><span class="p">,</span><span class="n">rse</span><span class="p">,</span><span class="n">scope</span><span class="p">,</span><span class="n">config</span><span class="p">,</span><span class="n">subscription</span><span class="p">,</span><span class="n">replicas</span><span class="p">}</span> <span class="o">...</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments">
+<h2>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h2>
+<dl class="option-list">
+<dt><kbd>--version</kbd></dt>
+<dd><p>show program’s version number and exit</p>
+</dd>
+<dt><kbd>--verbose, -v</kbd></dt>
+<dd><p>Print more verbose output</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>-H, --host</kbd></dt>
+<dd><p>The Rucio API host</p>
+</dd>
+<dt><kbd>--auth-host</kbd></dt>
+<dd><p>The Rucio Authentication host</p>
+</dd>
+<dt><kbd>-a, --account</kbd></dt>
+<dd><p>Rucio account to use</p>
+</dd>
+<dt><kbd>-S, --auth-strategy</kbd></dt>
+<dd><p>Authentication strategy (userpass, x509, ssh …)</p>
+</dd>
+<dt><kbd>-T, --timeout</kbd></dt>
+<dd><p>Set all timeout values to SECONDS</p>
+</dd>
+<dt><kbd>--vo</kbd></dt>
+<dd><p>VO to authenticate at. Only used in multi-VO mode.</p>
+</dd>
+<dt><kbd>-u, --user</kbd></dt>
+<dd><p>username</p>
+</dd>
+<dt><kbd>-pwd, --password</kbd></dt>
+<dd><p>password</p>
+</dd>
+<dt><kbd>--oidc-user</kbd></dt>
+<dd><p>OIDC username</p>
+</dd>
+<dt><kbd>--oidc-password</kbd></dt>
+<dd><p>OIDC password</p>
+</dd>
+<dt><kbd>--oidc-scope</kbd></dt>
+<dd><p>Defines which (OIDC) information user will share with Rucio. Rucio requires at least -sc=”openid profile”. To request refresh token for Rucio, scope must include “openid offline_access” and there must be no active access token saved on the side of the currently used Rucio Client.</p>
+<p>Default: “openid profile”</p>
+</dd>
+<dt><kbd>--oidc-audience</kbd></dt>
+<dd><p>Defines which audience are tokens requested for.</p>
+</dd>
+<dt><kbd>--oidc-auto</kbd></dt>
+<dd><p>If not specified, username and password credentials are not required and users will be given a URL to use in their browser. If specified, the users explicitly trust Rucio with their IdP credentials.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--oidc-polling</kbd></dt>
+<dd><p>If not specified, user will be asked to enter a code returned by the browser to the command line. If –polling is set, Rucio Client should get the token without any further interaction of the user. This option is active only if –auto is <em>not</em> specified.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--oidc-refresh-lifetime</kbd></dt>
+<dd><p>Max lifetime in hours for this an access token will be refreshed by asynchronous Rucio daemon. If not specified, refresh will be stopped after 4 days. This option is effective only if –oidc-scope includes offline_access scope for a refresh token to be granted to Rucio.</p>
+</dd>
+<dt><kbd>--oidc-issuer</kbd></dt>
+<dd><p>Defines which Identity Provider is goign to be used. The issuer string must correspond to the keys configured in the /etc/idpsecrets.json auth server configuration file.</p>
+</dd>
+<dt><kbd>--certificate</kbd></dt>
+<dd><p>Client certificate file</p>
+</dd>
+<dt><kbd>--ca-certificate</kbd></dt>
+<dd><p>CA certificate to verify peer against (SSL)</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Sub-commands:">
+<h2>Sub-commands:<a class="headerlink" href="#Sub-commands:" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="data">
+<h3>data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h3>
+<p>Import and export data</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">data</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">{</span><span class="n">import</span><span class="p">,</span><span class="n">export</span><span class="p">}</span> <span class="o">...</span>
+</pre></div>
+</div>
+<div class="section" id="Sub-commands:_repeat1">
+<h4>Sub-commands:<a class="headerlink" href="#Sub-commands:_repeat1" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="import">
+<h5>import<a class="headerlink" href="#import" title="Permalink to this headline">¶</a></h5>
+<p>Import data to Rucio from JSON file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">data</span> <span class="kn">import</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">file_path</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>file_path</kbd></dt>
+<dd><p>File path.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example">
+<h6>Usage example<a class="headerlink" href="#usage-example" title="Permalink to this headline">¶</a></h6>
+<p>Import data from the file file.json:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin data import file.json
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="export">
+<h5>export<a class="headerlink" href="#export" title="Permalink to this headline">¶</a></h5>
+<p>Export data from  Rucio to JSON file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">data</span> <span class="n">export</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">file_path</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat1">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat1" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>file_path</kbd></dt>
+<dd><p>File path.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat1">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat1" title="Permalink to this headline">¶</a></h6>
+<p>Export data to the file file.json:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin data export file.json
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="account">
+<h3>account<a class="headerlink" href="#account" title="Permalink to this headline">¶</a></h3>
+<p>Account methods</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">account</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">{</span><span class="nb">list</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">attributes</span><span class="p">,</span><span class="n">add</span><span class="o">-</span><span class="n">attribute</span><span class="p">,</span><span class="n">delete</span><span class="o">-</span><span class="n">attribute</span><span class="p">,</span><span class="n">add</span><span class="p">,</span><span class="n">delete</span><span class="p">,</span><span class="n">info</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">identities</span><span class="p">,</span><span class="nb">set</span><span class="o">-</span><span class="n">limits</span><span class="p">,</span><span class="n">get</span><span class="o">-</span><span class="n">limits</span><span class="p">,</span><span class="n">delete</span><span class="o">-</span><span class="n">limits</span><span class="p">,</span><span class="n">ban</span><span class="p">,</span><span class="n">unban</span><span class="p">,</span><span class="n">update</span><span class="p">}</span> <span class="o">...</span>
+</pre></div>
+</div>
+<div class="section" id="Sub-commands:_repeat2">
+<h4>Sub-commands:<a class="headerlink" href="#Sub-commands:_repeat2" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="list">
+<h5>list<a class="headerlink" href="#list" title="Permalink to this headline">¶</a></h5>
+<p>List Rucio accounts.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">account</span> <span class="nb">list</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">type</span> <span class="n">ACCOUNT_TYPE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">id</span> <span class="n">IDENTITY</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">filters</span> <span class="n">FILTERS</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments_repeat1">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat1" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--type</kbd></dt>
+<dd><p>Account Type (USER, GROUP, SERVICE)</p>
+</dd>
+<dt><kbd>--id</kbd></dt>
+<dd><p>Identity (e.g. DN)</p>
+</dd>
+<dt><kbd>--filters</kbd></dt>
+<dd><p>Filter arguments in form <cite>key=value,another_key=next_value</cite></p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat2">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat2" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin account list --type &#39;user&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="list-attributes">
+<h5>list-attributes<a class="headerlink" href="#list-attributes" title="Permalink to this headline">¶</a></h5>
+<p>List attributes for an account.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">account</span> <span class="nb">list</span><span class="o">-</span><span class="n">attributes</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">account</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat2">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat2" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>account</kbd></dt>
+<dd><p>Account name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat3">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat3" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin account list-attributes jdoe
++-------+---------+
+| Key   | Value   |
+|-------+---------|
+| admin | False   |
++-------+---------+
+</pre></div>
+</div>
+<p>Note: this table empty in most cases.</p>
+</div>
+</div>
+<div class="section" id="add-attribute">
+<h5>add-attribute<a class="headerlink" href="#add-attribute" title="Permalink to this headline">¶</a></h5>
+<p>Add attribute for an account.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">account</span> <span class="n">add</span><span class="o">-</span><span class="n">attribute</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">key</span> <span class="n">KEY</span> <span class="o">--</span><span class="n">value</span> <span class="n">VALUE</span> <span class="n">account</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat3">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat3" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>account</kbd></dt>
+<dd><p>Account name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat2">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat2" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--key</kbd></dt>
+<dd><p>Attribute key</p>
+</dd>
+<dt><kbd>--value</kbd></dt>
+<dd><p>Attribute value</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat4">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat4" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin account add-attribute --key &#39;test&#39; --value true jdoe
+</pre></div>
+</div>
+<p>Note: no printed stdout.</p>
+</div>
+</div>
+<div class="section" id="delete-attribute">
+<h5>delete-attribute<a class="headerlink" href="#delete-attribute" title="Permalink to this headline">¶</a></h5>
+<p>Delete attribute for an account.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">account</span> <span class="n">delete</span><span class="o">-</span><span class="n">attribute</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">key</span> <span class="n">KEY</span> <span class="n">account</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat4">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat4" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>account</kbd></dt>
+<dd><p>Account name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat3">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat3" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--key</kbd></dt>
+<dd><p>Attribute key</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat5">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat5" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin account delete-attribute --key &#39;test&#39; jdoe
+</pre></div>
+</div>
+<p>Note: no printed stdout.</p>
+</div>
+</div>
+<div class="section" id="add">
+<h5>add<a class="headerlink" href="#add" title="Permalink to this headline">¶</a></h5>
+<p>Add Rucio account.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">account</span> <span class="n">add</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">type</span> <span class="n">ACCOUNTTYPE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">email</span> <span class="n">ACCOUNTEMAIL</span><span class="p">]</span> <span class="n">account</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat5">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat5" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>account</kbd></dt>
+<dd><p>Account name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat4">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat4" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--type</kbd></dt>
+<dd><p>Account Type (USER, GROUP, SERVICE)</p>
+<p>Default: “USER”</p>
+</dd>
+<dt><kbd>--email</kbd></dt>
+<dd><p>Email address associated with the account</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat6">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat6" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin account add jdoe-sister
+Added new account: jdoe-sister
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="delete">
+<h5>delete<a class="headerlink" href="#delete" title="Permalink to this headline">¶</a></h5>
+<p>Delete Rucio account.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">account</span> <span class="n">delete</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">acnt</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat6">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat6" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>acnt</kbd></dt>
+<dd><p>Account name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat7">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat7" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin account delete jdoe-sister
+Deleted account: jdoe-sister
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="info">
+<h5>info<a class="headerlink" href="#info" title="Permalink to this headline">¶</a></h5>
+<p>Show detailed information about an account.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">account</span> <span class="n">info</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">account</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat7">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat7" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>account</kbd></dt>
+<dd><p>Account name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat8">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat8" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin account info jdoe
+status     : ACTIVE
+account    : jdoe
+account_type : SERVICE
+created_at : 2015-02-03T15:51:16
+suspended_at : None
+updated_at : 2015-02-03T15:51:16
+deleted_at : None
+email      : None
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="list-identities">
+<h5>list-identities<a class="headerlink" href="#list-identities" title="Permalink to this headline">¶</a></h5>
+<p>List all identities (DNs) on an account.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">account</span> <span class="nb">list</span><span class="o">-</span><span class="n">identities</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">account</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat8">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat8" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>account</kbd></dt>
+<dd><p>Account name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat9">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat9" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin account list-identities jdoe
+Identity: /C=DE/O=GermanGrid/OU=Desy/CN=Joe Doe, type: X509
+Identity: jdoe@CERN.CH,  type: GSS
+Identity: /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=jdoe/CN=707654/CN=Joe Doe, type: X509
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="set-limits">
+<h5>set-limits<a class="headerlink" href="#set-limits" title="Permalink to this headline">¶</a></h5>
+<p>Set the limits for the provided account at given RSE.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">account</span> <span class="nb">set</span><span class="o">-</span><span class="n">limits</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">account</span> <span class="n">rse</span> <span class="nb">bytes</span> <span class="p">[{</span><span class="n">local</span><span class="p">,</span><span class="k">global</span><span class="p">}]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat9">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat9" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>account</kbd></dt>
+<dd><p>Account name</p>
+</dd>
+<dt><kbd>rse</kbd></dt>
+<dd><p>RSE boolean expression</p>
+</dd>
+<dt><kbd>bytes</kbd></dt>
+<dd><p>Value can be specified in bytes (“10000”), with a storage unit (“10GB”), or “infinity”</p>
+</dd>
+<dt><kbd>locality</kbd></dt>
+<dd><p>Possible choices: local, global</p>
+<p>Global or local limit scope. Default: “local”</p>
+<p>Default: “local”</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat10">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat10" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin account set-limits jdoe DESY-ZN_DATADISK 1000000000000
+Set account limit for account jdoe on RSE DESY-ZN_DATADISK: 1.000 TB
+</pre></div>
+</div>
+<p>Note: the order of perameters is fixed: account, rse, bytes.</p>
+</div>
+</div>
+<div class="section" id="get-limits">
+<h5>get-limits<a class="headerlink" href="#get-limits" title="Permalink to this headline">¶</a></h5>
+<p>To get the account limits on an RSE.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">account</span> <span class="n">get</span><span class="o">-</span><span class="n">limits</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">account</span> <span class="n">rse</span> <span class="p">[{</span><span class="n">local</span><span class="p">,</span><span class="k">global</span><span class="p">}]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat10">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat10" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>account</kbd></dt>
+<dd><p>Account name</p>
+</dd>
+<dt><kbd>rse</kbd></dt>
+<dd><p>The RSE name</p>
+</dd>
+<dt><kbd>locality</kbd></dt>
+<dd><p>Possible choices: local, global</p>
+<p>Global or local limit scope. Default: “local”</p>
+<p>Default: “local”</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat11">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat11" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin account get-limits jdoe DESY-ZN_DATADISK
+Quota on DESY-ZN_DATADISK for jdoe : 1.000 TB
+</pre></div>
+</div>
+<p>Note: the order of parameters is fixed: account, rse.</p>
+</div>
+</div>
+<div class="section" id="delete-limits">
+<h5>delete-limits<a class="headerlink" href="#delete-limits" title="Permalink to this headline">¶</a></h5>
+<p>Delete limites for an account at given RSE.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">account</span> <span class="n">delete</span><span class="o">-</span><span class="n">limits</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">account</span> <span class="n">rse</span> <span class="p">[{</span><span class="n">local</span><span class="p">,</span><span class="k">global</span><span class="p">}]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat11">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat11" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>account</kbd></dt>
+<dd><p>Account name</p>
+</dd>
+<dt><kbd>rse</kbd></dt>
+<dd><p>RSE name</p>
+</dd>
+<dt><kbd>locality</kbd></dt>
+<dd><p>Possible choices: local, global</p>
+<p>Global or local limit scope. Default: “local”</p>
+<p>Default: “local”</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat12">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat12" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admain account delete-limits jdoe DESY-ZN_DATADISK
+Deleted account limit for account jdoe and RSE DESY-ZN_DATADISK
+</pre></div>
+</div>
+<p>Note: the order of parameters is fixed: account, rse.</p>
+</div>
+</div>
+<div class="section" id="ban">
+<h5>ban<a class="headerlink" href="#ban" title="Permalink to this headline">¶</a></h5>
+<p>Disable an account.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">account</span> <span class="n">ban</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">account</span> <span class="n">ACCOUNT</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments_repeat5">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat5" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--account</kbd></dt>
+<dd><p>Account name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat13">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat13" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin account ban --account jdoe
+Account jdoe banned
+</pre></div>
+</div>
+<p>Note: in case of accidental ban, use unban.
+CAUTION: the account is completely disabled.</p>
+</div>
+</div>
+<div class="section" id="unban">
+<h5>unban<a class="headerlink" href="#unban" title="Permalink to this headline">¶</a></h5>
+<p>Unban a banned account. The account is mandatory parameter.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">account</span> <span class="n">unban</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">account</span> <span class="n">ACCOUNT</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments_repeat6">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat6" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--account</kbd></dt>
+<dd><p>Account name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat14">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat14" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin account unban --account jdoe
+Account jdoe unbanned
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="update">
+<h5>update<a class="headerlink" href="#update" title="Permalink to this headline">¶</a></h5>
+<p>Update an account.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">account</span> <span class="n">update</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">account</span> <span class="n">ACCOUNT</span> <span class="o">--</span><span class="n">key</span> <span class="n">KEY</span> <span class="o">--</span><span class="n">value</span> <span class="n">VALUE</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments_repeat7">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat7" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--account</kbd></dt>
+<dd><p>Account name</p>
+</dd>
+<dt><kbd>--key</kbd></dt>
+<dd><p>Account parameter</p>
+</dd>
+<dt><kbd>--value</kbd></dt>
+<dd><p>Account parameter value</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat15">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat15" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin account update --account jdoe --key email --value test
+Account jdoe updated
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="identity">
+<h3>identity<a class="headerlink" href="#identity" title="Permalink to this headline">¶</a></h3>
+<p>Identity methods</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">identity</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">{</span><span class="n">add</span><span class="p">,</span><span class="n">delete</span><span class="p">}</span> <span class="o">...</span>
+</pre></div>
+</div>
+<div class="section" id="Sub-commands:_repeat3">
+<h4>Sub-commands:<a class="headerlink" href="#Sub-commands:_repeat3" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="add_repeat1">
+<h5>add<a class="headerlink" href="#add_repeat1" title="Permalink to this headline">¶</a></h5>
+<p>Grant an identity access to an account.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">identity</span> <span class="n">add</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">account</span> <span class="n">ACCOUNT</span> <span class="o">--</span><span class="nb">type</span> <span class="p">{</span><span class="n">X509</span><span class="p">,</span><span class="n">GSS</span><span class="p">,</span><span class="n">USERPASS</span><span class="p">,</span><span class="n">SSH</span><span class="p">,</span><span class="n">SAML</span><span class="p">,</span><span class="n">OIDC</span><span class="p">}</span> <span class="o">--</span><span class="nb">id</span> <span class="n">IDENTITY</span> <span class="o">--</span><span class="n">email</span> <span class="n">EMAIL</span> <span class="p">[</span><span class="o">--</span><span class="n">password</span> <span class="n">PASSWORD</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments_repeat8">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat8" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--account</kbd></dt>
+<dd><p>Account name</p>
+</dd>
+<dt><kbd>--type</kbd></dt>
+<dd><p>Possible choices: X509, GSS, USERPASS, SSH, SAML, OIDC</p>
+<p>Authentication type [X509|GSS|USERPASS|SSH|SAML|OIDC]</p>
+</dd>
+<dt><kbd>--id</kbd></dt>
+<dd><p>Identity</p>
+</dd>
+<dt><kbd>--email</kbd></dt>
+<dd><p>Email address associated with the identity</p>
+</dd>
+<dt><kbd>--password</kbd></dt>
+<dd><p>Password if authtype is USERPASS</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat16">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat16" title="Permalink to this headline">¶</a></h6>
+<p>To add an identity of X509 type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin identity add --account jdoe --type X509 --id &#39;/DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=jdoe/CN=707658/CN=Joe Doe&#39; --email jdoe@cern.ch
+Added new identity to account: /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=jdoe/CN=707658/CN=Joe Doe-jdoe
+
+$ rucio-admin account list-identities jdoe
+Identity: /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=jdoe/CN=707658/CN=Joe Doe,   type: X509
+</pre></div>
+</div>
+<p>Note: please keep the DN inside quota marks.</p>
+<p>To add an identity of GSS type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin identity add --account jdoe --type GSS --email jdoe@cern.ch --id jdoe@CERN.CH
+Added new identity to account: jdoe@CERN.CH-jdoe
+
+$ rucio-admin account list-identities jdoe
+Identity: jdoe@CERN.CH,    type: GSS
+Identity: /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=jdoe/CN=707658/CN=Joe Doe,   type: X509
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="delete_repeat1">
+<h5>delete<a class="headerlink" href="#delete_repeat1" title="Permalink to this headline">¶</a></h5>
+<p>Revoke an identity’s access to an account. The mandatory parameters are account, type and identity.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">identity</span> <span class="n">delete</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">account</span> <span class="n">ACCOUNT</span> <span class="o">--</span><span class="nb">type</span> <span class="p">{</span><span class="n">X509</span><span class="p">,</span><span class="n">GSS</span><span class="p">,</span><span class="n">USERPASS</span><span class="p">,</span><span class="n">SSH</span><span class="p">,</span><span class="n">SAML</span><span class="p">,</span><span class="n">OIDC</span><span class="p">}</span> <span class="o">--</span><span class="nb">id</span> <span class="n">IDENTITY</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments_repeat9">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat9" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--account</kbd></dt>
+<dd><p>Account name</p>
+</dd>
+<dt><kbd>--type</kbd></dt>
+<dd><p>Possible choices: X509, GSS, USERPASS, SSH, SAML, OIDC</p>
+<p>Authentication type [X509|GSS|USERPASS|SSH|SAML|OIDC]</p>
+</dd>
+<dt><kbd>--id</kbd></dt>
+<dd><p>Identity</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat17">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat17" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin identity delete --account jdoe --type X509 --id &#39;/DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=jdoe/CN=707658/CN=Joe Doe&#39;
+Deleted identity: /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=jdoe/CN=707658/CN=Joe Doe
+</pre></div>
+</div>
+<p>Note: if the identity was accidentaly deleted, use add option.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="rse">
+<h3>rse<a class="headerlink" href="#rse" title="Permalink to this headline">¶</a></h3>
+<p>RSE (Rucio Storage Element) methods</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">rse</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
+                <span class="p">{</span><span class="nb">list</span><span class="p">,</span><span class="n">add</span><span class="p">,</span><span class="n">update</span><span class="p">,</span><span class="n">info</span><span class="p">,</span><span class="nb">set</span><span class="o">-</span><span class="n">attribute</span><span class="p">,</span><span class="n">delete</span><span class="o">-</span><span class="n">attribute</span><span class="p">,</span><span class="n">add</span><span class="o">-</span><span class="n">distance</span><span class="p">,</span><span class="n">update</span><span class="o">-</span><span class="n">distance</span><span class="p">,</span><span class="n">get</span><span class="o">-</span><span class="n">distance</span><span class="p">,</span><span class="n">get</span><span class="o">-</span><span class="n">attribute</span><span class="p">,</span><span class="n">add</span><span class="o">-</span><span class="n">protocol</span><span class="p">,</span><span class="n">delete</span><span class="o">-</span><span class="n">protocol</span><span class="p">,</span><span class="n">delete</span><span class="p">,</span><span class="n">add</span><span class="o">-</span><span class="n">qos</span><span class="o">-</span><span class="n">policy</span><span class="p">,</span><span class="n">delete</span><span class="o">-</span><span class="n">qos</span><span class="o">-</span><span class="n">policy</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">qos</span><span class="o">-</span><span class="n">policies</span><span class="p">}</span>
+                <span class="o">...</span>
+</pre></div>
+</div>
+<div class="section" id="Sub-commands:_repeat4">
+<h4>Sub-commands:<a class="headerlink" href="#Sub-commands:_repeat4" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="list_repeat1">
+<h5>list<a class="headerlink" href="#list_repeat1" title="Permalink to this headline">¶</a></h5>
+<p>List all RSEs.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">rse</span> <span class="nb">list</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="usage-example_repeat18">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat18" title="Permalink to this headline">¶</a></h6>
+<p>To list all rses:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin rse list
+</pre></div>
+</div>
+<p>Note: same as rucio list-rses</p>
+<p>To list special class of rses:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio list-rses --expression &quot;tier=2&amp;type=DATADISK&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="add_repeat2">
+<h5>add<a class="headerlink" href="#add_repeat2" title="Permalink to this headline">¶</a></h5>
+<p>Add new RSE.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">rse</span> <span class="n">add</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">non</span><span class="o">-</span><span class="n">deterministic</span><span class="p">]</span> <span class="n">rse</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat12">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat12" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>rse</kbd></dt>
+<dd><p>RSE name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat10">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat10" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--non-deterministic</kbd></dt>
+<dd><p>Create RSE in non-deterministic mode</p>
+<p>Default: False</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="example-usage">
+<h6>Example Usage<a class="headerlink" href="#example-usage" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin rse add JDOE_DATADISK
+Added new deterministic RSE: JDOE_DATADISK
+
+$ rucio-admin rse add --non-deterministic JDOE-TEST_DATATAPE
+Added new non-deterministic RSE: JDOE-TEST_DATATAPE
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="update_repeat1">
+<h5>update<a class="headerlink" href="#update_repeat1" title="Permalink to this headline">¶</a></h5>
+<p>Update RSE settings.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">rse</span> <span class="n">update</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">rse</span> <span class="n">RSE</span> <span class="o">--</span><span class="n">setting</span> <span class="n">PARAM</span> <span class="o">--</span><span class="n">value</span> <span class="n">VALUE</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments_repeat11">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat11" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--rse</kbd></dt>
+<dd><p>RSE name</p>
+</dd>
+<dt><kbd>--setting</kbd></dt>
+<dd><p>One of deterministic, rse_type, staging_are, volatile, qos_class, availability_delete, availability_read, availability_write, city, country_name, latitude, longitude, region_code, time_zone</p>
+</dd>
+<dt><kbd>--value</kbd></dt>
+<dd><p>Value for the new setting configuration. Use “”, None or null to wipe the value</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="example-usage_repeat1">
+<h6>Example Usage<a class="headerlink" href="#example-usage_repeat1" title="Permalink to this headline">¶</a></h6>
+<blockquote>
+<div><p>$ rucio-admin rse update –setting availability_write –value False</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="info_repeat1">
+<h5>info<a class="headerlink" href="#info_repeat1" title="Permalink to this headline">¶</a></h5>
+<p>Information about RSE.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">rse</span> <span class="n">info</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">rse</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat13">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat13" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>rse</kbd></dt>
+<dd><p>RSE name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat19">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat19" title="Permalink to this headline">¶</a></h6>
+<p>Information about a RSE:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin rse info JDOE_DATADISK
+Settings:
+=========
+  third_party_copy_protocol: 1
+  rse_type: DISK
+  domain: [u&#39;lan&#39;, u&#39;wan&#39;]
+  availability_delete: True
+  delete_protocol: 1
+  rse: JDOE_DATADISK
+  deterministic: True
+  write_protocol: 1
+  read_protocol: 1
+  staging_area: False
+  credentials: None
+  availability_write: True
+  lfn2pfn_algorithm: default
+  availability_read: True
+  volatile: False
+  id: 9c54c73cbd534450b2202a576f809f1f
+Attributes:
+===========
+  JDOE_DATADISK: True
+Protocols:
+==========
+Usage:
+======
+  rucio
+  used: 0
+  rse: JDOE_DATADISK
+  updated_at: 2018-02-16 13:08:28
+  free: None
+  source: rucio
+  total: 0
+</pre></div>
+</div>
+<p>Note: alternatively:  rucio list-rse-usage JDOE_DATADISK.</p>
+</div>
+</div>
+<div class="section" id="set-attribute">
+<h5>set-attribute<a class="headerlink" href="#set-attribute" title="Permalink to this headline">¶</a></h5>
+<p>Add RSE attribute(key-value pair).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">rse</span> <span class="nb">set</span><span class="o">-</span><span class="n">attribute</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">rse</span> <span class="n">RSE</span> <span class="o">--</span><span class="n">key</span> <span class="n">KEY</span> <span class="o">--</span><span class="n">value</span> <span class="n">VALUE</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments_repeat12">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat12" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--rse</kbd></dt>
+<dd><p>RSE name</p>
+</dd>
+<dt><kbd>--key</kbd></dt>
+<dd><p>Attribute key</p>
+</dd>
+<dt><kbd>--value</kbd></dt>
+<dd><p>Attribute value</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat20">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat20" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin rse set-attribute --rse JDOE_DATADISK --key owner --value jdoe
+Added new RSE attribute for JDOE_DATADISK: owner-jdoe
+</pre></div>
+</div>
+<p>CAUTION: the existing attribute can be overwritten. Check rucio list-rse-attributes JDOE_DATADISK before setting an attribute.</p>
+</div>
+</div>
+<div class="section" id="delete-attribute_repeat1">
+<h5>delete-attribute<a class="headerlink" href="#delete-attribute_repeat1" title="Permalink to this headline">¶</a></h5>
+<p>Delete a RSE attribute(key-value pair).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">rse</span> <span class="n">delete</span><span class="o">-</span><span class="n">attribute</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">rse</span> <span class="n">RSE</span> <span class="o">--</span><span class="n">key</span> <span class="n">KEY</span> <span class="o">--</span><span class="n">value</span> <span class="n">VALUE</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments_repeat13">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat13" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--rse</kbd></dt>
+<dd><p>RSE name</p>
+</dd>
+<dt><kbd>--key</kbd></dt>
+<dd><p>Attribute key</p>
+</dd>
+<dt><kbd>--value</kbd></dt>
+<dd><p>Attribute value</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat21">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat21" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin rse delete-attribute --rse JDOE_DATADISK --key owner --value jdoe
+Deleted RSE attribute for JDOE_DATADISK: owner-jdoe
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="add-distance">
+<h5>add-distance<a class="headerlink" href="#add-distance" title="Permalink to this headline">¶</a></h5>
+<p>Set the distance between a pair of RSEs.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">rse</span> <span class="n">add</span><span class="o">-</span><span class="n">distance</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">distance</span> <span class="n">DISTANCE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ranking</span> <span class="n">RANKING</span><span class="p">]</span> <span class="n">source</span> <span class="n">destination</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat14">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat14" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>source</kbd></dt>
+<dd><p>Source RSE name</p>
+</dd>
+<dt><kbd>destination</kbd></dt>
+<dd><p>Destination RSE name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat14">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat14" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--distance</kbd></dt>
+<dd><p>Distance between RSEs</p>
+<p>Default: 1</p>
+</dd>
+<dt><kbd>--ranking</kbd></dt>
+<dd><p>Ranking of link</p>
+<p>Default: 1</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat22">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat22" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin rse add-distance JDOE_SCRATCHDISK JDOE_DATADISK
+Set distance from JDOE_SCRATCHDISK to JDOE_DATADISK to 1 with ranking 1/n
+</pre></div>
+</div>
+<p>Note:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">distance</span> <span class="ow">and</span> <span class="o">--</span><span class="n">ranking</span> <span class="n">can</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">0</span><span class="o">-</span><span class="mi">11</span><span class="p">),</span> <span class="mi">0</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">closest</span>
+</pre></div>
+</div>
+<p>Note: order of RSEs is fixed: source, destination</p>
+</div>
+</div>
+<div class="section" id="update-distance">
+<h5>update-distance<a class="headerlink" href="#update-distance" title="Permalink to this headline">¶</a></h5>
+<p>Update the existing distance or ranking between a pair of RSEs. The mandatory parameters are source, destination and distance or ranking.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">rse</span> <span class="n">update</span><span class="o">-</span><span class="n">distance</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">distance</span> <span class="n">DISTANCE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ranking</span> <span class="n">RANKING</span><span class="p">]</span> <span class="n">source</span> <span class="n">destination</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat15">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat15" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>source</kbd></dt>
+<dd><p>Source RSE name</p>
+</dd>
+<dt><kbd>destination</kbd></dt>
+<dd><p>Destination RSE name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat15">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat15" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--distance</kbd></dt>
+<dd><p>Distance between RSEs</p>
+</dd>
+<dt><kbd>--ranking</kbd></dt>
+<dd><p>Ranking of link</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat23">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat23" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin rse update-distance JDOE_DATADISK JDOE_SCRATCHDISK --ranking 10
+Update distance information from JDOE_DATADISK to JDOE_SCRATCHDISK:
+- Ranking set to 10
+</pre></div>
+</div>
+<p>Note:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">distance</span> <span class="n">can</span> <span class="n">be</span> <span class="nb">set</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">0</span><span class="o">-</span><span class="mi">11</span><span class="p">),</span> <span class="mi">0</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">closest</span>
+<span class="o">--</span><span class="n">ranking</span> <span class="n">can</span> <span class="n">be</span> <span class="nb">set</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="o">-</span><span class="n">inf</span><span class="o">+</span><span class="n">inf</span><span class="p">),</span> <span class="n">the</span> <span class="n">larger</span> <span class="n">the</span> <span class="n">better</span>
+</pre></div>
+</div>
+<p>Note: order of RSEs is fixed: source, destination.
+Note: ranking is updated dynamically against coditions at grid.</p>
+</div>
+</div>
+<div class="section" id="get-distance">
+<h5>get-distance<a class="headerlink" href="#get-distance" title="Permalink to this headline">¶</a></h5>
+<p>Get the distance information between a pair of RSEs.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">rse</span> <span class="n">get</span><span class="o">-</span><span class="n">distance</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">source</span> <span class="n">destination</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat16">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat16" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>source</kbd></dt>
+<dd><p>Source RSE name</p>
+</dd>
+<dt><kbd>destination</kbd></dt>
+<dd><p>Destination RSE name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat24">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat24" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin rse get-distance JDOE_DATADISK JDOE_SCRATCHDISK
+Distance information from JDOE_DATADISK to JDOE_SCRATCHDISK: distance=3, ranking=10
+</pre></div>
+</div>
+<p>Note: order of RSEs is fixed: source, destination.</p>
+</div>
+</div>
+<div class="section" id="get-attribute">
+<h5>get-attribute<a class="headerlink" href="#get-attribute" title="Permalink to this headline">¶</a></h5>
+<p>List RSE attributes.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">rse</span> <span class="n">get</span><span class="o">-</span><span class="n">attribute</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">rse</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat17">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat17" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>rse</kbd></dt>
+<dd><p>RSE name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat25">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat25" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin rse get-attribute JDOE_DATADISK
+owner: jdoe
+JDOE_DATADISK: True
+</pre></div>
+</div>
+<p>Note: alternatively: rucio list-rse-attributes JDOE_DATADISK.</p>
+</div>
+</div>
+<div class="section" id="add-protocol">
+<h5>add-protocol<a class="headerlink" href="#add-protocol" title="Permalink to this headline">¶</a></h5>
+<p>Add a protocol and its settings to a RSE.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">rse</span> <span class="n">add</span><span class="o">-</span><span class="n">protocol</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">hostname</span> <span class="n">HOSTNAME</span> <span class="o">--</span><span class="n">scheme</span> <span class="n">SCHEME</span> <span class="o">--</span><span class="n">prefix</span> <span class="n">PREFIX</span> <span class="p">[</span><span class="o">--</span><span class="n">space</span><span class="o">-</span><span class="n">token</span> <span class="n">SPACE_TOKEN</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">web</span><span class="o">-</span><span class="n">service</span><span class="o">-</span><span class="n">path</span> <span class="n">WEB_SERVICE_PATH</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">port</span> <span class="n">PORT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">impl</span> <span class="n">IMPL</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">domain</span><span class="o">-</span><span class="n">json</span> <span class="n">DOMAIN_JSON</span><span class="p">]</span>
+                             <span class="p">[</span><span class="o">--</span><span class="n">extended</span><span class="o">-</span><span class="n">attributes</span><span class="o">-</span><span class="n">json</span> <span class="n">EXT_ATTR_JSON</span><span class="p">]</span>
+                             <span class="n">rse</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat18">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat18" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>rse</kbd></dt>
+<dd><p>RSE name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat16">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat16" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--hostname</kbd></dt>
+<dd><p>Endpoint hostname</p>
+</dd>
+<dt><kbd>--scheme</kbd></dt>
+<dd><p>Endpoint URL scheme</p>
+</dd>
+<dt><kbd>--prefix</kbd></dt>
+<dd><p>Endpoint URL path prefix</p>
+</dd>
+<dt><kbd>--space-token</kbd></dt>
+<dd><p>Space token name (SRM-only)</p>
+</dd>
+<dt><kbd>--web-service-path</kbd></dt>
+<dd><p>Web service URL (SRM-only)</p>
+</dd>
+<dt><kbd>--port</kbd></dt>
+<dd><p>URL port</p>
+</dd>
+<dt><kbd>--impl</kbd></dt>
+<dd><p>Transfer protocol implementation to use</p>
+<p>Default: “rucio.rse.protocols.gfalv2.Default”</p>
+</dd>
+<dt><kbd>--domain-json</kbd></dt>
+<dd><p>JSON describing the WAN / LAN setup</p>
+</dd>
+<dt><kbd>--extended-attributes-json</kbd></dt>
+<dd><p>JSON describing any extended attributes</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat26">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat26" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin rse add-protocol --hostname jdoes.test.org --scheme gsiftp --prefix &#39;/atlasdatadisk/rucio/&#39; --port 8443 JDOE_DATADISK
+</pre></div>
+</div>
+<p>Note: no printed stdout.
+Note: examples of optional parametres:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span><span class="n">space</span><span class="o">-</span><span class="n">token</span> <span class="n">DATADISK</span>
+<span class="o">--</span><span class="n">web</span><span class="o">-</span><span class="n">service</span><span class="o">-</span><span class="n">path</span> <span class="s1">&#39;/srm/managerv2?SFN=&#39;</span>
+<span class="o">--</span><span class="n">port</span> <span class="mi">8443</span>
+<span class="o">--</span><span class="n">impl</span> <span class="s1">&#39;rucio.rse.protocols.gfalv2.Default&#39;</span>
+  <span class="p">(</span><span class="k">for</span> <span class="n">other</span> <span class="n">protocol</span> <span class="n">implementation</span><span class="p">,</span> <span class="n">replace</span> <span class="n">gfal2</span> <span class="k">with</span> <span class="n">impl</span><span class="o">.</span> <span class="n">name</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span> <span class="n">srm</span><span class="p">)</span>
+<span class="o">--</span><span class="n">domain</span><span class="o">-</span><span class="n">json</span>
+<span class="o">--</span><span class="n">extended</span><span class="o">-</span><span class="n">attributes</span><span class="o">-</span><span class="n">json</span> <span class="n">example</span><span class="o">.</span><span class="n">json</span>
+  <span class="n">where</span> <span class="n">example</span><span class="o">.</span><span class="n">json</span> <span class="n">contains</span> <span class="nb">dict</span> <span class="p">{</span><span class="s1">&#39;attr_name&#39;</span><span class="p">:</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="delete-protocol">
+<h5>delete-protocol<a class="headerlink" href="#delete-protocol" title="Permalink to this headline">¶</a></h5>
+<p>Delete a protocol from a RSE.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">rse</span> <span class="n">delete</span><span class="o">-</span><span class="n">protocol</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">hostname</span> <span class="n">HOSTNAME</span><span class="p">]</span> <span class="o">--</span><span class="n">scheme</span> <span class="n">SCHEME</span> <span class="p">[</span><span class="o">--</span><span class="n">port</span> <span class="n">PORT</span><span class="p">]</span> <span class="n">rse</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat19">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat19" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>rse</kbd></dt>
+<dd><p>RSE name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat17">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat17" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--hostname</kbd></dt>
+<dd><p>Endpoint hostname</p>
+</dd>
+<dt><kbd>--scheme</kbd></dt>
+<dd><p>Endpoint URL scheme</p>
+</dd>
+<dt><kbd>--port</kbd></dt>
+<dd><p>URL port</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat27">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat27" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin rse delete-protocol  --scheme gsiftp JDOE_DATADISK
+</pre></div>
+</div>
+<p>Note: no printed stdout.</p>
+</div>
+</div>
+<div class="section" id="delete_repeat2">
+<h5>delete<a class="headerlink" href="#delete_repeat2" title="Permalink to this headline">¶</a></h5>
+<p>Disable RSE.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">rse</span> <span class="n">delete</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">rse</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat20">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat20" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>rse</kbd></dt>
+<dd><p>RSE name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat28">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat28" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin rse delete JDOE_SCRATCHDISK
+</pre></div>
+</div>
+<p>Note: no printed stdout.
+CAUTION: all information about the RSE might be lost!</p>
+</div>
+</div>
+<div class="section" id="add-qos-policy">
+<h5>add-qos-policy<a class="headerlink" href="#add-qos-policy" title="Permalink to this headline">¶</a></h5>
+<p>Add a QoS policy to an RSE.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">rse</span> <span class="n">add</span><span class="o">-</span><span class="n">qos</span><span class="o">-</span><span class="n">policy</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">rse</span> <span class="n">qos_policy</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat21">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat21" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>rse</kbd></dt>
+<dd><p>RSE name</p>
+</dd>
+<dt><kbd>qos_policy</kbd></dt>
+<dd><p>QoS policy</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat29">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat29" title="Permalink to this headline">¶</a></h6>
+<blockquote>
+<div><p>$ rucio-admin rse add-qos-policy JDOE_DATADISK SLOW_BUT_CHEAP</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="delete-qos-policy">
+<h5>delete-qos-policy<a class="headerlink" href="#delete-qos-policy" title="Permalink to this headline">¶</a></h5>
+<p>Delete a QoS policy from an RSE.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">rse</span> <span class="n">delete</span><span class="o">-</span><span class="n">qos</span><span class="o">-</span><span class="n">policy</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">rse</span> <span class="n">qos_policy</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat22">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat22" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>rse</kbd></dt>
+<dd><p>RSE name</p>
+</dd>
+<dt><kbd>qos_policy</kbd></dt>
+<dd><p>QoS policy</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat30">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat30" title="Permalink to this headline">¶</a></h6>
+<blockquote>
+<div><p>$ rucio-admin rse delete-qos-policy JDOE_DATADISK SLOW_BUT_CHEAP</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="list-qos-policies">
+<h5>list-qos-policies<a class="headerlink" href="#list-qos-policies" title="Permalink to this headline">¶</a></h5>
+<p>List all QoS policies of an RSE.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">rse</span> <span class="nb">list</span><span class="o">-</span><span class="n">qos</span><span class="o">-</span><span class="n">policies</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">rse</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat23">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat23" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>rse</kbd></dt>
+<dd><p>RSE name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat31">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat31" title="Permalink to this headline">¶</a></h6>
+<blockquote>
+<div><p>$ rucio-admin rse list-qos-policies JDOE_DATADISK</p>
+</div></blockquote>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="scope">
+<h3>scope<a class="headerlink" href="#scope" title="Permalink to this headline">¶</a></h3>
+<p>Scope methods</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">scope</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">{</span><span class="n">add</span><span class="p">,</span><span class="nb">list</span><span class="p">}</span> <span class="o">...</span>
+</pre></div>
+</div>
+<div class="section" id="Sub-commands:_repeat5">
+<h4>Sub-commands:<a class="headerlink" href="#Sub-commands:_repeat5" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="add_repeat3">
+<h5>add<a class="headerlink" href="#add_repeat3" title="Permalink to this headline">¶</a></h5>
+<p>Add scope.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">scope</span> <span class="n">add</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">account</span> <span class="n">ACCOUNT</span> <span class="o">--</span><span class="n">scope</span> <span class="n">SCOPE</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments_repeat18">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat18" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--account</kbd></dt>
+<dd><p>Account name</p>
+</dd>
+<dt><kbd>--scope</kbd></dt>
+<dd><p>Scope name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat32">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat32" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin scope add --scope user.jdoe --account jdoe
+Added new scope to account: user.jdoe-jdoe
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="list_repeat2">
+<h5>list<a class="headerlink" href="#list_repeat2" title="Permalink to this headline">¶</a></h5>
+<p>List scopes.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">scope</span> <span class="nb">list</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">account</span> <span class="n">ACCOUNT</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments_repeat19">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat19" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--account</kbd></dt>
+<dd><p>Account name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat33">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat33" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin scope list --account jdoe
+user.jdoe
+</pre></div>
+</div>
+<p>Note: alternatively: rucio list-scopes.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="config">
+<h3>config<a class="headerlink" href="#config" title="Permalink to this headline">¶</a></h3>
+<p>Configuration methods. The global configuration of data mangement system can by modified.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">config</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">{</span><span class="n">get</span><span class="p">,</span><span class="nb">set</span><span class="p">,</span><span class="n">delete</span><span class="p">}</span> <span class="o">...</span>
+</pre></div>
+</div>
+<div class="section" id="Sub-commands:_repeat6">
+<h4>Sub-commands:<a class="headerlink" href="#Sub-commands:_repeat6" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="get">
+<h5>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h5>
+<p>Get matching configuration.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">config</span> <span class="n">get</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">section</span> <span class="n">SECTION</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">option</span> <span class="n">OPTION</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments_repeat20">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat20" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--section</kbd></dt>
+<dd><p>Section name</p>
+</dd>
+<dt><kbd>--option</kbd></dt>
+<dd><p>Option name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat34">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat34" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin config get --section quota
+[quota]
+LOCALGROUPDISK=95
+SCRATCHDISK=30
+USERDISK=30
+</pre></div>
+</div>
+<p>Note: to list other sections: rucio-admin config get.</p>
+</div>
+</div>
+<div class="section" id="set">
+<h5>set<a class="headerlink" href="#set" title="Permalink to this headline">¶</a></h5>
+<p>Set matching configuration.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">config</span> <span class="nb">set</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">section</span> <span class="n">SECTION</span> <span class="o">--</span><span class="n">option</span> <span class="n">OPTION</span> <span class="o">--</span><span class="n">value</span> <span class="n">VALUE</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments_repeat21">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat21" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--section</kbd></dt>
+<dd><p>Section name</p>
+</dd>
+<dt><kbd>--option</kbd></dt>
+<dd><p>Option name</p>
+</dd>
+<dt><kbd>--value</kbd></dt>
+<dd><p>String-encoded value</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat35">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat35" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin config set --section limitsscratchdisk --option testlimit --value 30
+Set configuration: limitsscratchdisk.testlimit=30
+</pre></div>
+</div>
+<p>CAUTION: you might not intend to change global configuration!</p>
+</div>
+</div>
+<div class="section" id="delete_repeat3">
+<h5>delete<a class="headerlink" href="#delete_repeat3" title="Permalink to this headline">¶</a></h5>
+<p>Delete matching configuration.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">config</span> <span class="n">delete</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">section</span> <span class="n">SECTION</span> <span class="o">--</span><span class="n">option</span> <span class="n">OPTION</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments_repeat22">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat22" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--section</kbd></dt>
+<dd><p>Section name</p>
+</dd>
+<dt><kbd>--option</kbd></dt>
+<dd><p>Option name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat36">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat36" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin config delete --section limitsscratchdisk --option testlimit
+Deleted section &#39;limitsscratchdisk&#39; option &#39;testlimit&#39;
+</pre></div>
+</div>
+<p>CAUTION: you might not intend to change global configuration!</p>
+</div>
+</div>
+</div>
+<p>e.g. quotas, daemons, rses</p>
+</div>
+<div class="section" id="subscription">
+<h3>subscription<a class="headerlink" href="#subscription" title="Permalink to this headline">¶</a></h3>
+<p>Subscription methods. The methods for automated and regular processing of some specific rules.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">subscription</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">{</span><span class="n">add</span><span class="p">,</span><span class="nb">list</span><span class="p">,</span><span class="n">update</span><span class="p">,</span><span class="n">reevaluate</span><span class="p">}</span> <span class="o">...</span>
+</pre></div>
+</div>
+<div class="section" id="Sub-commands:_repeat7">
+<h4>Sub-commands:<a class="headerlink" href="#Sub-commands:_repeat7" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="add_repeat4">
+<h5>add<a class="headerlink" href="#add_repeat4" title="Permalink to this headline">¶</a></h5>
+<p>Add subscription</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">subscription</span> <span class="n">add</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">lifetime</span> <span class="n">LIFETIME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">account</span> <span class="n">SUBS_ACCOUNT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">priority</span> <span class="n">PRIORITY</span><span class="p">]</span> <span class="n">name</span> <span class="nb">filter</span> <span class="n">replication_rules</span> <span class="n">comments</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat24">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat24" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>name</kbd></dt>
+<dd><p>Subscription name</p>
+</dd>
+<dt><kbd>filter</kbd></dt>
+<dd><p>DID filter (eg ‘{“scope”: [“tests”], “project”: [“data12_8TeV”]}’)</p>
+</dd>
+<dt><kbd>replication_rules</kbd></dt>
+<dd><p>Replication rules (eg ‘[{“copies”: 2, “rse_expression”: “tier=2”, “lifetime”: 3600, “activity”: “Functional Tests”, “weight”: “mou”}]’)</p>
+</dd>
+<dt><kbd>comments</kbd></dt>
+<dd><p>Comments on subscription</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat23">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat23" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--lifetime</kbd></dt>
+<dd><p>Subscription lifetime (in days)</p>
+</dd>
+<dt><kbd>--account</kbd></dt>
+<dd><p>Account name</p>
+</dd>
+<dt><kbd>--priority</kbd></dt>
+<dd><p>The priority of the subscription</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat37">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat37" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin subscription add --lifetime 2 --account jdoe --priority 1 jdoes_txt_files_on_datadisk
+&#39;{&quot;scope&quot;: [&quot;user.jdoe&quot;], &quot;datatype&quot;: [&quot;txt&quot;]}&#39; &#39;[{&quot;copies&quot;: 1, &quot;rse_expression&quot;: &quot;JDOE_DATADISK&quot;, &quot;lifetime&quot;: 3600, &quot;activity&quot;: &quot;User Subscriptions&quot;}]&#39;
+&#39;keeping replica on jdoes disk for 60 mins&#39;
+Subscription added 9a89cc8e692f4cabb8836fdafd884c5a
+</pre></div>
+</div>
+<p>Note: priority can range from 1 to infinity. Internal share for given account.</p>
+</div>
+</div>
+<div class="section" id="list_repeat3">
+<h5>list<a class="headerlink" href="#list_repeat3" title="Permalink to this headline">¶</a></h5>
+<p>List subscriptions</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">subscription</span> <span class="nb">list</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">account</span> <span class="n">SUBS_ACCOUNT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">long</span><span class="p">]</span> <span class="p">[</span><span class="n">name</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat25">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat25" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>name</kbd></dt>
+<dd><p>Subscription name</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat24">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat24" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--account</kbd></dt>
+<dd><p>Account name</p>
+</dd>
+<dt><kbd>--long</kbd></dt>
+<dd><p>Long listing</p>
+<p>Default: False</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat38">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat38" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin subscription list --account jdoe
+jdoe: jdoes_txt_files_on_datadisk UPDATED
+priority: 1
+filter: {&#39;datatype&#39;: [&#39;txt&#39;], &#39;scope&#39;: [&#39;user.jdoe&#39;]}
+rules: [{&#39;lifetime&#39;: 3600, &#39;rse_expression&#39;: &#39;JDOE_DATADISK&#39;, &#39;copies&#39;: 1, &#39;activity&#39;: &#39;User Subscriptions&#39;}]
+comments: keeping replica on jdoes disk for 60 mins
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="update_repeat2">
+<h5>update<a class="headerlink" href="#update_repeat2" title="Permalink to this headline">¶</a></h5>
+<p>Update subscription</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">subscription</span> <span class="n">update</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">lifetime</span> <span class="n">LIFETIME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">account</span> <span class="n">SUBS_ACCOUNT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">priority</span> <span class="n">PRIORITY</span><span class="p">]</span> <span class="n">name</span> <span class="nb">filter</span> <span class="n">replication_rules</span> <span class="n">comments</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat26">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat26" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>name</kbd></dt>
+<dd><p>Subscription name</p>
+</dd>
+<dt><kbd>filter</kbd></dt>
+<dd><p>DID filter (eg ‘{“scope”: [“tests”], “project”: [“data12_8TeV”]}’)</p>
+</dd>
+<dt><kbd>replication_rules</kbd></dt>
+<dd><p>Replication rules (eg ‘[{“activity”: “Functional Tests”, “copies”: 2, “rse_expression”: “tier=2”, “lifetime”: 3600, “weight”: “mou”}]’)</p>
+</dd>
+<dt><kbd>comments</kbd></dt>
+<dd><p>Comments on subscription</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat25">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat25" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--lifetime</kbd></dt>
+<dd><p>Subscription lifetime (in days)</p>
+</dd>
+<dt><kbd>--account</kbd></dt>
+<dd><p>Account name</p>
+</dd>
+<dt><kbd>--priority</kbd></dt>
+<dd><p>The priority of the subscription</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat39">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat39" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin subscription update --lifetime 3 --account jdoe --priority 1 jdoes_txt_files_on_datadisk
+&#39;{&quot;scope&quot;: [&quot;user.jdoe&quot;], &quot;datatype&quot;: [&quot;txt&quot;]}&#39; &#39;[{&quot;copies&quot;: 1, &quot;rse_expression&quot;: &quot;JDOE_DATADISK&quot;, &quot;lifetime&quot;: 3600, &quot;activity&quot;: &quot;User Subscriptions&quot;}]
+keeping replica on jdoes disk for 60 mins, valid until 23.2.2018
+</pre></div>
+</div>
+<p>Note: no printed stdout.
+Note: all the input parameters are mandatory.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin subscription list --account jdoe
+jdoe: jdoes_txt_files_on_datadisk UPDATED
+priority: 1
+filter: {&quot;datatype&quot;: [&quot;txt&quot;], &quot;scope&quot;: [&quot;user.jdoe&quot;]}
+rules: [{&quot;lifetime&quot;: 3600, &quot;rse_expression&quot;: &quot;JDOE_DATADISK&quot;, &quot;copies&quot;: 1, &quot;activity&quot;: &quot;User Subscriptions&quot;}]
+comments: keeping replica on jdoes disk for 60 mins, valid until 23.2.2018
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="reevaluate">
+<h5>reevaluate<a class="headerlink" href="#reevaluate" title="Permalink to this headline">¶</a></h5>
+<p>Reevaluate a list of DIDs against all active subscriptions</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">subscription</span> <span class="n">reevaluate</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">dids</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat27">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat27" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>dids</kbd></dt>
+<dd><p>List of DIDs (coma separated)</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat40">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat40" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin subscription reevaluate user.jdoe:jdoes.test.dataset
+</pre></div>
+</div>
+<p>Note: no printed stdout.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="replicas">
+<h3>replicas<a class="headerlink" href="#replicas" title="Permalink to this headline">¶</a></h3>
+<p>Replica methods</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">replicas</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">{</span><span class="n">declare</span><span class="o">-</span><span class="n">bad</span><span class="p">,</span><span class="n">declare</span><span class="o">-</span><span class="n">temporary</span><span class="o">-</span><span class="n">unavailable</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">pfns</span><span class="p">,</span><span class="nb">set</span><span class="o">-</span><span class="n">tombstone</span><span class="p">}</span> <span class="o">...</span>
+</pre></div>
+</div>
+<div class="section" id="Sub-commands:_repeat8">
+<h4>Sub-commands:<a class="headerlink" href="#Sub-commands:_repeat8" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="declare-bad">
+<h5>declare-bad<a class="headerlink" href="#declare-bad" title="Permalink to this headline">¶</a></h5>
+<p>Declare bad file replicas</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">replicas</span> <span class="n">declare</span><span class="o">-</span><span class="n">bad</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">reason</span> <span class="n">REASON</span> <span class="p">[</span><span class="o">--</span><span class="n">inputfile</span> <span class="p">[</span><span class="n">INPUTFILE</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">allow</span><span class="o">-</span><span class="n">collection</span><span class="p">]</span> <span class="p">[</span><span class="n">listbadfiles</span> <span class="p">[</span><span class="n">listbadfiles</span> <span class="o">...</span><span class="p">]]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat28">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat28" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>listbadfiles</kbd></dt>
+<dd><p>List of bad items. Each can be a PFN (for one replica) or an LFN (for all replicas of the LFN) or a collection DID (for all file replicas in the DID)</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat26">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat26" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--reason</kbd></dt>
+<dd><p>Reason</p>
+</dd>
+<dt><kbd>--inputfile</kbd></dt>
+<dd><p>File containing list of bad items</p>
+</dd>
+<dt><kbd>--allow-collection</kbd></dt>
+<dd><p>Allow passing a collection DID as bad item</p>
+<p>Default: False</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat41">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat41" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin replicas declare-bad
+srm://se.bfg.uni-freiburg.de:8443/srm/managerv2?SFN=/pnfs/bfg.uni-freiburg.de/data/atlasdatadisk/rucio/user/jdoe/e2/a7/jdoe.TXT.txt --reason &#39;test only&#39;
+</pre></div>
+</div>
+<p>Note: no printed stdout.</p>
+<p>Note: pfn can be provided, see rucio-admin replicas list-pfns or rucio list-file-replicas</p>
+</div>
+</div>
+<div class="section" id="declare-temporary-unavailable">
+<h5>declare-temporary-unavailable<a class="headerlink" href="#declare-temporary-unavailable" title="Permalink to this headline">¶</a></h5>
+<p>Declare temporary unavailable replicas</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">replicas</span> <span class="n">declare</span><span class="o">-</span><span class="n">temporary</span><span class="o">-</span><span class="n">unavailable</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">reason</span> <span class="n">REASON</span> <span class="p">[</span><span class="o">--</span><span class="n">inputfile</span> <span class="p">[</span><span class="n">INPUTFILE</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">expiration</span><span class="o">-</span><span class="n">date</span> <span class="n">EXPIRATION_DATE</span><span class="p">]</span> <span class="p">[</span><span class="n">listbadfiles</span> <span class="p">[</span><span class="n">listbadfiles</span> <span class="o">...</span><span class="p">]]</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat29">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat29" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>listbadfiles</kbd></dt>
+<dd><p>List of replicas. Each needs to be a proper PFN including the protocol</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat27">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat27" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--reason</kbd></dt>
+<dd><p>Reason</p>
+</dd>
+<dt><kbd>--inputfile</kbd></dt>
+<dd><p>File containing list of replicas</p>
+</dd>
+<dt><kbd>--expiration-date</kbd></dt>
+<dd><p>Timeout in hours when the replicas will become available again. Default 24</p>
+<p>Default: 24</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat42">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat42" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin replicas declare-temporary-unavailable
+srm://se.bfg.uni-freiburg.de/pnfs/bfg.uni-freiburg.de/data/atlasdatadisk/rucio/user/jdoe/e2/a7/jdoe.TXT.txt --expiration-date 168 --reason &#39;test only&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="list-pfns">
+<h5>list-pfns<a class="headerlink" href="#list-pfns" title="Permalink to this headline">¶</a></h5>
+<p>List the possible PFN for a file at a site.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">replicas</span> <span class="nb">list</span><span class="o">-</span><span class="n">pfns</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">dids</span> <span class="n">rse</span> <span class="n">protocol</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat30">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat30" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>dids</kbd></dt>
+<dd><p>List of DIDs (coma separated)</p>
+</dd>
+<dt><kbd>rse</kbd></dt>
+<dd><p>RSE</p>
+</dd>
+<dt><kbd>protocol</kbd></dt>
+<dd><p>The protocol, by default srm, can be one of [root|srm|http(s)].</p>
+<p>Default: “srm”</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat43">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat43" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin replicas list-pfns
+user.jdoe:jdoe.TXT.txt CERN-PROD_SCRATCHDISK srm &#39;{&quot;all_states&quot;: False, &quot;schemes&quot;: [&quot;srm&quot;], &quot;dids&quot;: [{&quot;scope&quot;: &quot;user.jdoe&quot;, &quot;name&quot;: &quot;jdoe.TXT.txt&quot;}]}&#39;
+srm://srm-eosatlas.cern.ch:8443/srm/v2/server?SFN=/eos/atlas/atlasscratchdisk/rucio/user/jdoe/e2/a7/jdoe.TXT.txt
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="set-tombstone">
+<h5>set-tombstone<a class="headerlink" href="#set-tombstone" title="Permalink to this headline">¶</a></h5>
+<p>Set a tombstone on a replica manually to force deletion. Only works if there is no lock on the replica.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">replicas</span> <span class="nb">set</span><span class="o">-</span><span class="n">tombstone</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">rse</span> <span class="n">RSE</span> <span class="n">dids</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments_repeat31">
+<h6>Positional Arguments<a class="headerlink" href="#Positional Arguments_repeat31" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>dids</kbd></dt>
+<dd><p>One or multiple comma separated DIDs.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments_repeat28">
+<h6>Named Arguments<a class="headerlink" href="#Named Arguments_repeat28" title="Permalink to this headline">¶</a></h6>
+<dl class="option-list">
+<dt><kbd>--rse</kbd></dt>
+<dd><p>RSE</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="usage-example_repeat44">
+<h6>Usage example<a class="headerlink" href="#usage-example_repeat44" title="Permalink to this headline">¶</a></h6>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin replicas set-tombstone mock:file --rse MOCK
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Rucio</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database.html">Database operations</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio.html">Rucio CLI</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../policy_packages.html">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="rucio.html" title="previous chapter">Rucio CLI</a></li>
+      <li>Next: <a href="../clients.html" title="next chapter">Rucio Clients</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/man/rucio-admin.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

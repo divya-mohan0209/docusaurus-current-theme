@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daemon rucio-conveyor-throttler &#8212; Rucio 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Daemon rucio-dark-reaper" href="rucio-dark-reaper.html" />
+    <link rel="prev" title="Daemon rucio-conveyor-submitter" href="rucio-conveyor-submitter.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="daemon-rucio-conveyor-throttler">
+<h1>Daemon rucio-conveyor-throttler<a class="headerlink" href="#daemon-rucio-conveyor-throttler" title="Permalink to this headline">¶</a></h1>
+<p><p>The Conveyor-Throttler daemon is responsible for managing the internal queue of transfer requests. Depending of transfer limits and current and waiting transfers, it decides whether a transfer should be put in the queue or not.</p>
+</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">rucio</span><span class="o">-</span><span class="n">conveyor</span><span class="o">-</span><span class="n">throttler</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">run</span><span class="o">-</span><span class="n">once</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">sleep</span><span class="o">-</span><span class="n">time</span> <span class="n">SLEEP_TIME</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments">
+<h2>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h2>
+<dl class="option-list">
+<dt><kbd>--run-once</kbd></dt>
+<dd><p>One iteration only</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--sleep-time</kbd></dt>
+<dd><p>Seconds to sleep if few requests</p>
+<p>Default: 600</p>
+</dd>
+</dl>
+</div>
+<p><p>In this example, the transfer limit will be one transfer which means that there should be only one active transfer at the time.
+There will be two waiting transfer requests and no current active transfer.
+After running the daemon, there will be one transfer in the queue which can then be started.</p>
+<p>Setup the transfer limit:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python
+from rucio.core.rse import set_rse_transfer_limits
+set_rse_transfer_limits(&#39;MOCK2&#39;, &#39;User Subscriptions&#39;, max_transfers=1)
+$ rucio-admin config set --section throttler --option &#39;User Subscriptions,MOCK2&#39; --value 1
+</pre></div>
+</div>
+<p>If Rucio is running in multi-VO mode, then the RSE ID should be used in place of its name when setting the config:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin rse info MOCK2
+Settings:
+=========
+  ...
+Attributes:
+===========
+  ...
+Protocols:
+==========
+  ...
+Usage:
+======
+  ...
+  rse_id: 9c54c73cbd534450b2202a576f809f1f
+$ rucio-admin config set --section throttler --option &#39;User Subscriptions,9c54c73cbd534450b2202a576f809f1f&#39; --value 1
+</pre></div>
+</div>
+<p>Upload two files and create replication rules to the same RSE:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio upload --scope mock --rse MOCK --name file1 filename.txt
+$ rucio add-rule mock:file 1 MOCK2
+$ rucio upload --scope mock --rse MOCK --name file2 filename.txt
+$ rucio add-rule mock:file2 1 MOCK2
+</pre></div>
+</div>
+<p>Check transfer requests:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python
+from rucio.db.sqla import session,models
+[request.to_dict() for request in session.get_session().query(models.Request).all()]
+# [{&#39;state&#39;: WAITING, ...}, {&#39;state&#39;: WAITING, ...}
+</pre></div>
+</div>
+<p>Two transfer requests with the state ‘WAITING’ got created.</p>
+<p>Run the daemon:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-conveyor-throttler --run-once
+</pre></div>
+</div>
+<p>Check transfer requests:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python
+from rucio.db.sqla import session,models
+[request.to_dict() for request in session.get_session().query(models.Request).all()]
+# [{&#39;state&#39;: WAITING, ...}, {&#39;state&#39;: QUEUED, ...}
+</pre></div>
+</div>
+<p>Finally one of the transfer requests got put in the queue and can be picked up by the Conyevor-Submitter daemon to submit the transfer job to the transfertool.
+The other request will have to wait until one of the queued requests is done or until the transfer limit changes.</p>
+</p>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Rucio</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database.html">Database operations</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio.html">Rucio CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-admin.html">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../policy_packages.html">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="daemons.html">Daemons CLIs</a><ul>
+      <li>Previous: <a href="rucio-conveyor-submitter.html" title="previous chapter">Daemon rucio-conveyor-submitter</a></li>
+      <li>Next: <a href="rucio-dark-reaper.html" title="next chapter">Daemon rucio-dark-reaper</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/man/rucio-conveyor-throttler.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

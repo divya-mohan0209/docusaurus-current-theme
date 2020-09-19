@@ -1,0 +1,266 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Installing Rucio daemons &#8212; Rucio 1.2 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Daemons CLIs" href="man/daemons.html" />
+    <link rel="prev" title="Installing Rucio server" href="installing_server.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="installing-rucio-daemons">
+<h1>Installing Rucio daemons<a class="headerlink" href="#installing-rucio-daemons" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>The Rucio daemons run on Python 2.7, 3.6 and 3.7 on any Unix-like platform.</p>
+</div>
+<div class="section" id="install-via-pip">
+<h2>Install via pip<a class="headerlink" href="#install-via-pip" title="Permalink to this headline">¶</a></h2>
+<p>Heads up: We recommend to use the docker-based install (see next section) as it will configure many things for you automatically. Only use the pip-based install if you have a good reason and know how to configure your web service manually:</p>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">rucio</span></code></p>
+<p>This will pull the latest release from <a class="reference external" href="https://pypi.python.org/pypi/rucio/">PyPi</a>. The Rucio server also needs several Python dependencies. These are all listed in the file <code class="docutils literal notranslate"><span class="pre">tools/pip-requires</span></code> and will be pulled in as necessary.</p>
+</div>
+<div class="section" id="install-via-docker">
+<h2>Install via Docker<a class="headerlink" href="#install-via-docker" title="Permalink to this headline">¶</a></h2>
+<p>This image provides the Rucio daemons. Each daemon has to be run in a separate container. It supports MySQL, PostgreSQL, Oracle, and SQLite as database backends.</p>
+<p>This image expects that there is an already initialised Rucio DB. To start a simple <cite>judge-cleaner</cite> daemon using a database on <cite>mysql.db</cite> without an additional parameters just run this:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`docker</span> <span class="pre">run</span> <span class="pre">--name=rucio-judge-cleaner</span> <span class="pre">-e</span> <span class="pre">RUCIO_CFG_DATABASE_DEFAULT=&quot;mysql+pymysql://rucio:rucio&#64;mysql.db/rucio&quot;</span> <span class="pre">-e</span> <span class="pre">RUCIO_DAEMON=judge-cleaner</span>&#160; <span class="pre">rucio/rucio-daemons`</span></code></p>
+<p>The <cite>RUCIO_DAEMON</cite> environment variable gives the name of the rucio daemon.</p>
+<p>Rucio can be configured fully using environment variables like <cite>RUCIO_CFG_DATABASE_DEFAULT</cite>. If you want to instead use a complete rucio.cfg it can also be mounted. This will then ignore the <cite>RUCIO_CFG</cite> environment variables:</p>
+<p>The rucio.cfg is used to configure the database backend and the daemons:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`docker</span> <span class="pre">run</span> <span class="pre">--name=rucio-judge-cleaner</span> <span class="pre">-v</span> <span class="pre">/tmp/rucio.cfg:/opt/rucio/etc/rucio.cfg</span> <span class="pre">-e</span> <span class="pre">RUCIO_DAEMON=judge-cleaner</span>&#160; <span class="pre">rucio/rucio-daemons`</span></code></p>
+<p>By default the daemon logs are written to stdout and stderr if you want to write to a file you can use <cite>RUCIO_ENABLE_LOGS</cite> like this:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`docker</span> <span class="pre">run</span> <span class="pre">--name=rucio-judge-cleaner</span> <span class="pre">-v</span> <span class="pre">/tmp/rucio.cfg:/opt/rucio/etc/rucio.cfg</span> <span class="pre">-v</span> <span class="pre">/tmp/logs:/var/log/rucio</span> <span class="pre">-e</span> <span class="pre">RUCIO_DAEMON=judge-cleaner</span>&#160; <span class="pre">-e</span> <span class="pre">RUCIO_ENABLE_LOGS=True</span> <span class="pre">rucio/rucio-daemons`</span></code></p>
+</div>
+<div class="section" id="environment-variables">
+<h2>Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h2>
+<p>As shown in the examples above the rucio-daemon image can be configured using environment variables that are passed with <cite>docker run</cite>. Below is a list of all available variables and their behaviour:</p>
+<div class="section" id="rucio-daemon">
+<h3><cite>RUCIO_DAEMON</cite><a class="headerlink" href="#rucio-daemon" title="Permalink to this headline">¶</a></h3>
+<p>This variable is mandatory and it specifies the name of the daemon, e.g., <cite>hermes</cite>, <cite>kronos</cite>, <cite>judge-evaluator</cite>, etc.</p>
+</div>
+<div class="section" id="rucio-daemon-args">
+<h3><cite>RUCIO_DAEMON_ARGS</cite><a class="headerlink" href="#rucio-daemon-args" title="Permalink to this headline">¶</a></h3>
+<p>Any additional command line parameter can be specified here, e.g., <cite>–run-once</cite>. This field is optional.</p>
+</div>
+<div class="section" id="rucio-enable-logfile">
+<h3><cite>RUCIO_ENABLE_LOGFILE</cite><a class="headerlink" href="#rucio-enable-logfile" title="Permalink to this headline">¶</a></h3>
+<p>By default, the log output of the daemon is written to stdout and stderr. If you set this variable to <cite>True</cite> the output will be written to <cite>access_log</cite> and <cite>error_log</cite> under <cite>/var/log/rucio</cite>.</p>
+</div>
+</div>
+<div class="section" id="rucio-cfg-configuration-parameters">
+<h2><cite>RUCIO_CFG</cite> configuration parameters:<a class="headerlink" href="#rucio-cfg-configuration-parameters" title="Permalink to this headline">¶</a></h2>
+<p>Environment variables can be used to set values for the auto-generated rucio.cfg. The names are derived from the actual names in the configuration file prefixed by <cite>RUCIO_CFG</cite>, e.g., the <cite>default</cite> value in the <cite>database</cite> section becomes <cite>RUCIO_CFG_DATABASE_DEFAULT</cite>.
+All available environment variables are:</p>
+<ul class="simple">
+<li><p>RUCIO_CFG_ACCOUNTS_SPECIAL_ACCOUNTS</p></li>
+<li><p>RUCIO_CFG_COMMON_LOGDIR</p></li>
+<li><p>RUCIO_CFG_COMMON_LOGLEVEL</p></li>
+<li><p>RUCIO_CFG_COMMON_MAILTEMPLATEDIR</p></li>
+<li><p>RUCIO_CFG_DATABASE_DEFAULT</p></li>
+<li><p>RUCIO_CFG_DATABASE_SCHEMA</p></li>
+<li><p>RUCIO_CFG_DATABASE_SCHEMA</p></li>
+<li><p>RUCIO_CFG_DATABASE_POOL_RESET_ON_RETURN</p></li>
+<li><p>RUCIO_CFG_DATABASE_ECHO</p></li>
+<li><p>RUCIO_CFG_DATABASE_POOL_RECYCLE</p></li>
+<li><p>RUCIO_CFG_DATABASE_POOL_SIZE</p></li>
+<li><p>RUCIO_CFG_DATABASE_POOL_TIMEOUT</p></li>
+<li><p>RUCIO_CFG_DATABASE_MAX_OVERFLOW</p></li>
+<li><p>RUCIO_CFG_DATABASE_POWUSERACCOUNT</p></li>
+<li><p>RUCIO_CFG_DATABASE_POWUSERPASSWORD</p></li>
+<li><p>RUCIO_CFG_MONITOR_CARBON_SERVER</p></li>
+<li><p>RUCIO_CFG_MONITOR_CARBON_PORT</p></li>
+<li><p>RUCIO_CFG_MONITOR_USER_SCOPE</p></li>
+<li><p>RUCIO_CFG_PERMISSION_POLICY</p></li>
+<li><p>RUCIO_CFG_PERMISSION_SCHEMA</p></li>
+<li><p>RUCIO_CFG_PERMISSION_LFN2PFN_ALGORITHM_DEFAULT</p></li>
+<li><p>RUCIO_CFG_PERMISSION_SUPPORT</p></li>
+<li><p>RUCIO_CFG_PERMISSION_SUPPORT_RUCIO</p></li>
+<li><p>RUCIO_CFG_AUTOMATIX_SITES</p></li>
+<li><p>RUCIO_CFG_AUTOMATIX_SLEEP_TIME</p></li>
+<li><p>RUCIO_CFG_AUTOMATIX_DATASET_LIFETIME</p></li>
+<li><p>RUCIO_CFG_AUTOMATIX_SET_METADATA</p></li>
+<li><p>RUCIO_CFG_AUDITOR_RESULTS</p></li>
+<li><p>RUCIO_CFG_AUDITOR_CACHE</p></li>
+<li><p>RUCIO_CFG_CONVEYOR_SCHEME</p></li>
+<li><p>RUCIO_CFG_CONVEYOR_TRANSFERTOOL</p></li>
+<li><p>RUCIO_CFG_CONVEYOR_FTSHOSTS</p></li>
+<li><p>RUCIO_CFG_CONVEYOR_CACERT</p></li>
+<li><p>RUCIO_CFG_CONVEYOR_USERCERT</p></li>
+<li><p>RUCIO_CFG_CONVEYOR_CACHE_TIME</p></li>
+<li><p>RUCIO_CFG_CONVEYOR_USE_DETERMINISTIC_ID</p></li>
+<li><p>RUCIO_CFG_CONVEYOR_POLL_TIMEOUT</p></li>
+<li><p>RUCIO_CFG_CONVEYOR_SUBMIT_TIMEOUT</p></li>
+<li><p>RUCIO_CFG_CONVEYOR_BRING_ONLINE</p></li>
+<li><p>RUCIO_CFG_CONVEYOR_QUEUE_MODE</p></li>
+<li><p>RUCIO_CFG_CONVEYOR_USING_MEMCACHE</p></li>
+<li><p>RUCIO_CFG_CONVEYOR_FTSMONHOSTS</p></li>
+<li><p>RUCIO_CFG_MESSAGING_FTS3_PORT</p></li>
+<li><p>RUCIO_CFG_MESSAGING_FTS3_SSL_KEY_FILE</p></li>
+<li><p>RUCIO_CFG_MESSAGING_FTS3_SSL_CERT_FILE</p></li>
+<li><p>RUCIO_CFG_MESSAGING_FTS3_DESTINATION</p></li>
+<li><p>RUCIO_CFG_MESSAGING_FTS3_BROKERS</p></li>
+<li><p>RUCIO_CFG_MESSAGING_FTS3_VONAME</p></li>
+<li><p>RUCIO_CFG_MESSAGING_HERMES_USERNAME</p></li>
+<li><p>RUCIO_CFG_MESSAGING_HERMES_PASSWORD</p></li>
+<li><p>RUCIO_CFG_MESSAGING_HERMES_PORT</p></li>
+<li><p>RUCIO_CFG_MESSAGING_HERMES_NONSSL_PORT</p></li>
+<li><p>RUCIO_CFG_MESSAGING_HERMES_USE_SSL</p></li>
+<li><p>RUCIO_CFG_MESSAGING_HERMES_SSL_KEY_FILE</p></li>
+<li><p>RUCIO_CFG_MESSAGING_HERMES_SSL_CERT_FILE</p></li>
+<li><p>RUCIO_CFG_MESSAGING_HERMES_DESTINATION</p></li>
+<li><p>RUCIO_CFG_MESSAGING_HERMES_BROKERS</p></li>
+<li><p>RUCIO_CFG_MESSAGING_HERMES_VONAME</p></li>
+<li><p>RUCIO_CFG_MESSAGING_HERMES_EMAIL_FROM</p></li>
+<li><p>RUCIO_CFG_MESSAGING_HERMES_EMAIL_TEST</p></li>
+<li><p>RUCIO_CFG_TRACER_KRONOS_BROKERS</p></li>
+<li><p>RUCIO_CFG_TRACER_KRONOS_PORT</p></li>
+<li><p>RUCIO_CFG_TRACER_SSL_KEY_FILE</p></li>
+<li><p>RUCIO_CFG_TRACER_SSL_CERT_FILE</p></li>
+<li><p>RUCIO_CFG_TRACER_QUEUE</p></li>
+<li><p>RUCIO_CFG_TRACER_PREFETCH_SIZE</p></li>
+<li><p>RUCIO_CFG_TRACER_CHUNKSIZE</p></li>
+<li><p>RUCIO_CFG_TRACER_SUBSCRIPTION_ID</p></li>
+<li><p>RUCIO_CFG_TRACER_USE_SSL</p></li>
+<li><p>RUCIO_CFG_TRACER_RECONNECT_ATTEMPTS</p></li>
+<li><p>RUCIO_CFG_TRACER_EXCLUDED_USRDNS</p></li>
+<li><p>RUCIO_CFG_TRACER_KRONOS_USERNAME</p></li>
+<li><p>RUCIO_CFG_TRACER_KRONOS_PASSWORD</p></li>
+<li><p>RUCIO_CFG_TRACER_DATASET_WAIT</p></li>
+<li><p>RUCIO_CFG_MESSAGING_CACHE_PORT</p></li>
+<li><p>RUCIO_CFG_MESSAGING_CACHE_SSL_KEY_FILE</p></li>
+<li><p>RUCIO_CFG_MESSAGING_CACHE_SSL_CERT_FILE</p></li>
+<li><p>RUCIO_CFG_MESSAGING_CACHE_DESTINATION</p></li>
+<li><p>RUCIO_CFG_MESSAGING_CACHE_BROKERS</p></li>
+<li><p>RUCIO_CFG_MESSAGING_CACHE_VONAME</p></li>
+<li><p>RUCIO_CFG_MESSAGING_CACHE_ACCOUNT</p></li>
+<li><p>RUCIO_CFG_CREDENTIALS_GCS</p></li>
+<li><p>RUCIO_CFG_CREDENTIALS_SIGNATURE_LIFETIME</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Rucio</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database.html">Database operations</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/rucio.html">Rucio CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/rucio-admin.html">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installing Rucio daemons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="monitoring.html">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="policy_packages.html">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="installing_server.html" title="previous chapter">Installing Rucio server</a></li>
+      <li>Next: <a href="man/daemons.html" title="next chapter">Daemons CLIs</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/installing_daemons.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

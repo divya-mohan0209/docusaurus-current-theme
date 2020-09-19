@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multi-VO Rucio &#8212; Rucio 1.2 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="multi-vo-rucio">
+<h1>Multi-VO Rucio<a class="headerlink" href="#multi-vo-rucio" title="Permalink to this headline">¶</a></h1>
+<p>This section provides an overview of using Rucio for multiple virtual organizations (VOs) on a single instance with the “Multi-VO” feature. Rather than each VO having to set up
+an entire instance by themselves, they can share the same server and database which are run by a central “super_root”, and continue to use Rucio as they would a normal or
+“Single-VO” instance. Their accounts, scopes and RSEs are associated with their VO which ensures all rules and replicas are kept separate from other VOs using the instance.</p>
+<div class="section" id="changes-to-the-client">
+<h2>Changes to the Client<a class="headerlink" href="#changes-to-the-client" title="Permalink to this headline">¶</a></h2>
+<p>At the CLI and client level there are few changes to how Rucio is used. These cases, such as optional arguments for VO, are covered in documentation for the affected function. The
+main change is the addition of two options in the <code class="docutils literal notranslate"><span class="pre">rucio.cfg</span></code> file, one to flag that the instance is being run in M-VO mode and another to specify the VO the users belong to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">common</span><span class="p">]</span>
+<span class="o">...</span>
+<span class="n">multi_vo</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="p">[</span><span class="n">client</span><span class="p">]</span>
+<span class="o">...</span>
+<span class="n">vo</span> <span class="o">=</span> <span class="n">abc</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">multi_vo</span></code> should also be set in the other config files for the server, daemons etc. However, <code class="docutils literal notranslate"><span class="pre">vo</span></code> should not be set in these cases as these parts of Rucio are not associated
+with a single VO. If <code class="docutils literal notranslate"><span class="pre">multi_vo</span></code> is not set, or set to False, then Rucio will operate normally.</p>
+</div>
+<div class="section" id="role-of-the-super-root">
+<h2>Role of the super_root<a class="headerlink" href="#role-of-the-super-root" title="Permalink to this headline">¶</a></h2>
+<p>While root accounts still retain their administrative role within a VO, for example adding RSEs and accounts, functions relating to the creation and management of VOs is handled
+by the super_root account, a concept introduced with M-VO Rucio. It is worth noting that the super_root account <strong>cannot</strong> be used to perform individual VO administration; the
+roles of super_root and root are distinct.</p>
+<div class="section" id="access-of-super-root-functions">
+<h3>Access of super_root Functions<a class="headerlink" href="#access-of-super-root-functions" title="Permalink to this headline">¶</a></h3>
+<p>As the super_root functions aren’t intended for use by normal users of admins, they do not have an implementation in the client or CLI. They can be accessed from the core or the
+<a class="reference internal" href="restapi/vo.html#vo-rest-api"><span class="std std-ref">VO Rest API</span></a>, however the latter will require the VO endpoint to be added to the aliases file used when setting up the server as it is disabled by default.</p>
+</div>
+<div class="section" id="starting-a-m-vo-instance">
+<h3>Starting a M-VO Instance<a class="headerlink" href="#starting-a-m-vo-instance" title="Permalink to this headline">¶</a></h3>
+<p>When bootstrapping the database as part of the Rucio installation, if M-VO is enabled in <code class="docutils literal notranslate"><span class="pre">rucio.cfg</span></code> then the super_root account is created automatically. The default VO “def”
+is also created, and the super_root acccount is associated with it. The identity used to access this account can be managed in the usual way.</p>
+</div>
+<div class="section" id="creating-vos">
+<h3>Creating VOs<a class="headerlink" href="#creating-vos" title="Permalink to this headline">¶</a></h3>
+<p>When creating a new VO with the <code class="docutils literal notranslate"><span class="pre">add_vo</span></code> function you need to specify the three digit identifier for the new VO, which can contain letters and numbers. This must be unique for
+the instance. A more complete description can also be optionally included, along with an email to use for the root of this new VO. In addition to creating the new VO, a root
+account is also created for this VO, and has all identities associated with super_root added to it. The identities for the new root can then be configured as usual.</p>
+</div>
+<div class="section" id="managing-vos">
+<h3>Managing VOs<a class="headerlink" href="#managing-vos" title="Permalink to this headline">¶</a></h3>
+<p>In addition to creating VOs, the description and email for a VO can be altered using <code class="docutils literal notranslate"><span class="pre">update_vo</span></code>. If the root user of a VO loses access to their account, the super_root can
+associate a new identity with it using <code class="docutils literal notranslate"><span class="pre">recover_vo_root_identity</span></code>. Finally, a list of current VOs and their descriptions is accessible via <code class="docutils literal notranslate"><span class="pre">list_vos</span></code>.</p>
+</div>
+</div>
+<div class="section" id="converting-existing-instances">
+<h2>Converting Existing Instances<a class="headerlink" href="#converting-existing-instances" title="Permalink to this headline">¶</a></h2>
+<p>As opposed to starting a new M-VO instance from scratch, it may be desirable to
+convert the database for an existing (S-VO) Rucio instance into a M-VO instance
+so that additional VOs can be added without disrupting the original VO or
+needing to create a second instance. Conversely, one VO within a M-VO instance may
+grow to the point where it needs its own dedicated instance, and so converting
+data from M-VO to S-VO may also be desirable. These operations can be performed
+using utility functions included with Rucio.</p>
+<p>As mentioned above, in order to configure a M-VO instance of Rucio only the
+config file needs to change. However for an existing instance any entries already
+in the database will not be associated with a VO (or associated with their old
+one if previously in M-VO mode). In order to change these, direct operations on
+the database are required. These commands are generated using SQLAlchemy, and
+can either be run directly on the database or printed out and run manually.</p>
+<div class="section" id="practicalities">
+<h3>Practicalities<a class="headerlink" href="#practicalities" title="Permalink to this headline">¶</a></h3>
+<p>Before attempting to convert existing data, it is recommended that a backup of
+the database is taken in case an issue arises. Furthermore, of the databases
+supported by Rucio, only PostgreSQL has been tested on real data. Based on this
+test (which was performed on a machine with 64GB memory and four Intel Xeon E5-2430 v2),
+the tables with 2 columns that needed updating were converted at a rate of 5GB
+of data per hour. However many tables do not need any changes, so the process
+will likely be faster than this in practice. Another approach to speed up the
+conversion is to skip the “history” tables, as these can be very large. Unlike
+other tables these do not have foreign key constraints set, and so do not need
+to be updated in order to use the database. While the history will be
+inaccessible from the new VO, it will still exist in the database and could be
+accessed using the <code class="docutils literal notranslate"><span class="pre">super_root</span></code> account if needed.</p>
+</div>
+<div class="section" id="s-vo-to-m-vo">
+<h3>S-VO to M-VO<a class="headerlink" href="#s-vo-to-m-vo" title="Permalink to this headline">¶</a></h3>
+<p>Before starting, ensure that <code class="docutils literal notranslate"><span class="pre">multi_vo</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code> in the config file.
+The SQL commands needed to convert the database involve dropping foreign key
+constraints that affect accounts/scopes, then altering the relevant columns,
+before re-adding the constraints. The 3 character identifier for the VO, a full
+description and an admin email should be provided:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tools/convert_database_vo.py convert_to_mvo new &quot;New VO for existing data&quot; rucio@email.com
+ALTER TABLE account_limits DROP CONSTRAINT &quot;ACCOUNT_LIMITS_ACCOUNT_FK&quot;;
+...
+UPDATE account_limits SET account=(split_part(account_limits.account, &#39;@&#39;, 1) || CAST(&#39;@new&#39; AS CHAR(4))) WHERE split_part(account_limits.account, &#39;@&#39;, 2) = &#39;&#39;;
+...
+ALTER TABLE account_limits ADD CONSTRAINT &quot;ACCOUNT_LIMITS_ACCOUNT_FK&quot; FOREIGN KEY(account) REFERENCES accounts (account);
+</pre></div>
+</div>
+<p>In this example, no changes will be made to the database by running the script,
+and so the SQL will need to be run manually. After running the commands, a
+<code class="docutils literal notranslate"><span class="pre">super_root</span></code> account should be setup to allow administrative functions like
+adding more VOs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python
+&gt;&gt;&gt; from rucio.db.sqla.util import create_root_account
+&gt;&gt;&gt; create_root_account(create_counters=False)
+</pre></div>
+</div>
+<p>Alternatively by specifying <code class="docutils literal notranslate"><span class="pre">--commit_changes</span></code> the script will attempt to
+modify the database as it runs, however this requires the account used by the
+Rucio instance to access the database to be the owner of the the tables. In
+this case, the <code class="docutils literal notranslate"><span class="pre">super_root</span></code> account can be added as part of the script by
+passing the argument <code class="docutils literal notranslate"><span class="pre">--create_super_root</span></code>. If there is an error during the
+conversion, then none of the changes will be committed.</p>
+<blockquote>
+<div><p>$ tools/convert_database_vo.py –commit_changes convert_to_mvo new “New VO for existing data” <a class="reference external" href="mailto:rucio&#37;&#52;&#48;email&#46;com">rucio<span>&#64;</span>email<span>&#46;</span>com</a> –create_super_root</p>
+</div></blockquote>
+<p>Finally, there is the option to skip the (potentially very large) tables of
+historical data using <code class="docutils literal notranslate"><span class="pre">--skip_history</span></code>. In this case the commands to alter
+those tables are omitted:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tools/convert_database_vo.py --skip_history convert_to_mvo new &quot;New VO for existing data&quot; rucio@email.com
+</pre></div>
+</div>
+</div>
+<div class="section" id="m-vo-to-s-vo">
+<h3>M-VO to S-VO<a class="headerlink" href="#m-vo-to-s-vo" title="Permalink to this headline">¶</a></h3>
+<p>Before starting, ensure that <code class="docutils literal notranslate"><span class="pre">multi_vo</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code> in the config file
+(this option can be removed after completing the conversion). The first stage
+of the conversion is the same as before, dropping foreign key constraints and
+renaming the entries that were associated with the old VO. The name of this VO
+is the only required argument:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tools/convert_database_vo.py convert_to_svo old
+ALTER TABLE account_limits DROP CONSTRAINT &quot;ACCOUNT_LIMITS_ACCOUNT_FK&quot;;
+...
+UPDATE account_limits SET account=split_part(account_limits.account, &#39;@&#39;, 1) WHERE split_part(account_limits.account, &#39;@&#39;, 2) = &#39;old&#39;;
+...
+ALTER TABLE account_limits ADD CONSTRAINT &quot;ACCOUNT_LIMITS_ACCOUNT_FK&quot; FOREIGN KEY(account) REFERENCES accounts (account);
+</pre></div>
+</div>
+<p>By default data associated with any other VOs is left in the database, but will be
+inaccessible to Rucio users. By setting pass the argument <code class="docutils literal notranslate"><span class="pre">--delete_vos</span></code>, these
+entries will be deleted from the database completely:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tools/convert_database_vo.py convert_to_svo old --delete_vos
+...
+DELETE FROM account_limits WHERE split_part(account_limits.account, &#39;@&#39;, 2) = &#39;xyz&#39;;
+...
+DELETE FROM account_limits WHERE split_part(account_limits.account, &#39;@&#39;, 2) = &#39;123&#39;;
+...
+</pre></div>
+</div>
+<p>Once again, historical tables skipped with <code class="docutils literal notranslate"><span class="pre">--skip_history</span></code>, and the commands
+can be run directly against the database using the <code class="docutils literal notranslate"><span class="pre">--commit_changes</span></code> argument;
+if this is not set then the <code class="docutils literal notranslate"><span class="pre">super_root</span></code> account should be manually deleted
+after running the SQL:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python
+&gt;&gt;&gt; from rucio.common.types import InternalAccount
+&gt;&gt;&gt; from rucio.core.account import del_account
+&gt;&gt;&gt; del_account(InternalAccount(&#39;super_root&#39;, vo=&#39;def&#39;))
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Rucio</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database.html">Database operations</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/rucio.html">Rucio CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/rucio-admin.html">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="monitoring.html">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="policy_packages.html">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/multi_vo_rucio.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

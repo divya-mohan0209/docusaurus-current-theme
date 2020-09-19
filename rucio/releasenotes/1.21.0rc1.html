@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1.21.0rc1 &#8212; Rucio 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.21.0.post2" href="1.21.0.post2.html" />
+    <link rel="prev" title="1.21.0rc2" href="1.21.0rc2.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="rc1">
+<h1>1.21.0rc1<a class="headerlink" href="#rc1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="release-candidate">
+<h2>Release Candidate<a class="headerlink" href="#release-candidate" title="Permalink to this headline">¶</a></h2>
+<p>This is a release candidate! Only to be used in testing environments!</p>
+</div>
+<div class="section" id="upgrade-instructions">
+<h2>Upgrade Instructions<a class="headerlink" href="#upgrade-instructions" title="Permalink to this headline">¶</a></h2>
+<p>This feature release requires a database schema upgrade. Please consult the <a class="reference external" href="https://rucio.readthedocs.io/en/latest/database.html">documentation</a> about upgrading your database schema.</p>
+<p>The following changes are necessary and are covered by the <code class="docutils literal notranslate"><span class="pre">alembic</span> <span class="pre">upgrade</span> <span class="pre">head</span></code> command:</p>
+<ol class="arabic simple">
+<li><p>Adding columns <code class="docutils literal notranslate"><span class="pre">created_at</span></code> and <code class="docutils literal notranslate"><span class="pre">updated_at</span></code> to <code class="docutils literal notranslate"><span class="pre">did_meta</span></code> table. This only needs to be executed if the columns are not existing (Alembic revision <code class="docutils literal notranslate"><span class="pre">53b479c3cb0f</span></code>)</p></li>
+<li><p>Adding <code class="docutils literal notranslate"><span class="pre">SAML</span></code> as authentication typ to <code class="docutils literal notranslate"><span class="pre">identities</span></code> and <code class="docutils literal notranslate"><span class="pre">account_map</span></code> tables (Alembic revision <code class="docutils literal notranslate"><span class="pre">9a1b149a2044</span></code>)</p></li>
+<li><p>Adding <code class="docutils literal notranslate"><span class="pre">staging_started_at</span></code> and <code class="docutils literal notranslate"><span class="pre">staging_finished_at</span></code> to <code class="docutils literal notranslate"><span class="pre">requests</span></code> and <code class="docutils literal notranslate"><span class="pre">requests_history</span></code> tables (Alembic revision <code class="docutils literal notranslate"><span class="pre">bc68e9946deb</span></code>)</p></li>
+<li><p>Adding <code class="docutils literal notranslate"><span class="pre">third_party_copy_write</span></code> and <code class="docutils literal notranslate"><span class="pre">third_party_copy_read</span></code> columns to <code class="docutils literal notranslate"><span class="pre">rse_protocols</span></code> table (Alembic revision <code class="docutils literal notranslate"><span class="pre">2b69addda658</span></code>)</p></li>
+<li><p>Added new <code class="docutils literal notranslate"><span class="pre">account_glob_limits</span></code> table (Alembic revision <code class="docutils literal notranslate"><span class="pre">a74275a1ad30</span></code>)</p></li>
+<li><p>Added new <code class="docutils literal notranslate"><span class="pre">dids_followed</span></code> and <code class="docutils literal notranslate"><span class="pre">dids_followed_events</span></code> tables (Alembic revision <code class="docutils literal notranslate"><span class="pre">7541902bf173</span></code>)</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">strategy</span></code>, <code class="docutils literal notranslate"><span class="pre">direction</span></code>, and <code class="docutils literal notranslate"><span class="pre">deadline</span></code> column to <code class="docutils literal notranslate"><span class="pre">rse_transfer_limits</span></code> table (Alembic revision <code class="docutils literal notranslate"><span class="pre">810a41685bc1</span></code>)</p></li>
+</ol>
+</div>
+<div class="section" id="general">
+<h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="features">
+<h3>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Core &amp; Internals: Global account qutoas <a class="reference external" href="https://github.com/rucio/rucio/issues/2315">#2315</a></p></li>
+<li><p>Core &amp; Internals: Removal of fts3-rest-api dependency <a class="reference external" href="https://github.com/rucio/rucio/issues/2518">#2518</a></p></li>
+<li><p>Core &amp; Internals: Add Source rse mode to throttler <a class="reference external" href="https://github.com/rucio/rucio/issues/2611">#2611</a></p></li>
+<li><p>Deletion: Use signed URLs when deleting from object stores <a class="reference external" href="https://github.com/rucio/rucio/issues/2411">#2411</a></p></li>
+<li><p>Collection following mechanism <a class="reference external" href="https://github.com/rucio/rucio/issues/2304">#2304</a></p></li>
+<li><p>Release management: Dependency upgrade for 1.21 <a class="reference external" href="https://github.com/rucio/rucio/issues/3054">#3054</a></p></li>
+<li><p>Testing: flake8 and pycodestyles upgrade <a class="reference external" href="https://github.com/rucio/rucio/issues/2156">#2156</a></p></li>
+<li><p>Testing: activate python3 client tests <a class="reference external" href="https://github.com/rucio/rucio/issues/2943">#2943</a></p></li>
+<li><p>Transfers: Generic Multi-Hop transfers <a class="reference external" href="https://github.com/rucio/rucio/issues/2632">#2632</a></p></li>
+<li><p>Transfers: Rucio support for Globus Online as a transfer tool <a class="reference external" href="https://github.com/rucio/rucio/issues/2905">#2905</a></p></li>
+<li><p>Transfers: Add staging timestamps to request history <a class="reference external" href="https://github.com/rucio/rucio/issues/3023">#3023</a></p></li>
+<li><p>WebUI: Login to WebUI with SSO <a class="reference external" href="https://github.com/rucio/rucio/issues/2306">#2306</a></p></li>
+<li><p>WebUI: Create username/password authentication for Rucio WebUI <a class="reference external" href="https://github.com/rucio/rucio/issues/2614">#2614</a></p></li>
+</ul>
+</div>
+<div class="section" id="enhancements">
+<h3>Enhancements<a class="headerlink" href="#enhancements" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Core &amp; Internals: S3 URL signing code should pass endpoint to boto3 <a class="reference external" href="https://github.com/rucio/rucio/issues/2715">#2715</a></p></li>
+<li><p>Core &amp; Internals: S3 URL signing code should use RSE name to index credentials <a class="reference external" href="https://github.com/rucio/rucio/issues/2717">#2717</a></p></li>
+<li><p>Core &amp; Internals: session() replaced by Session() in requests <a class="reference external" href="https://github.com/rucio/rucio/issues/3011">#3011</a></p></li>
+<li><p>Core &amp; Internals: Permission : Add a quota_approver similar to rule_approver <a class="reference external" href="https://github.com/rucio/rucio/issues/3053">#3053</a></p></li>
+<li><p>Infrastructure: Add objectstore to development Docker image <a class="reference external" href="https://github.com/rucio/rucio/issues/2855">#2855</a></p></li>
+<li><p>Infrastructure: Add a docker-compose that brings services up only listening on localhost <a class="reference external" href="https://github.com/rucio/rucio/issues/2990">#2990</a></p></li>
+<li><p>Testing: fix setup problems in python3 travis tests <a class="reference external" href="https://github.com/rucio/rucio/issues/2597">#2597</a></p></li>
+<li><p>Testing: Activate grouped FIFO tests for mysql <a class="reference external" href="https://github.com/rucio/rucio/issues/2802">#2802</a></p></li>
+<li><p>Testing: Python 3.* tests for clients <a class="reference external" href="https://github.com/rucio/rucio/issues/3032">#3032</a></p></li>
+</ul>
+</div>
+<div class="section" id="bugs">
+<h3>Bugs<a class="headerlink" href="#bugs" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Core &amp; Internals: problems upgrading to latest mysql/mariadb version <a class="reference external" href="https://github.com/rucio/rucio/issues/2421">#2421</a></p></li>
+<li><p>Core &amp; Internals: Missing created_at and updated_at columns in did_meta table <a class="reference external" href="https://github.com/rucio/rucio/issues/2462">#2462</a></p></li>
+<li><p>Core &amp; Internals: Integer attribute value ‘1’ displayed as ‘True’ in the client.   <a class="reference external" href="https://github.com/rucio/rucio/issues/2787">#2787</a></p></li>
+<li><p>Core &amp; Internals: missing dot in schema in alembic scripts <a class="reference external" href="https://github.com/rucio/rucio/issues/2823">#2823</a></p></li>
+<li><p>Infrastructure: docker setup issues <a class="reference external" href="https://github.com/rucio/rucio/issues/3038">#3038</a></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="clients">
+<h2>Clients<a class="headerlink" href="#clients" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id28">
+<h3>Bugs<a class="headerlink" href="#id28" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Clients: rucio client fails if username not defined <a class="reference external" href="https://github.com/rucio/rucio/issues/3050">#3050</a></p></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Rucio</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database.html">Database operations</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/rucio.html">Rucio CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/rucio-admin.html">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../man/daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../policy_packages.html">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../releasenotes.html">Release notes</a><ul>
+      <li>Previous: <a href="1.21.0rc2.html" title="previous chapter">1.21.0rc2</a></li>
+      <li>Next: <a href="1.21.0.post2.html" title="next chapter">1.21.0.post2</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/releasenotes/1.21.0rc1.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

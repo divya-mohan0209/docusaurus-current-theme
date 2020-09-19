@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daemon rucio-bb8 &#8212; Rucio 1.2 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Daemon rucio-c3po" href="rucio-c3po.html" />
+    <link rel="prev" title="Daemon rucio-automatix" href="rucio-automatix.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="daemon-rucio-bb8">
+<h1>Daemon rucio-bb8<a class="headerlink" href="#daemon-rucio-bb8" title="Permalink to this headline">¶</a></h1>
+<p><p>The BB8 daemon is responsible for rebalancing data between RSEs.</p>
+</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">rucio</span><span class="o">-</span><span class="n">bb8</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">dry</span><span class="o">-</span><span class="n">run</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">exclude</span><span class="o">-</span><span class="n">expression</span> <span class="n">EXCLUDE_EXPRESSION</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">comment</span> <span class="n">COMMENT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">force</span><span class="o">-</span><span class="n">expression</span> <span class="n">FORCE_EXPRESSION</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">decommission</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">priority</span> <span class="n">PRIORITY</span><span class="p">]</span>
+                 <span class="p">[</span><span class="o">--</span><span class="n">source</span><span class="o">-</span><span class="n">replica</span><span class="o">-</span><span class="n">expression</span> <span class="n">SOURCE_REPLICA_EXPRESSION</span><span class="p">]</span>
+                 <span class="n">rse</span> <span class="nb">bytes</span>
+</pre></div>
+</div>
+<div class="section" id="Positional Arguments">
+<h2>Positional Arguments<a class="headerlink" href="#Positional Arguments" title="Permalink to this headline">¶</a></h2>
+<dl class="option-list">
+<dt><kbd>rse</kbd></dt>
+<dd><p>RSE to rebalance</p>
+</dd>
+<dt><kbd>bytes</kbd></dt>
+<dd><p>Number of bytes to rebalance</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="Named Arguments">
+<h2>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h2>
+<dl class="option-list">
+<dt><kbd>--dry-run</kbd></dt>
+<dd><p>Only run in dry-run mode</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--exclude-expression</kbd></dt>
+<dd><p>Exclude these rse_expression from being destinations</p>
+</dd>
+<dt><kbd>--comment</kbd></dt>
+<dd><p>Add a comment to the new rules</p>
+</dd>
+<dt><kbd>--force-expression</kbd></dt>
+<dd><p>For this rse_expression for rebalanced rules instead of letting BB8 decide</p>
+</dd>
+<dt><kbd>--decommission</kbd></dt>
+<dd><p>Run BB8 in decommission mode</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--priority</kbd></dt>
+<dd><p>Priority for the newly created rules</p>
+<p>Default: 3</p>
+</dd>
+<dt><kbd>--source-replica-expression</kbd></dt>
+<dd><p>Source replica expression for the newly created rules</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="force-expression-ideal-case">
+<h2>Force expression - ideal case<a class="headerlink" href="#force-expression-ideal-case" title="Permalink to this headline">¶</a></h2>
+<p>–force-expression option of bb8 defines a set of rses where the rebalanced data will be sent. It can be one rse or group of rses. Complicated case is when we intend to rebalance distributed dataset, of which only part is present at rebalanced rse. Than only that part will be rebalanced elsewhere and the rest of the distributed dataset stays at its current locations.</p>
+<p>Use case:</p>
+<ul class="simple">
+<li><p>all t1s are full and we need to free one of them forcing the destination as t2 nuclei, example:</p></li>
+<li><p>rucio-bb8 INFN-T1_DATADISK 50000000000000 –force-expression ‘tier=2&amp;datapolicy=Nucleus’</p></li>
+<li><p>we run decommissioning e.g. LOCALGROUPDISK of a site, and we need to specify dst LOCALGROUPDISK where to move the remaining data</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/bb8_1.svg"><img alt="../_images/bb8_1.svg" height="500px" src="../_images/bb8_1.svg" /></a>
+</div>
+<div class="section" id="force-expression-feasible-alternative">
+<h2>Force expression - feasible alternative<a class="headerlink" href="#force-expression-feasible-alternative" title="Permalink to this headline">¶</a></h2>
+<p>The schema on previous slide is not feasible, because:</p>
+<ol class="arabic simple">
+<li><p>new_exp = force_exp // rebalanced_rse
+could trigger unwanted transfers of files in distributed datasets, (dotted line) DANGEROUS!</p></li>
+<li><p>new_exp = (force_exp &amp; source_exp) // rebalanced_rse
+can trigger transfers to source_exp (dashed line), instead of wished force_exp.</p></li>
+</ol>
+<p>Solution for near future:</p>
+<ul class="simple">
+<li><p>rules on files with Express activity would be created, so that rebalanced files are qucikly moved to force_exp (bb8-file rules)</p></li>
+<li><p>the main rule for rebalancing with new_exp is created with certain delay, so that express rules will manage to be finished.</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/bb8_2.svg"><img alt="../_images/bb8_2.svg" height="500px" src="../_images/bb8_2.svg" /></a>
+</div>
+<div class="section" id="overlapping-datasets">
+<h2>Overlapping datasets<a class="headerlink" href="#overlapping-datasets" title="Permalink to this headline">¶</a></h2>
+<p>A dataset can be partly composed of files from different dataset. If such a dataset is rebalanced, only the part unique for the dataset is physically  moved. Original rule behind this dataset seems to be fully rebalanced, but few files are not moved and thus the final counting of rebalanced bytes doesn’t need to be accurate. Target expression can be both site or set of sites, and it can be forced, or chosen by bb8.</p>
+<a class="reference internal image-reference" href="../_images/bb8_3.svg"><img alt="../_images/bb8_3.svg" height="500px" src="../_images/bb8_3.svg" /></a>
+</div>
+<div class="section" id="rebalancing-modes-selection-of-destination-rses">
+<h2>Rebalancing modes - selection of destination rses<a class="headerlink" href="#rebalancing-modes-selection-of-destination-rses" title="Permalink to this headline">¶</a></h2>
+<p>Rebalancing is running in free different modes marked with different color on the left schema. This represents rebalancing only when –force-expression is not used, and only if rse is of type DATADISK. For LOCALGROUPDISKS, –force-expression should be used, in order to use the other proper LOCALGROUPDISK.</p>
+<a class="reference internal image-reference" href="../_images/bb8_4.svg"><img alt="../_images/bb8_4.svg" height="500px" src="../_images/bb8_4.svg" /></a>
+</div>
+<div class="section" id="automatic-rebalancing">
+<h2>Automatic rebalancing<a class="headerlink" href="#automatic-rebalancing" title="Permalink to this headline">¶</a></h2>
+<p>Currently two separated groups:</p>
+<ol class="arabic simple">
+<li><p>nuclei = (t1s + some t2s)</p></li>
+<li><p>t2s non-nulcei</p></li>
+</ol>
+<p>ratio = primaries / total_space
+Not-rebalanced src candidates (red in the schema):</p>
+<ol class="arabic simple">
+<li><p>rebalancing is already ongoing, or not finished</p></li>
+<li><p>rse is too small</p></li>
+<li><p>rse is blacklisted</p></li>
+<li><p>rse is excluded from rebalancing</p></li>
+</ol>
+<p>Same for destinations.</p>
+<a class="reference internal image-reference" href="../_images/bb8_5.svg"><img alt="../_images/bb8_5.svg" height="500px" src="../_images/bb8_5.svg" /></a>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Rucio</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database.html">Database operations</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio.html">Rucio CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-admin.html">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../policy_packages.html">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="daemons.html">Daemons CLIs</a><ul>
+      <li>Previous: <a href="rucio-automatix.html" title="previous chapter">Daemon rucio-automatix</a></li>
+      <li>Next: <a href="rucio-c3po.html" title="next chapter">Daemon rucio-c3po</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/man/rucio-bb8.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

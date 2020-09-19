@@ -1,0 +1,277 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Configuration &#8212; Rucio 1.2 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>You need to have a Rucio server up and running with the root account created. Please refer to <a class="reference external" href="installing_server.html">installation documentation</a> for further information</p>
+<blockquote>
+<div></div></blockquote>
+</div>
+<div class="section" id="creating-new-users">
+<h2>Creating new users<a class="headerlink" href="#creating-new-users" title="Permalink to this headline">¶</a></h2>
+<p>The first step is to create new accounts:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin account add --type USER --email jdoe@blahblih.com jdoe
+</pre></div>
+</div>
+<p>You can choose from different types in the list USER, GROUP, SERVICE. Different policies/permissions can be set depending on the account type.  Once the account is created, you need to create and attach an identity to this account:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin identity add --type X509 --id &quot;/DC=blah/DC=blih/OU=Organic Units/OU=Users/CN=jdoe&quot; --email jdoe@blahblih.com --account jdoe
+</pre></div>
+</div>
+<p>The list of possible identity types is X509, GSS, USERPASS, SSH, OIDC:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin account list-identities jdoe
+Identity: /DC=blah/DC=blih/OU=Organic Units/OU=Users/CN=jdoe,        type: X509
+</pre></div>
+</div>
+<p>You can set attributes to the users:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin account add-attribute --key country --value xyz jdoe
+</pre></div>
+</div>
+<p>And list these attributes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin account list-attributes jdoe
++---------+-------+
+| Key     | Value |
+|---------+-------|
+| country | xyz   |
++---------+-------+
+</pre></div>
+</div>
+<p>You can also list all the accounts matching a certain attribute using the filter option:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin account list --filters &quot;country=xyz&quot;
+jdoe
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="creating-scope">
+<h1>Creating scope<a class="headerlink" href="#creating-scope" title="Permalink to this headline">¶</a></h1>
+<p>One needs then to create some scopes associated with the accounts:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin scope add --account jdoe --scope user.jdoe
+</pre></div>
+</div>
+<p>Only the owner of the scope or privileged users can write into the scope.</p>
+<dl class="simple">
+<dt>To list all the scopes::</dt><dd><p>$ rucio-admin scope list
+user.janedoe
+user.jdoe</p>
+</dd>
+</dl>
+<div class="section" id="creating-new-rses">
+<h2>Creating new RSEs<a class="headerlink" href="#creating-new-rses" title="Permalink to this headline">¶</a></h2>
+<p>To create a new RSE:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin rse add SITE3_DISK
+Added new RSE: SITE3_DISK
+</pre></div>
+</div>
+<p>Then you can attach protocols to this RSE. In the following example, a file protocol is added to the site created previously:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin rse add-protocol --hostname blahblah --scheme file --impl rucio.rse.protocols.posix.Default --domain-json &#39;{&quot;wan&quot;: {&quot;read&quot;: 1, &quot;write&quot;: 1, &quot;third_party_copy&quot;: 0, &quot;delete&quot;: 1}, &quot;lan&quot;: {&quot;read&quot;: 1, &quot;write&quot;: 1, &quot;third_party_copy&quot;: 0, &quot;delete&quot;: 1}}&#39; --prefix /tmp/SITE3_DISK/ SITE3_DISK
+</pre></div>
+</div>
+<p>The different parameters are explained in more details if you use the –help option.</p>
+<p>Last step is to create RSE attributes that can be used to build RSE expressions:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin rse set-attribute --rse SITE3_DISK --key tier --value 1
+Added new RSE attribute for SITE3_DISK: tier-1
+$ rucio-admin rse set-attribute --rse SITE3_DISK --key disk --value 1
+Added new RSE attribute for SITE3_DISK: disk-1
+$ rucio list-rses --expression &quot;disk=1&amp;tier=1&quot;
+SITE3_DISK
+</pre></div>
+</div>
+<p>Let’s check that everything is properly defined:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin rse info SITE3_DISK
+Settings:
+=========
+  third_party_copy_protocol: 1
+  rse_type: DISK
+  domain: [u&#39;lan&#39;, u&#39;wan&#39;]
+  availability_delete: True
+  delete_protocol: 1
+  rse: SITE3_DISK
+  deterministic: True
+  write_protocol: 1
+  read_protocol: 1
+  staging_area: False
+  credentials: None
+  availability_write: True
+  lfn2pfn_algorithm: default
+  availability_read: True
+  volatile: False
+  id: 4079d6873603462b8867e4a49674cc11
+Attributes:
+===========
+  tier: True
+  disk: True
+  istape: False
+  SITE3_DISK: True
+Protocols:
+==========
+  file
+    extended_attributes: None
+    hostname: blahblih
+    prefix: /tmp/SITE3_DISK/
+    domains: {u&#39;wan&#39;: {u&#39;read&#39;: 1, u&#39;write&#39;: 1, u&#39;third_party_copy&#39;: 0, u&#39;delete&#39;: 1}, u&#39;lan&#39;: {u&#39;read&#39;: 1, u&#39;write&#39;: 1, u&#39;delete&#39;: 1}}
+    scheme: file
+    port: 0
+    impl: rucio.rse.protocols.posix.Default
+Usage:
+======
+  rucio
+    used: 0
+    rse: SITE3_DISK
+    updated_at: 2018-02-22 13:05:45
+    free: None
+    source: rucio
+    total: 0
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-quota-and-permissions">
+<h2>Setting quota and permissions<a class="headerlink" href="#setting-quota-and-permissions" title="Permalink to this headline">¶</a></h2>
+<p>The root account has all the privileges. You can define other admin accounts by setting the account attribute admin:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin account add-attribute --key admin --value 1 jdoe
+$ rucio-admin account list --filter &quot;admin=1&quot;
+jdoe
+</pre></div>
+</div>
+<p>The permissions are easily tunable by overloading the <a class="reference external" href="https://github.com/rucio/rucio/blob/master/lib/rucio/core/permission/generic.py">generic permission file</a>.</p>
+<blockquote>
+<div></div></blockquote>
+<p>This is an advanced feature that is not explained there, for more details get in touch with the developers.</p>
+<p>To set the quota for one account on a given RSE:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rucio-admin account set-limits jdoe SITE3_DISK 10000000000000
+Set account limit for account jdoe on SITE3_DISK: 10.000 TB
+$ rucio-admin account get-limits jdoe SITE3_DISK
+Quota on SITE3_DISK for jdoe : 10 TB
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Rucio</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="database.html">Database operations</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/rucio.html">Rucio CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/rucio-admin.html">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="man/daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="monitoring.html">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="policy_packages.html">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/configuration.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
