@@ -1,43 +1,407 @@
 
-<!DOCTYPE html>
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rucio CLI &#8212; Rucio 1.2 documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Rucio CLI &mdash; Rucio 1.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Rucio Administrative CLI" href="rucio-admin.html" />
-    <link rel="prev" title="Rucio CLI: Examples" href="../cli_examples.html" />
+    <link rel="prev" title="Rucio CLI: Examples" href="../cli_examples.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
    
-  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
-  </head><body>
-  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
           
 
-          <div class="body" role="main">
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> Rucio
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developing.html">Setting up a Rucio development environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database.html">Database operations</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Rucio CLI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Named Arguments">Named Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Sub-commands:">Sub-commands:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ping">ping</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#usage-example">Usage example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#whoami">whoami</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#usage-example_repeat1">Usage example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#list-file-replicas">list-file-replicas</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat1">Named Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#usage-example_repeat2">Usage example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#list-dataset-replicas">list-dataset-replicas</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat1">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat2">Named Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#usage-example_repeat3">Usage example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#add-dataset">add-dataset</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat2">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat3">Named Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#usage-example_repeat4">Usage example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#add-container">add-container</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat3">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat4">Named Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#usage-example_repeat5">Usage example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#attach">attach</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat4">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat5">Named Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#usage-example_repeat6">Usage example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#detach">detach</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat5">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#usage-example_repeat7">Usage example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#ls">ls</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat6">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat6">Named Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#usage-example_repeat8">Usage example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#list-dids">list-dids</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat7">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat7">Named Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#usage-example_repeat9">Usage example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#list-dids-extended">list-dids-extended</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat8">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat8">Named Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#usage-example_repeat10">Usage example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#list-parent-dids">list-parent-dids</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat9">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat9">Named Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#usage-example_repeat11">Usage example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#list-parent-datasets">list-parent-datasets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat10">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat10">Named Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#usage-example_repeat12">Usage example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#list-scopes">list-scopes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#usage-example_repeat13">Usage example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#close">close</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat11">Positional Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#reopen">reopen</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat12">Positional Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#stat">stat</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat13">Positional Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#erase">erase</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat14">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat11">Named Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#list-files">list-files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat15">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat12">Named Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#list-content">list-content</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat16">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat13">Named Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#list-content-history">list-content-history</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat17">Positional Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#upload">upload</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat18">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat14">Named Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#get">get</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat19">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat15">Named Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#download">download</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat20">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat16">Named Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#get-metadata">get-metadata</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat21">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat17">Named Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#set-metadata">set-metadata</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat18">Named Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#delete-metadata">delete-metadata</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat19">Named Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#list-rse-usage">list-rse-usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat22">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat20">Named Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#list-account-usage">list-account-usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat23">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat21">Named Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#list-account-limits">list-account-limits</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat24">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat22">Named Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#add-rule">add-rule</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat25">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat23">Named Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#delete-rule">delete-rule</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat26">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat24">Named Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#rule-info">rule-info</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat27">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat25">Named Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#list-rules">list-rules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat28">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat26">Named Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#usage-example_repeat14">Usage example</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#list-rules-history">list-rules-history</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat29">Positional Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#update-rule">update-rule</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat30">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat27">Named Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#move-rule">move-rule</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat31">Positional Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#list-rses">list-rses</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat28">Named Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#list-rse-attributes">list-rse-attributes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat32">Positional Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#list-datasets-rse">list-datasets-rse</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat33">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat29">Named Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#test-server">test-server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#touch">touch</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Positional Arguments_repeat34">Positional Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Named Arguments_repeat30">Named Arguments</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rucio-admin.html">Rucio Administrative CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../policy_packages.html">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../demo_environment.html">Setting up a Rucio development environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Individual contributors to the source code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html#organisations-employing-contributors">Organisations employing contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Rucio</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Rucio CLI</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/man/rucio.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <div class="section" id="rucio-cli">
 <h1>Rucio CLI<a class="headerlink" href="#rucio-cli" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">rucio</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">version</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">config</span> <span class="n">CONFIG</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">verbose</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">H</span> <span class="n">ADDRESS</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">auth</span><span class="o">-</span><span class="n">host</span> <span class="n">ADDRESS</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">a</span> <span class="n">ACCOUNT</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">S</span> <span class="n">AUTH_STRATEGY</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">T</span> <span class="n">TIMEOUT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">robot</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">user</span><span class="o">-</span><span class="n">agent</span> <span class="n">USER_AGENT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vo</span> <span class="n">VO</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">u</span> <span class="n">USERNAME</span><span class="p">]</span>
-             <span class="p">[</span><span class="o">-</span><span class="n">pwd</span> <span class="n">PASSWORD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">user</span> <span class="n">OIDC_USERNAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">password</span> <span class="n">OIDC_PASSWORD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">scope</span> <span class="n">OIDC_SCOPE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">audience</span> <span class="n">OIDC_AUDIENCE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">auto</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">polling</span><span class="p">]</span>
-             <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">refresh</span><span class="o">-</span><span class="n">lifetime</span> <span class="n">OIDC_REFRESH_LIFETIME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">issuer</span> <span class="n">OIDC_ISSUER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">certificate</span> <span class="n">CERTIFICATE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ca</span><span class="o">-</span><span class="n">certificate</span> <span class="n">CA_CERTIFICATE</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">rucio</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">version</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">config</span> <span class="n">CONFIG</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">verbose</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">H</span> <span class="n">ADDRESS</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">auth</span><span class="o">-</span><span class="n">host</span> <span class="n">ADDRESS</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">a</span> <span class="n">ACCOUNT</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">S</span> <span class="n">AUTH_STRATEGY</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">T</span> <span class="n">TIMEOUT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">robot</span><span class="p">]</span>
+             <span class="p">[</span><span class="o">--</span><span class="n">user</span><span class="o">-</span><span class="n">agent</span> <span class="n">USER_AGENT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vo</span> <span class="n">VO</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">u</span> <span class="n">USERNAME</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">pwd</span> <span class="n">PASSWORD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">user</span> <span class="n">OIDC_USERNAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">password</span> <span class="n">OIDC_PASSWORD</span><span class="p">]</span>
+             <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">scope</span> <span class="n">OIDC_SCOPE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">audience</span> <span class="n">OIDC_AUDIENCE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">auto</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">polling</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">refresh</span><span class="o">-</span><span class="n">lifetime</span> <span class="n">OIDC_REFRESH_LIFETIME</span><span class="p">]</span>
+             <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">issuer</span> <span class="n">OIDC_ISSUER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">certificate</span> <span class="n">CERTIFICATE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ca</span><span class="o">-</span><span class="n">certificate</span> <span class="n">CA_CERTIFICATE</span><span class="p">]</span>
              <span class="p">{</span><span class="n">ping</span><span class="p">,</span><span class="n">whoami</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="n">replicas</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">dataset</span><span class="o">-</span><span class="n">replicas</span><span class="p">,</span><span class="n">add</span><span class="o">-</span><span class="n">dataset</span><span class="p">,</span><span class="n">add</span><span class="o">-</span><span class="n">container</span><span class="p">,</span><span class="n">attach</span><span class="p">,</span><span class="n">detach</span><span class="p">,</span><span class="n">ls</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">dids</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">dids</span><span class="o">-</span><span class="n">extended</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">parent</span><span class="o">-</span><span class="n">dids</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">parent</span><span class="o">-</span><span class="n">datasets</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">scopes</span><span class="p">,</span><span class="n">close</span><span class="p">,</span><span class="n">reopen</span><span class="p">,</span><span class="n">stat</span><span class="p">,</span><span class="n">erase</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">files</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">content</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">content</span><span class="o">-</span><span class="n">history</span><span class="p">,</span><span class="n">upload</span><span class="p">,</span><span class="n">get</span><span class="p">,</span><span class="n">download</span><span class="p">,</span><span class="n">get</span><span class="o">-</span><span class="n">metadata</span><span class="p">,</span><span class="nb">set</span><span class="o">-</span><span class="n">metadata</span><span class="p">,</span><span class="n">delete</span><span class="o">-</span><span class="n">metadata</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">rse</span><span class="o">-</span><span class="n">usage</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">account</span><span class="o">-</span><span class="n">usage</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">account</span><span class="o">-</span><span class="n">limits</span><span class="p">,</span><span class="n">add</span><span class="o">-</span><span class="n">rule</span><span class="p">,</span><span class="n">delete</span><span class="o">-</span><span class="n">rule</span><span class="p">,</span><span class="n">rule</span><span class="o">-</span><span class="n">info</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">rules</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">rules</span><span class="o">-</span><span class="n">history</span><span class="p">,</span><span class="n">update</span><span class="o">-</span><span class="n">rule</span><span class="p">,</span><span class="n">move</span><span class="o">-</span><span class="n">rule</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">rses</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">rse</span><span class="o">-</span><span class="n">attributes</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">datasets</span><span class="o">-</span><span class="n">rse</span><span class="p">,</span><span class="n">test</span><span class="o">-</span><span class="n">server</span><span class="p">,</span><span class="n">touch</span><span class="p">}</span>
              <span class="o">...</span>
 </pre></div>
@@ -158,8 +522,8 @@ jdoe
 <div class="section" id="list-file-replicas">
 <h3>list-file-replicas<a class="headerlink" href="#list-file-replicas" title="Permalink to this headline">¶</a></h3>
 <p>This method allows to list all the replicas of a given Data IDentifier (DID). The only mandatory parameter is the DID which can be a container/dataset/files. By default all the files replicas in state available are returned.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="nb">list</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="n">replicas</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">protocols</span> <span class="n">PROTOCOLS</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">all</span><span class="o">-</span><span class="n">states</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">pfns</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">domain</span> <span class="n">DOMAIN</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">link</span> <span class="n">LINK</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">rse</span> <span class="n">SELECTED_RSE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">missing</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">metalink</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">resolve</span><span class="o">-</span><span class="n">archives</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">sort</span> <span class="n">SORT</span><span class="p">]</span>
-                         <span class="p">[</span><span class="o">--</span><span class="n">expression</span> <span class="n">RSE_EXPRESSION</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="nb">list</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="n">replicas</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">protocols</span> <span class="n">PROTOCOLS</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">all</span><span class="o">-</span><span class="n">states</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">pfns</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">domain</span> <span class="n">DOMAIN</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">link</span> <span class="n">LINK</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">rse</span> <span class="n">SELECTED_RSE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">missing</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">metalink</span><span class="p">]</span>
+                         <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">resolve</span><span class="o">-</span><span class="n">archives</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">sort</span> <span class="n">SORT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">expression</span> <span class="n">RSE_EXPRESSION</span><span class="p">]</span>
                          <span class="n">dids</span> <span class="p">[</span><span class="n">dids</span> <span class="o">...</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -830,7 +1194,8 @@ user.janedoe
 <div class="section" id="upload">
 <h3>upload<a class="headerlink" href="#upload" title="Permalink to this headline">¶</a></h3>
 <p>Upload method.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">upload</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">rse</span> <span class="n">RSE</span> <span class="p">[</span><span class="o">--</span><span class="n">lifetime</span> <span class="n">LIFETIME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">scope</span> <span class="n">SCOPE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">register</span><span class="o">-</span><span class="n">after</span><span class="o">-</span><span class="n">upload</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">summary</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">guid</span> <span class="n">GUID</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">protocol</span> <span class="n">PROTOCOL</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">pfn</span> <span class="n">PFN</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">name</span> <span class="n">NAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">transfer</span><span class="o">-</span><span class="n">timeout</span> <span class="n">TRANSFER_TIMEOUT</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">upload</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">rse</span> <span class="n">RSE</span> <span class="p">[</span><span class="o">--</span><span class="n">lifetime</span> <span class="n">LIFETIME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">scope</span> <span class="n">SCOPE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">register</span><span class="o">-</span><span class="n">after</span><span class="o">-</span><span class="n">upload</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">summary</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">guid</span> <span class="n">GUID</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">protocol</span> <span class="n">PROTOCOL</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">pfn</span> <span class="n">PFN</span><span class="p">]</span>
+             <span class="p">[</span><span class="o">--</span><span class="n">name</span> <span class="n">NAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">transfer</span><span class="o">-</span><span class="n">timeout</span> <span class="n">TRANSFER_TIMEOUT</span><span class="p">]</span>
              <span class="n">args</span> <span class="p">[</span><span class="n">args</span> <span class="o">...</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -884,8 +1249,9 @@ user.janedoe
 <div class="section" id="get">
 <h3>get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
 <p>Download method (synonym for download)</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">get</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">dir</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">allow</span><span class="o">-</span><span class="n">tape</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">rse</span> <span class="n">RSE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">protocol</span> <span class="n">PROTOCOL</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">nrandom</span> <span class="n">NRANDOM</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ndownloader</span> <span class="n">NDOWNLOADER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">subdir</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">pfn</span> <span class="n">PFN</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">archive</span><span class="o">-</span><span class="n">did</span> <span class="n">ARCHIVE_DID</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">resolve</span><span class="o">-</span><span class="n">archives</span><span class="p">]</span>
-          <span class="p">[</span><span class="o">--</span><span class="n">transfer</span><span class="o">-</span><span class="n">timeout</span> <span class="n">TRANSFER_TIMEOUT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">aria</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">filter</span> <span class="n">FILTER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">scope</span> <span class="n">SCOPE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">metalink</span> <span class="n">METALINK_FILE</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">get</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">dir</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">allow</span><span class="o">-</span><span class="n">tape</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">rse</span> <span class="n">RSE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">protocol</span> <span class="n">PROTOCOL</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">nrandom</span> <span class="n">NRANDOM</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ndownloader</span> <span class="n">NDOWNLOADER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">subdir</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">pfn</span> <span class="n">PFN</span><span class="p">]</span>
+          <span class="p">[</span><span class="o">--</span><span class="n">archive</span><span class="o">-</span><span class="n">did</span> <span class="n">ARCHIVE_DID</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">resolve</span><span class="o">-</span><span class="n">archives</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">transfer</span><span class="o">-</span><span class="n">timeout</span> <span class="n">TRANSFER_TIMEOUT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">aria</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">filter</span> <span class="n">FILTER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">scope</span> <span class="n">SCOPE</span><span class="p">]</span>
+          <span class="p">[</span><span class="o">--</span><span class="n">metalink</span> <span class="n">METALINK_FILE</span><span class="p">]</span>
           <span class="p">[</span><span class="n">dids</span> <span class="p">[</span><span class="n">dids</span> <span class="o">...</span><span class="p">]]</span>
 </pre></div>
 </div>
@@ -958,8 +1324,9 @@ user.janedoe
 <div class="section" id="download">
 <h3>download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h3>
 <p>Download method (synonym for get)</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">download</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">dir</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">allow</span><span class="o">-</span><span class="n">tape</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">rse</span> <span class="n">RSE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">protocol</span> <span class="n">PROTOCOL</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">nrandom</span> <span class="n">NRANDOM</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ndownloader</span> <span class="n">NDOWNLOADER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">subdir</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">pfn</span> <span class="n">PFN</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">archive</span><span class="o">-</span><span class="n">did</span> <span class="n">ARCHIVE_DID</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">resolve</span><span class="o">-</span><span class="n">archives</span><span class="p">]</span>
-               <span class="p">[</span><span class="o">--</span><span class="n">transfer</span><span class="o">-</span><span class="n">timeout</span> <span class="n">TRANSFER_TIMEOUT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">aria</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">filter</span> <span class="n">FILTER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">scope</span> <span class="n">SCOPE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">metalink</span> <span class="n">METALINK_FILE</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">download</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">dir</span> <span class="n">DIR</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">allow</span><span class="o">-</span><span class="n">tape</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">rse</span> <span class="n">RSE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">protocol</span> <span class="n">PROTOCOL</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">nrandom</span> <span class="n">NRANDOM</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ndownloader</span> <span class="n">NDOWNLOADER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">subdir</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">pfn</span> <span class="n">PFN</span><span class="p">]</span>
+               <span class="p">[</span><span class="o">--</span><span class="n">archive</span><span class="o">-</span><span class="n">did</span> <span class="n">ARCHIVE_DID</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">resolve</span><span class="o">-</span><span class="n">archives</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">transfer</span><span class="o">-</span><span class="n">timeout</span> <span class="n">TRANSFER_TIMEOUT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">aria</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">filter</span> <span class="n">FILTER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">scope</span> <span class="n">SCOPE</span><span class="p">]</span>
+               <span class="p">[</span><span class="o">--</span><span class="n">metalink</span> <span class="n">METALINK_FILE</span><span class="p">]</span>
                <span class="p">[</span><span class="n">dids</span> <span class="p">[</span><span class="n">dids</span> <span class="o">...</span><span class="p">]]</span>
 </pre></div>
 </div>
@@ -1168,8 +1535,9 @@ user.janedoe
 <div class="section" id="add-rule">
 <h3>add-rule<a class="headerlink" href="#add-rule" title="Permalink to this headline">¶</a></h3>
 <p>Add replication rule.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">add</span><span class="o">-</span><span class="n">rule</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">weight</span> <span class="n">WEIGHT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">lifetime</span> <span class="n">LIFETIME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">grouping</span> <span class="p">{</span><span class="n">DATASET</span><span class="p">,</span><span class="n">ALL</span><span class="p">,</span><span class="n">NONE</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">locked</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">source</span><span class="o">-</span><span class="n">replica</span><span class="o">-</span><span class="n">expression</span> <span class="n">SOURCE_REPLICA_EXPRESSION</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">notify</span> <span class="n">NOTIFY</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">activity</span> <span class="n">ACTIVITY</span><span class="p">]</span>
-               <span class="p">[</span><span class="o">--</span><span class="n">comment</span> <span class="n">COMMENT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ask</span><span class="o">-</span><span class="n">approval</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">asynchronous</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">account</span> <span class="n">RULE_ACCOUNT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">skip</span><span class="o">-</span><span class="n">duplicates</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">add</span><span class="o">-</span><span class="n">rule</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">weight</span> <span class="n">WEIGHT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">lifetime</span> <span class="n">LIFETIME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">grouping</span> <span class="p">{</span><span class="n">DATASET</span><span class="p">,</span><span class="n">ALL</span><span class="p">,</span><span class="n">NONE</span><span class="p">}]</span> <span class="p">[</span><span class="o">--</span><span class="n">locked</span><span class="p">]</span>
+               <span class="p">[</span><span class="o">--</span><span class="n">source</span><span class="o">-</span><span class="n">replica</span><span class="o">-</span><span class="n">expression</span> <span class="n">SOURCE_REPLICA_EXPRESSION</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">notify</span> <span class="n">NOTIFY</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">activity</span> <span class="n">ACTIVITY</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">comment</span> <span class="n">COMMENT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ask</span><span class="o">-</span><span class="n">approval</span><span class="p">]</span>
+               <span class="p">[</span><span class="o">--</span><span class="n">asynchronous</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">account</span> <span class="n">RULE_ACCOUNT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">skip</span><span class="o">-</span><span class="n">duplicates</span><span class="p">]</span>
                <span class="n">dids</span> <span class="p">[</span><span class="n">dids</span> <span class="o">...</span><span class="p">]</span> <span class="n">copies</span> <span class="n">rse_expression</span>
 </pre></div>
 </div>
@@ -1374,8 +1742,8 @@ a12e5664555a4f12b3cc6991db5accf9  jdoe       user.jdoe:user.jdoe.test.container.
 <div class="section" id="update-rule">
 <h3>update-rule<a class="headerlink" href="#update-rule" title="Permalink to this headline">¶</a></h3>
 <p>Update replication rule.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">update</span><span class="o">-</span><span class="n">rule</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">lifetime</span> <span class="n">LIFETIME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">locked</span> <span class="n">LOCKED</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">account</span> <span class="n">RULE_ACCOUNT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">stuck</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">suspend</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">activity</span> <span class="n">RULE_ACTIVITY</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">source</span><span class="o">-</span><span class="n">replica</span><span class="o">-</span><span class="n">expression</span> <span class="n">SOURCE_REPLICA_EXPRESSION</span><span class="p">]</span>
-                  <span class="p">[</span><span class="o">--</span><span class="n">cancel</span><span class="o">-</span><span class="n">requests</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">priority</span> <span class="n">PRIORITY</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">child</span><span class="o">-</span><span class="n">rule</span><span class="o">-</span><span class="nb">id</span> <span class="n">CHILD_RULE_ID</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span> <span class="n">update</span><span class="o">-</span><span class="n">rule</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">lifetime</span> <span class="n">LIFETIME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">locked</span> <span class="n">LOCKED</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">account</span> <span class="n">RULE_ACCOUNT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">stuck</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">suspend</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">activity</span> <span class="n">RULE_ACTIVITY</span><span class="p">]</span>
+                  <span class="p">[</span><span class="o">--</span><span class="n">source</span><span class="o">-</span><span class="n">replica</span><span class="o">-</span><span class="n">expression</span> <span class="n">SOURCE_REPLICA_EXPRESSION</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">cancel</span><span class="o">-</span><span class="n">requests</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">priority</span> <span class="n">PRIORITY</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">child</span><span class="o">-</span><span class="n">rule</span><span class="o">-</span><span class="nb">id</span> <span class="n">CHILD_RULE_ID</span><span class="p">]</span>
                   <span class="n">rule_id</span>
 </pre></div>
 </div>
@@ -1532,101 +1900,59 @@ a12e5664555a4f12b3cc6991db5accf9  jdoe       user.jdoe:user.jdoe.test.container.
 </div>
 
 
+           </div>
+           
           </div>
-          
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../index.html">Rucio</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../concepts.html">Concepts and terminology</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../replica_workflow.html">Typical replica workflow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releasepolicy.html">Release policy</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releasenotes.html">Release notes</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../rest.html">RESTful APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../api.html">The Client API Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../database.html">Database operations</a></li>
-</ul>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../installing_clients.html">Installing Rucio Clients</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Rucio CLI</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rucio-admin.html">Rucio Administrative CLI</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../rse_expressions.html">RSE Expressions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../clients.html">Rucio Clients</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../advanced_usage.html">Advanced Usage</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../installing_server.html">Installing Rucio server</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../installing_daemons.html">Installing Rucio daemons</a></li>
-<li class="toctree-l1"><a class="reference internal" href="daemons.html">Daemons CLIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Monitoring</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../policy_packages.html">Policy packages</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="../cli_examples.html" title="previous chapter">Rucio CLI: Examples</a></li>
-      <li>Next: <a href="rucio-admin.html" title="next chapter">Rucio Administrative CLI</a></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="rucio-admin.html" class="btn btn-neutral float-right" title="Rucio Administrative CLI" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../cli_examples.html" class="btn btn-neutral float-left" title="Rucio CLI: Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
     </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+  
 
+  <hr/>
 
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2012-2018 CERN for the benefit of the ATLAS collaboration
 
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
-
-
-
+</footer>
 
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-      |
-      <a href="../_sources/man/rucio.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
 
-    
+    </section>
 
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
     
-  </body>
+   
+
+</body>
 </html>

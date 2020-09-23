@@ -1,43 +1,235 @@
 
-<!DOCTYPE html>
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rucio Administrative CLI &#8212; Rucio 1.2 documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Rucio Administrative CLI &mdash; Rucio 1.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Rucio Clients" href="../clients.html" />
-    <link rel="prev" title="Rucio CLI" href="rucio.html" />
+    <link rel="prev" title="Rucio CLI" href="rucio.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
    
-  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
-  </head><body>
-  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
           
 
-          <div class="body" role="main">
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> Rucio
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../concepts.html">Concepts and terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../replica_workflow.html">Typical replica workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasepolicy.html">Release policy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releasenotes.html">Release notes</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developing.html">Setting up a Rucio development environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rest.html">RESTful APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">The Client API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../database.html">Database operations</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installing_clients.html">Installing Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rucio.html">Rucio CLI</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Rucio Administrative CLI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Named Arguments">Named Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Sub-commands:">Sub-commands:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#data">data</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Sub-commands:_repeat1">Sub-commands:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#account">account</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Sub-commands:_repeat2">Sub-commands:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#identity">identity</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Sub-commands:_repeat3">Sub-commands:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#rse">rse</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Sub-commands:_repeat4">Sub-commands:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#scope">scope</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Sub-commands:_repeat5">Sub-commands:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#config">config</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Sub-commands:_repeat6">Sub-commands:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#subscription">subscription</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Sub-commands:_repeat7">Sub-commands:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#replicas">replicas</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Sub-commands:_repeat8">Sub-commands:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html">Rucio Clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced_usage.html">Advanced Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installing_server.html">Installing Rucio server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installing_daemons.html">Installing Rucio daemons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="daemons.html">Daemons CLIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../policy_packages.html">Policy packages</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../demo_environment.html">Setting up a Rucio development environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Individual contributors to the source code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html#organisations-employing-contributors">Organisations employing contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Rucio</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Rucio Administrative CLI</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/man/rucio-admin.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
             
   <div class="section" id="rucio-administrative-cli">
 <h1>Rucio Administrative CLI<a class="headerlink" href="#rucio-administrative-cli" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">version</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">verbose</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">H</span> <span class="n">ADDRESS</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">auth</span><span class="o">-</span><span class="n">host</span> <span class="n">ADDRESS</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">a</span> <span class="n">ACCOUNT</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">S</span> <span class="n">AUTH_STRATEGY</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">T</span> <span class="n">TIMEOUT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vo</span> <span class="n">VO</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">u</span> <span class="n">USERNAME</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">pwd</span> <span class="n">PASSWORD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">user</span> <span class="n">OIDC_USERNAME</span><span class="p">]</span>
-                   <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">password</span> <span class="n">OIDC_PASSWORD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">scope</span> <span class="n">OIDC_SCOPE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">audience</span> <span class="n">OIDC_AUDIENCE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">auto</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">polling</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">refresh</span><span class="o">-</span><span class="n">lifetime</span> <span class="n">OIDC_REFRESH_LIFETIME</span><span class="p">]</span>
-                   <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">issuer</span> <span class="n">OIDC_ISSUER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">certificate</span> <span class="n">CERTIFICATE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">ca</span><span class="o">-</span><span class="n">certificate</span> <span class="n">CA_CERTIFICATE</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">version</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">verbose</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">H</span> <span class="n">ADDRESS</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">auth</span><span class="o">-</span><span class="n">host</span> <span class="n">ADDRESS</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">a</span> <span class="n">ACCOUNT</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">S</span> <span class="n">AUTH_STRATEGY</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">T</span> <span class="n">TIMEOUT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vo</span> <span class="n">VO</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">u</span> <span class="n">USERNAME</span><span class="p">]</span>
+                   <span class="p">[</span><span class="o">-</span><span class="n">pwd</span> <span class="n">PASSWORD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">user</span> <span class="n">OIDC_USERNAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">password</span> <span class="n">OIDC_PASSWORD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">scope</span> <span class="n">OIDC_SCOPE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">audience</span> <span class="n">OIDC_AUDIENCE</span><span class="p">]</span>
+                   <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">auto</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">polling</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">refresh</span><span class="o">-</span><span class="n">lifetime</span> <span class="n">OIDC_REFRESH_LIFETIME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">oidc</span><span class="o">-</span><span class="n">issuer</span> <span class="n">OIDC_ISSUER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">certificate</span> <span class="n">CERTIFICATE</span><span class="p">]</span>
+                   <span class="p">[</span><span class="o">--</span><span class="n">ca</span><span class="o">-</span><span class="n">certificate</span> <span class="n">CA_CERTIFICATE</span><span class="p">]</span>
                    <span class="p">{</span><span class="n">data</span><span class="p">,</span><span class="n">account</span><span class="p">,</span><span class="n">identity</span><span class="p">,</span><span class="n">rse</span><span class="p">,</span><span class="n">scope</span><span class="p">,</span><span class="n">config</span><span class="p">,</span><span class="n">subscription</span><span class="p">,</span><span class="n">replicas</span><span class="p">}</span> <span class="o">...</span>
 </pre></div>
 </div>
@@ -169,7 +361,9 @@
 <div class="section" id="account">
 <h3>account<a class="headerlink" href="#account" title="Permalink to this headline">¶</a></h3>
 <p>Account methods</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">account</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">{</span><span class="nb">list</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">attributes</span><span class="p">,</span><span class="n">add</span><span class="o">-</span><span class="n">attribute</span><span class="p">,</span><span class="n">delete</span><span class="o">-</span><span class="n">attribute</span><span class="p">,</span><span class="n">add</span><span class="p">,</span><span class="n">delete</span><span class="p">,</span><span class="n">info</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">identities</span><span class="p">,</span><span class="nb">set</span><span class="o">-</span><span class="n">limits</span><span class="p">,</span><span class="n">get</span><span class="o">-</span><span class="n">limits</span><span class="p">,</span><span class="n">delete</span><span class="o">-</span><span class="n">limits</span><span class="p">,</span><span class="n">ban</span><span class="p">,</span><span class="n">unban</span><span class="p">,</span><span class="n">update</span><span class="p">}</span> <span class="o">...</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">account</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
+                    <span class="p">{</span><span class="nb">list</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">attributes</span><span class="p">,</span><span class="n">add</span><span class="o">-</span><span class="n">attribute</span><span class="p">,</span><span class="n">delete</span><span class="o">-</span><span class="n">attribute</span><span class="p">,</span><span class="n">add</span><span class="p">,</span><span class="n">delete</span><span class="p">,</span><span class="n">info</span><span class="p">,</span><span class="nb">list</span><span class="o">-</span><span class="n">identities</span><span class="p">,</span><span class="nb">set</span><span class="o">-</span><span class="n">limits</span><span class="p">,</span><span class="n">get</span><span class="o">-</span><span class="n">limits</span><span class="p">,</span><span class="n">delete</span><span class="o">-</span><span class="n">limits</span><span class="p">,</span><span class="n">ban</span><span class="p">,</span><span class="n">unban</span><span class="p">,</span><span class="n">update</span><span class="p">}</span>
+                    <span class="o">...</span>
 </pre></div>
 </div>
 <div class="section" id="Sub-commands:_repeat2">
@@ -1003,8 +1197,8 @@ JDOE_DATADISK: True
 <div class="section" id="add-protocol">
 <h5>add-protocol<a class="headerlink" href="#add-protocol" title="Permalink to this headline">¶</a></h5>
 <p>Add a protocol and its settings to a RSE.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">rse</span> <span class="n">add</span><span class="o">-</span><span class="n">protocol</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">hostname</span> <span class="n">HOSTNAME</span> <span class="o">--</span><span class="n">scheme</span> <span class="n">SCHEME</span> <span class="o">--</span><span class="n">prefix</span> <span class="n">PREFIX</span> <span class="p">[</span><span class="o">--</span><span class="n">space</span><span class="o">-</span><span class="n">token</span> <span class="n">SPACE_TOKEN</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">web</span><span class="o">-</span><span class="n">service</span><span class="o">-</span><span class="n">path</span> <span class="n">WEB_SERVICE_PATH</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">port</span> <span class="n">PORT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">impl</span> <span class="n">IMPL</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">domain</span><span class="o">-</span><span class="n">json</span> <span class="n">DOMAIN_JSON</span><span class="p">]</span>
-                             <span class="p">[</span><span class="o">--</span><span class="n">extended</span><span class="o">-</span><span class="n">attributes</span><span class="o">-</span><span class="n">json</span> <span class="n">EXT_ATTR_JSON</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">rse</span> <span class="n">add</span><span class="o">-</span><span class="n">protocol</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">hostname</span> <span class="n">HOSTNAME</span> <span class="o">--</span><span class="n">scheme</span> <span class="n">SCHEME</span> <span class="o">--</span><span class="n">prefix</span> <span class="n">PREFIX</span> <span class="p">[</span><span class="o">--</span><span class="n">space</span><span class="o">-</span><span class="n">token</span> <span class="n">SPACE_TOKEN</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">web</span><span class="o">-</span><span class="n">service</span><span class="o">-</span><span class="n">path</span> <span class="n">WEB_SERVICE_PATH</span><span class="p">]</span>
+                             <span class="p">[</span><span class="o">--</span><span class="n">port</span> <span class="n">PORT</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">impl</span> <span class="n">IMPL</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">domain</span><span class="o">-</span><span class="n">json</span> <span class="n">DOMAIN_JSON</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">extended</span><span class="o">-</span><span class="n">attributes</span><span class="o">-</span><span class="n">json</span> <span class="n">EXT_ATTR_JSON</span><span class="p">]</span>
                              <span class="n">rse</span>
 </pre></div>
 </div>
@@ -1575,7 +1769,8 @@ srm://se.bfg.uni-freiburg.de:8443/srm/managerv2?SFN=/pnfs/bfg.uni-freiburg.de/da
 <div class="section" id="declare-temporary-unavailable">
 <h5>declare-temporary-unavailable<a class="headerlink" href="#declare-temporary-unavailable" title="Permalink to this headline">¶</a></h5>
 <p>Declare temporary unavailable replicas</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">replicas</span> <span class="n">declare</span><span class="o">-</span><span class="n">temporary</span><span class="o">-</span><span class="n">unavailable</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">reason</span> <span class="n">REASON</span> <span class="p">[</span><span class="o">--</span><span class="n">inputfile</span> <span class="p">[</span><span class="n">INPUTFILE</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">expiration</span><span class="o">-</span><span class="n">date</span> <span class="n">EXPIRATION_DATE</span><span class="p">]</span> <span class="p">[</span><span class="n">listbadfiles</span> <span class="p">[</span><span class="n">listbadfiles</span> <span class="o">...</span><span class="p">]]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rucio</span><span class="o">-</span><span class="n">admin</span> <span class="n">replicas</span> <span class="n">declare</span><span class="o">-</span><span class="n">temporary</span><span class="o">-</span><span class="n">unavailable</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">reason</span> <span class="n">REASON</span> <span class="p">[</span><span class="o">--</span><span class="n">inputfile</span> <span class="p">[</span><span class="n">INPUTFILE</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">expiration</span><span class="o">-</span><span class="n">date</span> <span class="n">EXPIRATION_DATE</span><span class="p">]</span>
+                                                   <span class="p">[</span><span class="n">listbadfiles</span> <span class="p">[</span><span class="n">listbadfiles</span> <span class="o">...</span><span class="p">]]</span>
 </pre></div>
 </div>
 <div class="section" id="Positional Arguments_repeat29">
@@ -1674,101 +1869,59 @@ srm://srm-eosatlas.cern.ch:8443/srm/v2/server?SFN=/eos/atlas/atlasscratchdisk/ru
 </div>
 
 
+           </div>
+           
           </div>
-          
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../index.html">Rucio</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../concepts.html">Concepts and terminology</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../replica_workflow.html">Typical replica workflow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releasepolicy.html">Release policy</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../releasenotes.html">Release notes</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../rest.html">RESTful APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../api.html">The Client API Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../database.html">Database operations</a></li>
-</ul>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../installing_clients.html">Installing Rucio Clients</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rucio.html">Rucio CLI</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Rucio Administrative CLI</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../rse_expressions.html">RSE Expressions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../clients.html">Rucio Clients</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../clients.html#errors-and-exceptions">Errors and Exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../advanced_usage.html">Advanced Usage</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../installing_server.html">Installing Rucio server</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../installing_daemons.html">Installing Rucio daemons</a></li>
-<li class="toctree-l1"><a class="reference internal" href="daemons.html">Daemons CLIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Monitoring</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../policy_packages.html">Policy packages</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../cli_examples.html">Rucio CLI: Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="rucio.html" title="previous chapter">Rucio CLI</a></li>
-      <li>Next: <a href="../clients.html" title="next chapter">Rucio Clients</a></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../clients.html" class="btn btn-neutral float-right" title="Rucio Clients" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="rucio.html" class="btn btn-neutral float-left" title="Rucio CLI" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
     </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+  
 
+  <hr/>
 
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2012-2018 CERN for the benefit of the ATLAS collaboration
 
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
-
-
-
+</footer>
 
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-      |
-      <a href="../_sources/man/rucio-admin.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
 
-    
+    </section>
 
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
     
-  </body>
+   
+
+</body>
 </html>

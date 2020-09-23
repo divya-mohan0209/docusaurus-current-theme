@@ -1,74 +1,113 @@
 
-<!DOCTYPE html>
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rucio Storage Element &#8212; Rucio 1.2 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Rucio Storage Element &mdash; Rucio 1.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Meta-data attributes" href="overview_Meta-data_attributes.html" />
-    <link rel="prev" title="Files, Datasets and Containers" href="overview_File_Dataset_Container.html" />
+    <link rel="prev" title="Files, Datasets and Containers" href="overview_File_Dataset_Container.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
    
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
-  </head><body>
-  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
           
 
-          <div class="body" role="main">
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Rucio
+          
+
+          
+          </a>
+
+          
             
-  <div class="section" id="rucio-storage-element">
-<h1>Rucio Storage Element<a class="headerlink" href="#rucio-storage-element" title="Permalink to this headline">¶</a></h1>
-<p>A Rucio Storage Element (RSE) is the logical abstraction of a storage system for physical files. It is the smallest unit of storage space addressable within Rucio. It has a unique identifier and a set of meta attributes describing properties such as supported protocols (https, srm, s3, …), host/port address, quality of service, storage type (disk, tape, …), physical space properties (used-, available-, non-pledged space), and geographical zone.</p>
-<p>Rucio Storage Elements can be grouped in many logical ways, e.g. the UK RSEs, the Tier-1 RSEs, or the ‘good’ RSEs. One can reference groups of RSEs by metadata attributes or by explicit enumeration of RSEs. See the section about <a class="reference external" href="rse_expressions.html">RSE Expressions</a> for more information.</p>
-<p>RSE tags are expanded at transfer time to enumerate target sites. Post-facto changes to the sites in an RSE tag list will not affect currently replicated files.</p>
-<div class="section" id="rucio-cache-rse">
-<h2>Rucio Cache RSE<a class="headerlink" href="#rucio-cache-rse" title="Permalink to this headline">¶</a></h2>
-<p>A cache is storage service which keeps additional copies of files to reduce response time and bandwidth usage. In Rucio, a cache is an RSE, tagged as volatile. The control of the cache content is usually handled by an external process or applications (e.g. the Workflow management systems) and not by Rucio. Thus, as Rucio doesn’t control all file movements on these RSEs, the application populating the cache must register and unregister these file replicas in Rucio. The information about replica location on volatile RSEs can have a lifetime. Replicas registered on volatile RSEs are excluded from the Rucio replica management system (replication rules, quota, replication locks) described in the section <a class="reference external" href="overview_Replica_management.html">Replica management</a>. Explicit transfer requests can be made to Rucio in order to populate the cache.</p>
-</div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
 </div>
 
-
-          </div>
           
         </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">Rucio</a></h1>
 
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="concepts.html">Concepts and terminology</a></li>
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="concepts.html">Concepts and terminology</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="overview_Rucio_account.html">Rucio account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview_File_Dataset_Container.html">Files, Datasets and Containers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Rucio Storage Element</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rucio-cache-rse">Rucio Cache RSE</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview_Meta-data_attributes.html">Meta-data attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview_Permission_model.html">Permission model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview_Replica_management.html">Replica management with replication rules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replication_rules_examples.html">Replication rule examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rse_expressions.html">RSE Expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview_Accounting_and_quota.html">Accounting and quota</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview_Notifications.html">Notifications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview_Subscriptions.html">Subscriptions</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="replica_workflow.html">Typical replica workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="releasepolicy.html">Release policy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="releasenotes.html">Release notes</a></li>
 </ul>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing.html">Setting up a Rucio development environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">RESTful APIs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">The Client API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="database.html">Database operations</a></li>
@@ -91,57 +130,145 @@
 <li class="toctree-l1"><a class="reference internal" href="policy_packages.html">Policy packages</a></li>
 </ul>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="demo_environment.html">Setting up a Rucio development environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli_examples.html">Rucio CLI: Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
 </ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
 <ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-  <li><a href="concepts.html">Concepts and terminology</a><ul>
-      <li>Previous: <a href="overview_File_Dataset_Container.html" title="previous chapter">Files, Datasets and Containers</a></li>
-      <li>Next: <a href="overview_Meta-data_attributes.html" title="next chapter">Meta-data attributes</a></li>
-  </ul></li>
-  </ul></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Individual contributors to the source code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html#organisations-employing-contributors">Organisations employing contributors</a></li>
 </ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Rucio</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="concepts.html">Concepts and terminology</a> &raquo;</li>
+        
+      <li>Rucio Storage Element</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/overview_Rucio_Storage_Element.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
 </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="rucio-storage-element">
+<h1>Rucio Storage Element<a class="headerlink" href="#rucio-storage-element" title="Permalink to this headline">¶</a></h1>
+<p>A Rucio Storage Element (RSE) is the logical abstraction of a storage system for physical files. It is the smallest unit of storage space addressable within Rucio. It has a unique identifier and a set of meta attributes describing properties such as supported protocols (https, srm, s3, …), host/port address, quality of service, storage type (disk, tape, …), physical space properties (used-, available-, non-pledged space), and geographical zone.</p>
+<p>Rucio Storage Elements can be grouped in many logical ways, e.g. the UK RSEs, the Tier-1 RSEs, or the ‘good’ RSEs. One can reference groups of RSEs by metadata attributes or by explicit enumeration of RSEs. See the section about <a class="reference external" href="rse_expressions.html">RSE Expressions</a> for more information.</p>
+<p>RSE tags are expanded at transfer time to enumerate target sites. Post-facto changes to the sites in an RSE tag list will not affect currently replicated files.</p>
+<div class="section" id="rucio-cache-rse">
+<h2>Rucio Cache RSE<a class="headerlink" href="#rucio-cache-rse" title="Permalink to this headline">¶</a></h2>
+<p>A cache is storage service which keeps additional copies of files to reduce response time and bandwidth usage. In Rucio, a cache is an RSE, tagged as volatile. The control of the cache content is usually handled by an external process or applications (e.g. the Workflow management systems) and not by Rucio. Thus, as Rucio doesn’t control all file movements on these RSEs, the application populating the cache must register and unregister these file replicas in Rucio. The information about replica location on volatile RSEs can have a lifetime. Replicas registered on volatile RSEs are excluded from the Rucio replica management system (replication rules, quota, replication locks) described in the section <a class="reference external" href="overview_Replica_management.html">Replica management</a>. Explicit transfer requests can be made to Rucio in order to populate the cache.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="overview_Meta-data_attributes.html" class="btn btn-neutral float-right" title="Meta-data attributes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="overview_File_Dataset_Container.html" class="btn btn-neutral float-left" title="Files, Datasets and Containers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
     </div>
-</div>
-<script>$('#searchbox').show(0);</script>
+  
 
+  <hr/>
 
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2012-2018 CERN for the benefit of the ATLAS collaboration
 
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
-
-
-
+</footer>
 
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-      |
-      <a href="_sources/overview_Rucio_Storage_Element.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
 
-    
+    </section>
 
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
     
-  </body>
+   
+
+</body>
 </html>

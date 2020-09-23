@@ -1,65 +1,105 @@
 
-<!DOCTYPE html>
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>&lt;no title&gt; &#8212; Rucio 1.2 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Contributor Guide &mdash; Rucio 1.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="developing.html" />
-    <link rel="prev" title="1.13.3" href="releasenotes/1.13.3.html" />
+    <link rel="next" title="Setting up a Rucio development environment" href="developing.html" />
+    <link rel="prev" title="1.13.3" href="releasenotes/1.13.3.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
    
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
-  </head><body>
-  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
           
 
-          <div class="body" role="main">
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Rucio
+          
+
+          
+          </a>
+
+          
             
-  <p>../../CONTRIBUTING.rst</p>
+            
+          
 
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
 
-          </div>
           
         </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">Rucio</a></h1>
 
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<ul>
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="concepts.html">Concepts and terminology</a></li>
 <li class="toctree-l1"><a class="reference internal" href="replica_workflow.html">Typical replica workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="releasepolicy.html">Release policy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="releasenotes.html">Release notes</a></li>
 </ul>
-<ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributor Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#git-hooks">Git Hooks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#automatic-testing">Automatic Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#human-review">Human Review</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#coding-style">Coding Style</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="developing.html">Setting up a Rucio development environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rest.html">RESTful APIs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">The Client API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="database.html">Database operations</a></li>
@@ -82,55 +122,257 @@
 <li class="toctree-l1"><a class="reference internal" href="policy_packages.html">Policy packages</a></li>
 </ul>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="demo_environment.html">Setting up a Rucio development environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli_examples.html">Rucio CLI: Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli_admin_examples.html">Rucio administration CLI: Examples</a></li>
 </ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
 <ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="releasenotes/1.13.3.html" title="previous chapter">1.13.3</a></li>
-      <li>Next: <a href="developing.html" title="next chapter">&lt;no title&gt;</a></li>
-  </ul></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Individual contributors to the source code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html#organisations-employing-contributors">Organisations employing contributors</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Rucio</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Contributor Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/contributing.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="contributor-guide">
+<h1>Contributor Guide<a class="headerlink" href="#contributor-guide" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Thank you for participating!</p></li>
+<li><p>Please ensure that an <a class="reference external" href="https://github.com/rucio/rucio/issues/new">issue</a> exists before submitting your contribution as a pull request.</p></li>
+<li><p>The issue should contain the motivation, modification and expected results (discussions usually happen there).</p></li>
+<li><p>No pull request will be merged without an associated issue (release notes are generated from issues).</p></li>
+<li><p>You should make sure to add your name (and organisation) to <a class="reference external" href="AUTHORS.rst">AUTHORS</a>.</p></li>
+<li><p>If you have questions, you can reach the core development team on our <a class="reference external" href="https://rucio.slack.com/">Slack</a> channel, or send an email to our development mailing list <a class="reference external" href="mailto:rucio-dev&#37;&#52;&#48;cern&#46;ch">rucio-dev<span>&#64;</span>cern<span>&#46;</span>ch</a>.</p></li>
+</ul>
+<dl class="simple">
+<dt>A contribution can be either be a <strong>patch</strong>, <strong>feature</strong>, or <strong>hotfix</strong>:</dt><dd><ul class="simple">
+<li><p><strong>Patches</strong> include bugfixes and minor changes to the code and are included in patch releases usually made on a bi-weekly schedule.</p></li>
+<li><p><strong>Features</strong> include major developments or potentially disruptive changes and are included in feature releases made multiple times a year.</p></li>
+<li><p><strong>Hotfix</strong> are specific patch releases happening due to the necessity of important fixes.</p></li>
+</ul>
+</dd>
+<dt>The <a class="reference external" href="https://github.com/rucio/rucio/">repository</a>  consists of different branches:</dt><dd><ul class="simple">
+<li><p>the <strong>master</strong> branch includes the development for the next major version.</p></li>
+<li><p>the <strong>release-…</strong> branches include the patch/minor development of the releases.</p></li>
+<li><p>the <strong>hotfix-…</strong> branches include the patches for hotfix releases.</p></li>
+</ul>
+</dd>
+</dl>
+<p>On release day both master and the related release branch are essentially the same. Release branches only exist for the currently maintained release versions. Hotfix branches are created on demand. Please communicate to the Rucio maintainers, if you wish to hotfix a previous release.</p>
+<p>Generally all <a class="reference external" href="https://github.com/rucio/rucio/pulls">pull requests</a> are to be created against the Rucio <strong>master</strong> branch. Features will end up in the upstream <strong>master</strong> only and patches are cherry-picked to the maintained releases if applicable. Release-specific changes are excluded from that rule and might be needed if e.g. cherry-picking to the last release was not successful.</p>
+<p>The following figure might help you with an overview:</p>
+<img alt="https://raw.githubusercontent.com/rucio/rucio/master/doc/source/images/branching_strategy.svg" src="https://raw.githubusercontent.com/rucio/rucio/master/doc/source/images/branching_strategy.svg" /><div class="section" id="getting-started">
+<h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<p><strong>Step 1</strong>: Fork the <a class="reference external" href="https://github.com/rucio/rucio/">repository</a> on Github.</p>
+<p><strong>Step 2</strong>: Clone the repository to your development machine and configure it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/&lt;YOUR_USER&gt;/rucio/
+$ cd rucio
+$ git remote add upstream https://github.com/rucio/rucio.git
+</pre></div>
+</div>
+</div>
+<div class="section" id="git-hooks">
+<h2>Git Hooks<a class="headerlink" href="#git-hooks" title="Permalink to this headline">¶</a></h2>
+<p>Some git hooks (pre-commit, prepare-commit-msg) can be installed by executing the script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./tools/configure_git.sh
+</pre></div>
+</div>
+</div>
+<div class="section" id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h2>
+<p><strong>Step 1</strong>: If not exist, create an <a class="reference external" href="https://github.com/rucio/rucio/issues/new">issue</a> with the description of the contribution (motivation, modification and expected results). Every issue will get a <strong>unique issue number</strong>.</p>
+<p><strong>Step 2</strong>: Create a local branch that corresponds to the issue. To easily identify the purpose of branches different keywords must be used:</p>
+<ul class="simple">
+<li><p>Patch branches must be named <strong>patch-[issue number]-[short description]</strong></p></li>
+<li><p>Feature branches must be named <strong>feature-[issue number]-[short description]</strong></p></li>
+<li><p>Hotfix branches must be named <strong>hotfix-[issue number]-[short description]</strong></p></li>
+</ul>
+<p>If you create these branches by hand please check the spelling because otherwise the test automation might misidentify your branch. There are utility scripts to fetch master and create these branches for you:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./tools/create-patch-branch &lt;unique issue number&gt; &#39;&lt;short_change_message&gt;&#39;
+$ ./tools/create-feature-branch &lt;unique issue number&gt; &#39;&lt;short_change_message&gt;&#39;
+$ ./tools/create-hotfix-branch &lt;release tag/release branch&gt; &lt;unique issue number&gt; &#39;&lt;short_change_message&gt;&#39;
+</pre></div>
+</div>
+<p><strong>Step 3</strong>: Commit your change. The commit command must include a specific message format:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git commit -m &quot;&lt;component&gt;: &lt;change_message&gt; #&lt;issue number&gt;&quot;
+</pre></div>
+</div>
+<p>Valid component names are listed in the <a class="reference external" href="https://github.com/rucio/rucio/labels">label list</a> and are usually specified on the issue of the change.</p>
+<p>If you use the default commit message template, make sure you edit it.</p>
+<p>If you add a <a class="reference external" href="https://help.github.com/articles/closing-issues-using-keywords/">github-recognised keyword</a> then the associated issue can be closed automatically once the pull request is merged, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">component</span><span class="o">&gt;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">change_message</span><span class="o">&gt;</span> <span class="n">Fix</span> <span class="c1">#&lt;issue number&gt;</span>
+</pre></div>
+</div>
+<p><strong>Step 4</strong>: Push the commit to your forked repository and create the pull request.</p>
+<p>While using the <a class="reference external" href="https://help.github.com/articles/creating-a-pull-request/">github interface</a> is the default interface to create pull requests, you could also use GitHub’s command-line wrapper <a class="reference external" href="https://hub.github.com">hub</a> or the <a class="reference external" href="https://cli.github.com/">GitHub CLI</a>.</p>
+<p>The format of the pull request title must be:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">component</span><span class="o">&gt;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">short_change_message</span><span class="o">&gt;</span> <span class="c1">#&lt;issue number&gt;</span>
+</pre></div>
+</div>
+<p><strong>Step 5</strong>: Watch the pull request for comments and reviews. For any pull requests update, please try to squash/amend your commits to avoid “in-between” commits.</p>
+</div>
+<div class="section" id="automatic-testing">
+<h2>Automatic Testing<a class="headerlink" href="#automatic-testing" title="Permalink to this headline">¶</a></h2>
+<p>Every submitted pull request will automatically be run through automated testing through continuous integration. You should see the status of these tests on your pull request.</p>
+<p><strong>Local automatic testing</strong></p>
+<p>There is also a local shell script to run the same autotests: <code class="code docutils literal notranslate"><span class="pre">tools/run_autotests.sh</span></code>. For manual local testing within containers, please see <a class="reference external" href="etc/docker/dev/README.rst">the docker README</a>.</p>
+<p><strong>WARNING:</strong> Because of the nature of using the same scripts as continuous integration, some containers may be left running after a test run or when aborting the test run. This is especially the case for running this script without podman.</p>
+<p>By default the tool uses 3 worker processes to run all tests that are defined in <code class="code docutils literal notranslate"><span class="pre">etc/docker/test/matrix.yml</span></code>. Feel free to modify the matrix to your needs, but be sure to not unintentionally commit your changes to it. The tests run at most 6 hours - after that a TimeoutError will be raised, causing the script to fail. Running the autotests like this can be parameterized with environment variables as follows:</p>
+<ul>
+<li><dl class="simple">
+<dt><code class="code docutils literal notranslate"><span class="pre">USE_PODMAN</span></code> 0/1 (default: depends on whether the docker command points to podman)</dt><dd><p>Use podman and therefore pods to run the tests.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><code class="code docutils literal notranslate"><span class="pre">PARALLEL_AUTOTESTS</span></code> 0/1 (default: 1)</dt><dd><p>1 enables multiple processes to run autotests and 0 disables it.
+When enabled, logs of the running autotests will be written to the <code class="code docutils literal notranslate"><span class="pre">.autotest</span></code> directory created in the working directory. Otherwise the log output will be written to the console (stderr).</p>
+<p><em>Note that when tests are not running in parallel mode, the test run will always fail fast.</em></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="code docutils literal notranslate"><span class="pre">PARALLEL_AUTOTESTS_PROCNUM</span></code> (1,) (default: 3)</dt><dd><p>Specifies the number of processes to run and therefor the concurrently run autotests. 3 will usually result in more than 8 GB RAM usage and a fair amount of load on the PC.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="code docutils literal notranslate"><span class="pre">PARALLEL_AUTOTESTS_FAILFAST</span></code> 0/1 (default: 0)</dt><dd><p>Will abort the parallel run of autotests as soon as possible after at least one autotest failed. Enabling this will leave containers running in case of a failure even on podman.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="code docutils literal notranslate"><span class="pre">COPY_AUTOTEST_LOGS</span></code> 0/1 (default: 0)</dt><dd><p>Copies <code class="code docutils literal notranslate"><span class="pre">/var/log</span></code> from the rucio container into the <code class="code docutils literal notranslate"><span class="pre">.autotest</span></code> directory after the test run. Each test case will have it’s specific naming as with the logs from the parallel run above.</p>
+</dd>
+</dl>
+</li>
 </ul>
 </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
+<div class="section" id="human-review">
+<h2>Human Review<a class="headerlink" href="#human-review" title="Permalink to this headline">¶</a></h2>
+<p>Anyone is welcome to review merge requests and make comments!</p>
+<p>The Rucio development team can approve, request changes, or close pull requests. Merging of approved pull requests is done by the Rucio development lead.</p>
 </div>
-<script>$('#searchbox').show(0);</script>
+<div class="section" id="coding-style">
+<h2>Coding Style<a class="headerlink" href="#coding-style" title="Permalink to this headline">¶</a></h2>
+<p>We use flake8 and pylint to sanitize our code. Please do the same before submitting a pull request.</p>
+</div>
+</div>
 
 
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="developing.html" class="btn btn-neutral float-right" title="Setting up a Rucio development environment" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="releasenotes/1.13.3.html" class="btn btn-neutral float-left" title="1.13.3" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
 
+  <hr/>
 
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2012-2018 CERN for the benefit of the ATLAS collaboration
 
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
-
+</footer>
 
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &copy;2012-2018 CERN for the benefit of the ATLAS collaboration.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-      |
-      <a href="_sources/contributing.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
 
-    
+    </section>
 
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
     
-  </body>
+   
+
+</body>
 </html>
